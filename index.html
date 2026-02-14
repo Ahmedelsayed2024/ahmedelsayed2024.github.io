@@ -1,848 +1,1783 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed Elsayed Mohamed - Portfolio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Team Task Board</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#f4f2ee;--surface:#fff;--border:#e2ddd8;--border-strong:#c8c2ba;
+    --text:#1a1714;--text-muted:#7a736b;--text-light:#a89f96;
+    --accent:#c84b2f;--accent-soft:#fdf0ed;--accent2:#2563eb;--accent2-soft:#eff6ff;
+    --tag-todo:#e8e5e0;--tag-todo-text:#5a534c;--tag-inprogress:#fef3c7;--tag-inprogress-text:#92400e;
+    --tag-review:#e0e7ff;--tag-review-text:#3730a3;--tag-done:#d1fae5;--tag-done-text:#065f46;
+    --tag-blocked:#fee2e2;--tag-blocked-text:#991b1b;--tag-high:#fee2e2;--tag-high-text:#991b1b;
+    --tag-medium:#fef3c7;--tag-medium-text:#92400e;--tag-low:#d1fae5;--tag-low-text:#065f46;
+    --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+    --shadow-md:0 4px 20px rgba(0,0,0,.12);--radius:10px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
+  /* ─ Header ─ */
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;gap:12px;}
+  .header-left{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+  .logo-area{position:relative;width:200px;height:42px;border-radius:10px;overflow:hidden;flex-shrink:0;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .15s;}
+  .logo-area img{width:100%;height:100%;object-fit:contain;display:none;}
+  .logo-area img.loaded{display:block;}
+  .logo-default{font-size:14px;font-weight:600;color:var(--text-muted);pointer-events:none;}
+  .header-title{display:flex;flex-direction:column;gap:2px;}
+  .header-title h1{font-size:15px;font-weight:600;letter-spacing:-.2px;line-height:1.2;outline:none;cursor:text;}
+  .header-title h1:empty::before{content:'Team Task Board';color:var(--text-light);}
+  .week-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-weight:500;}
+  .week-badge .wk-num{font-family:'DM Mono',monospace;font-weight:700;color:var(--accent2);}
+  .week-badge .wk-sep{color:var(--border-strong);}
+  .week-badge .wk-range{color:var(--text-light);}
+  .header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            min-height: 100vh;
-            box-shadow: 0 0 50px rgba(0,0,0,0.3);
-        }
+  /* ─ Toolbar ─ */
+  .toolbar{padding:16px 28px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .toolbar-left{display:flex;gap:10px;flex:1;flex-wrap:wrap;}
+  .toolbar-right{display:flex;gap:8px;}
+  input[type=text],select{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius);padding:7px 12px;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s;}
+  input[type=text]:focus,select:focus{border-color:var(--accent2);}
+  input[type=date]{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius);padding:7px 12px;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s;width:150px;}
+  input[type=date]:focus{border-color:var(--accent2);}
+  input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.6;}
+  input[type=date]::-webkit-calendar-picker-indicator:hover{opacity:1;}
+  .search-wrap{position:relative;}
+  .search-wrap input{padding-left:32px;width:210px;}
+  .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-light);pointer-events:none;font-size:13px;}
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
+  /* ─ Buttons ─ */
+  .btn{font-family:inherit;font-size:13px;font-weight:500;border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+  .btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{background:#b03d24;}
+  .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border-strong);}.btn-secondary:hover{background:var(--bg);}
+  .btn-blue{background:var(--accent2);color:#fff;}.btn-blue:hover{background:#1d4ed8;}
+  .btn-ghost{background:transparent;color:var(--text-muted);padding:8px 10px;}.btn-ghost:hover{background:var(--border);color:var(--text);}
+  .btn-danger{background:#fee2e2;color:#991b1b;}.btn-danger:hover{background:#fecaca;}
+  .btn-sm{padding:5px 10px;font-size:12px;}.btn-xs{padding:2px 7px;font-size:11px;border-radius:6px;}
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
+  /* ─ Stats bar ─ */
+  .stats-bar{padding:14px 28px;display:flex;gap:10px;flex-wrap:wrap;}
+  .stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer;transition:all .15s;}
+  .stat-pill:hover,.stat-pill.active{border-color:var(--accent);background:var(--accent-soft);}
+  .stat-pill .dot{width:8px;height:8px;border-radius:50%;}
+  .stat-pill .count{font-weight:700;font-family:'DM Mono',monospace;}
 
-        header .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  /* ─ Table ─ */
+  .table-wrap{padding:0 28px 40px;overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+  thead th{background:#faf9f7;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;user-select:none;cursor:pointer;}
+  thead th:hover{color:var(--text);}
+  thead th .sort-icon{margin-left:4px;opacity:.4;}
+  thead th.sorted .sort-icon{opacity:1;color:var(--accent);}
+  thead th.col-custom{background:#f0f4ff;}
+  th.add-col-th{background:#faf9f7;color:var(--accent2);font-size:15px;cursor:pointer;}
+  th.add-col-th:hover{background:var(--accent2-soft);}
+  tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+  tbody tr:last-child{border-bottom:none;}
+  tbody tr:hover{background:#faf9f7;}
+  tbody tr.row-done{opacity:.55;}
+  tbody tr.row-done td{text-decoration:line-through;text-decoration-color:var(--border-strong);}
+  tbody tr.row-done .tag,.row-done .btn,.row-done .dep-chip{text-decoration:none;}
+  tbody tr.row-highlighted{background:#fffbeb!important;outline:2px solid #f59e0b;outline-offset:-2px;}
+  
+  /* ─ Conditional Formatting ─ */
+  tbody tr.cf-overdue{background:#fee2e2!important;}
+  tbody tr.cf-high-priority{background:#fef3c7!important;}
+  tbody tr.cf-blocked{background:#fee2e2!important;border-left:4px solid #dc2626!important;}
+  tbody tr.cf-almost-done{background:#dcfce7!important;}
+  tbody tr.cf-stale{background:#f3f4f6!important;opacity:.7;}
+  tbody tr.cf-custom-1{background:#fef3c7!important;border-left:4px solid #f59e0b!important;}
+  tbody tr.cf-custom-2{background:#dbeafe!important;border-left:4px solid #3b82f6!important;}
+  tbody tr.cf-custom-3{background:#fae8ff!important;border-left:4px solid #c026d3!important;}
+  td{padding:11px 14px;vertical-align:middle;font-size:13px;}
+  td.task-name{font-weight:500;max-width:220px;}
+  td.task-name .task-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
+  td.task-name .task-desc{font-size:11px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;font-weight:400;}
+  td.td-custom{max-width:150px;}
+  .inline-edit{font-family:inherit;font-size:12px;border:1px solid transparent;border-radius:6px;padding:3px 6px;width:100%;background:transparent;color:var(--text);outline:none;cursor:text;transition:all .15s;}
+  .inline-edit:hover{background:var(--bg);border-color:var(--border);}
+  .inline-edit:focus{background:#fff;border-color:var(--accent2);}
+  select.inline-edit{cursor:pointer;}
 
-        /* Navigation */
-        nav {
-            background: #2d3748;
-            padding: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+  /* ─ Tags ─ */
+  .tag{display:inline-flex;align-items:center;font-size:11px;font-weight:600;letter-spacing:.3px;padding:3px 8px;border-radius:6px;white-space:nowrap;}
+  .tag-todo{background:var(--tag-todo);color:var(--tag-todo-text);}.tag-inprogress{background:var(--tag-inprogress);color:var(--tag-inprogress-text);}
+  .tag-review{background:var(--tag-review);color:var(--tag-review-text);}.tag-done{background:var(--tag-done);color:var(--tag-done-text);}
+  .tag-blocked{background:var(--tag-blocked);color:var(--tag-blocked-text);}.tag-high{background:var(--tag-high);color:var(--tag-high-text);}
+  .tag-medium{background:var(--tag-medium);color:var(--tag-medium-text);}.tag-low{background:var(--tag-low);color:var(--tag-low-text);}
+  .progress-bar{width:76px;height:5px;background:var(--border);border-radius:100px;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:100px;background:var(--accent2);transition:width .3s;}
+  .due-date{font-family:'DM Mono',monospace;font-size:12px;}.due-overdue{color:var(--accent);font-weight:600;}.due-soon{color:#92400e;}
+  .assignee-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px 3px 5px;font-size:12px;}
+  .assignee-avatar{width:20px;height:20px;border-radius:50%;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .actions{display:flex;gap:4px;}
+  .no-results{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;}
+  .no-results .icon{font-size:32px;margin-bottom:10px;}
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+  /* ─ Deps ─ */
+  .dep-chips{display:flex;flex-wrap:wrap;gap:4px;}
+  .dep-chip{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap;border:1px solid transparent;}
+  .dep-chip.dep-open{background:#fef3c7;color:#92400e;border-color:#fcd34d;}
+  .dep-chip.dep-done{background:#d1fae5;color:#065f46;border-color:#6ee7b7;text-decoration:line-through;opacity:.7;}
+  .dep-chip.dep-blocked{background:#fee2e2;color:#991b1b;border-color:#fca5a5;}
+  .dep-chip:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.1);}
+  .dep-selector{border:1px solid var(--border-strong);border-radius:8px;background:var(--bg);max-height:150px;overflow-y:auto;padding:6px;display:flex;flex-direction:column;gap:3px;}
+  .dep-option{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;transition:background .1s;}
+  .dep-option:hover{background:var(--surface);}
+  .dep-option input[type=checkbox]{accent-color:var(--accent2);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
+  .dep-opt-id{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-light);min-width:32px;}
+  .dep-opt-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-        nav ul li {
-            margin: 0;
-        }
+  /* ─ Modal (shared) ─ */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal{background:var(--surface);border-radius:16px;width:100%;box-shadow:var(--shadow-md);transform:translateY(12px);transition:transform .2s;max-height:90vh;overflow-y:auto;}
+  .modal-overlay.open .modal{transform:translateY(0);}
+  .modal-header{padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between;}
+  .modal-header h2{font-size:16px;font-weight:600;}
+  .modal-body{padding:20px 24px 8px;display:flex;flex-direction:column;gap:14px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-group{display:flex;flex-direction:column;gap:5px;}
+  .form-group.full{grid-column:1/-1;}
+  .form-group label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+  .form-group input,.form-group select,.form-group textarea{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent2);background:#fff;}
+  .form-group textarea{resize:vertical;min-height:60px;}
+  .modal-footer{padding:16px 24px 22px;display:flex;justify-content:flex-end;gap:10px;}
 
-        nav ul li a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 1rem 2rem;
-            transition: background 0.3s;
-        }
+  /* ─ Chart modal ─ */
+  #chart-modal .modal{max-width:800px;}
+  .chart-tabs{display:flex;gap:2px;padding:0 24px;border-bottom:1px solid var(--border);}
+  .chart-tab{padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-muted);transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;}
+  .chart-tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+  .chart-tab:hover{color:var(--text);}
+  .chart-panel{display:none;padding:20px 24px;}
+  .chart-panel.active{display:block;}
+  .chart-canvas-wrap{position:relative;}
+  canvas.chart{width:100%!important;}
+  .person-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:16px;}
+  .person-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+  .person-card-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .person-card-avatar{width:34px;height:34px;border-radius:50%;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .person-card-name{font-weight:600;font-size:13px;}
+  .person-card-count{font-size:11px;color:var(--text-muted);}
+  .mini-bars{display:flex;flex-direction:column;gap:5px;}
+  .mini-bar-row{display:flex;align-items:center;gap:7px;font-size:11px;}
+  .mini-bar-label{width:66px;color:var(--text-muted);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mini-bar-track{flex:1;height:6px;background:var(--border);border-radius:100px;overflow:hidden;}
+  .mini-bar-fill{height:100%;border-radius:100px;}
+  .mini-bar-num{font-family:'DM Mono',monospace;font-weight:600;font-size:10px;color:var(--text-muted);min-width:14px;text-align:right;}
 
-        nav ul li a:hover,
-        nav ul li a.active {
-            background: #4a5568;
-        }
+  /* ─ Add Column modal ─ */
+  #addcol-modal .modal{max-width:460px;}
+  .col-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .col-type-btn{padding:11px 13px;border:2px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;transition:all .15s;font-family:inherit;}
+  .col-type-btn:hover{border-color:var(--accent2);background:var(--accent2-soft);}
+  .col-type-btn.selected{border-color:var(--accent2);background:var(--accent2-soft);}
+  .col-type-icon{font-size:17px;margin-bottom:3px;}
+  .col-type-name{font-size:12px;font-weight:600;}
+  .col-type-desc{font-size:11px;color:var(--text-muted);margin-top:1px;}
+  
+  /* ─ Conditional Formatting modal ─ */
+  #cf-modal .modal{max-width:700px;}
+  .cf-rules-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;max-height:400px;overflow-y:auto;}
+  .cf-rule-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;}
+  .cf-rule-header{display:flex;align-items:center;gap:10px;}
+  .cf-rule-toggle{position:relative;width:40px;height:22px;background:var(--border);border-radius:100px;cursor:pointer;transition:background .2s;flex-shrink:0;}
+  .cf-rule-toggle.active{background:var(--accent2);}
+  .cf-rule-toggle-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .cf-rule-toggle.active .cf-rule-toggle-knob{left:21px;}
+  .cf-rule-name{flex:1;font-weight:600;font-size:13px;}
+  .cf-rule-preview{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);flex-shrink:0;}
+  .cf-rule-condition{display:grid;grid-template-columns:130px 110px 1fr;gap:8px;align-items:center;}
+  .cf-rule-condition select,.cf-rule-condition input{font-size:12px;padding:6px 10px;}
+  .cf-add-rule{border:2px dashed var(--border-strong);background:transparent;color:var(--text-muted);padding:14px;border-radius:10px;cursor:pointer;text-align:center;font-weight:500;transition:all .15s;}
+  .cf-add-rule:hover{border-color:var(--accent2);color:var(--accent2);background:var(--accent2-soft);}
+  .cf-preset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:16px;}
+  .cf-preset-btn{padding:12px;border:2px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;transition:all .15s;font-size:12px;}
+  .cf-preset-btn:hover{border-color:var(--accent2);background:var(--accent2-soft);}
+  .cf-preset-name{font-weight:600;margin-bottom:3px;}
+  .cf-preset-desc{font-size:11px;color:var(--text-muted);}
+  .custom-cols-list{display:flex;flex-direction:column;gap:5px;max-height:170px;overflow-y:auto;}
+  .custom-col-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg);border-radius:8px;font-size:13px;}
+  .custom-col-item .col-icon{font-size:14px;}
+  .custom-col-item .col-name{flex:1;font-weight:500;}
+  .custom-col-item .col-type-tag{font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;background:var(--border);padding:2px 6px;border-radius:4px;}
 
-        /* Main Content */
-        .content {
-            padding: 3rem 2rem;
-        }
+  /* ─ Hint banner ─ */
+  .export-hint{margin:0 28px 14px;background:var(--accent2-soft);border:1px solid #bfdbfe;border-radius:var(--radius);padding:9px 14px;font-size:12px;color:#1e40af;display:flex;align-items:center;gap:8px;}
+  .export-hint strong{font-weight:600;}
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
+  /* ─ Tabs ─ */
+  .tabs{display:flex;gap:4px;padding:0 28px;border-bottom:2px solid var(--border);background:var(--surface);position:sticky;top:64px;z-index:99;}
+  .tab{padding:12px 20px;background:transparent;border:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border-radius:0;transition:all .15s;position:relative;}
+  .tab:hover{background:var(--bg);color:var(--text);}
+  .tab.active{background:transparent;color:var(--accent2);font-weight:600;}
+  .tab.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--accent2);}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
 
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* CV Section */
-        .cv-section {
-            margin-bottom: 3rem;
-        }
-
-        .cv-section h2 {
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        .cv-section h3 {
-            color: #2d3748;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: #f7fafc;
-            border-radius: 8px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .job-entry {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: #f7fafc;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
-        }
-
-        .job-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .job-title {
-            font-weight: bold;
-            color: #2d3748;
-            font-size: 1.2rem;
-        }
-
-        .job-date {
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .job-entry ul {
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .job-entry li {
-            margin-bottom: 0.5rem;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .skill-category {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-top: 3px solid #667eea;
-        }
-
-        .skill-category h4 {
-            color: #2d3748;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Projects Section */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .project-card {
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 2rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-color: #667eea;
-        }
-
-        .project-card h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-
-        .project-tag {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-right: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Articles Section */
-        .article-list {
-            margin-top: 2rem;
-        }
-
-        .article-item {
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .article-item:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            border-color: #667eea;
-        }
-
-        .article-item h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        .article-meta {
-            color: #718096;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .read-more {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .read-more:hover {
-            text-decoration: underline;
-        }
-
-        /* Project Detail Pages */
-        .project-detail {
-            display: none;
-            padding: 3rem 2rem;
-            animation: fadeIn 0.5s;
-        }
-
-        .back-button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            transition: background 0.3s;
-        }
-
-        .back-button:hover {
-            background: #5568d3;
-        }
-
-        .project-detail h1 {
-            color: #667eea;
-            margin-bottom: 1rem;
-            font-size: 2.5rem;
-        }
-
-        .project-detail h2 {
-            color: #2d3748;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 0.5rem;
-        }
-
-        .project-meta {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            padding: 1rem;
-            background: #f7fafc;
-            border-radius: 8px;
-        }
-
-        .project-meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-meta-item strong {
-            color: #667eea;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .project-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .project-image-placeholder {
-            background: #e2e8f0;
-            border-radius: 8px;
-            aspect-ratio: 16/9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #718096;
-            font-size: 1.1rem;
-        }
-
-        /* Footer */
-        footer {
-            background: #2d3748;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            nav ul {
-                flex-direction: column;
-            }
-
-            .contact-info {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .job-header {
-                flex-direction: column;
-            }
-
-            .content {
-                padding: 2rem 1rem;
-            }
-
-            .project-detail {
-                padding: 2rem 1rem;
-            }
-
-            .project-detail h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+  @media(max-width:700px){
+    .header,.toolbar,.stats-bar,.table-wrap,.export-hint{padding-left:14px;padding-right:14px;}
+    .form-row{grid-template-columns:1fr;}
+    .header-right .btn-sm:not(.btn-primary){display:none;}
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Ahmed Elsayed Mohamed</h1>
-            <p class="subtitle">Senior Motor Development Engineer</p>
-        </header>
 
-        <nav>
-            <ul>
-                <li><a href="#cv" class="nav-link active" onclick="showTab('cv')">CV</a></li>
-                <li><a href="#work" class="nav-link" onclick="showTab('work')">Work & Projects</a></li>
-                <li><a href="#articles" class="nav-link" onclick="showTab('articles')">Articles</a></li>
-            </ul>
-        </nav>
+<!-- ══ HEADER ══ -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-area" title="Company logo">
+      <img id="logo-img" src="ELARABY.LOGO" alt="Logo" onerror="this.style.display='none';document.getElementById('logo-default').style.display='block';" onload="this.classList.add('loaded');" />
+      <span class="logo-default" id="logo-default" style="display:none;">ELARABY</span>
+    </div>
+    <div class="header-title">
+      <h1 id="board-title" contenteditable="true" spellcheck="false" title="Click to rename">Team Task Board</h1>
+      <div class="week-badge" id="week-badge"></div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-ghost btn-sm" onclick="openInfoModal()" title="About data storage">ℹ️ Info</button>
+    <button class="btn btn-blue btn-sm" onclick="openChartModal()">📊 Team Stats</button>
+    <button class="btn btn-secondary btn-sm" onclick="openCFModal()">🎨 Formatting</button>
+    <button class="btn btn-secondary btn-sm" onclick="openAddColModal()">＋ Column</button>
+    <button class="btn btn-secondary btn-sm" onclick="exportJSON()">⬇ Export JSON</button>
+    <button class="btn btn-secondary btn-sm" onclick="importJSON()">⬆ Import JSON</button>
+    <input type="file" id="json-input" accept=".json" style="display:none" onchange="handleJSONImport(event)" />
+    <button class="btn btn-primary" onclick="openModal()">+ Add Task</button>
+  </div>
+</header>
 
-        <div class="content">
-            <!-- CV Tab -->
-            <div id="cv" class="tab-content active">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <strong>📞</strong> +201015760867
-                    </div>
-                    <div class="contact-item">
-                        <strong>📧</strong> <a href="mailto:Aelsay96@gmail.com">Aelsay96@gmail.com</a>
-                    </div>
-                    <div class="contact-item">
-                        <strong>📍</strong> Menofiya, Egypt
-                    </div>
-                </div>
+<!-- ══ TABS ══ -->
+<div class="tabs">
+  <button class="tab active" onclick="switchMainTab('tasks')">✓ Tasks</button>
+  <button class="tab" onclick="switchMainTab('projects')">📁 Projects</button>
+  <button class="tab" onclick="switchMainTab('statistics')">📊 Statistics</button>
+</div>
 
-                <div class="cv-section">
-                    <h2>Professional Summary</h2>
-                    <p>Electrical Motor Engineer with 5+ years of expertise in Finite Element Analysis (FEA), motor design optimization, and Python automation. Proficient in ANSYS Maxwell, JMAG, and MATLAB. Currently pursuing a Master's in Power Electronics Engineering, specializing in electric vehicle (EV) drive systems.</p>
-                </div>
+<!-- ══ TASKS TAB ══ -->
+<div id="tasks-tab" class="tab-content active">
 
-                <div class="cv-section">
-                    <h2>Core Competencies</h2>
-                    <p>Finite Element Analysis (FEA), Home Appliance Motor Design (Analytical Design / CAD), ANSYS Automation (PyAEDT / OptiSLang), Python/MATLAB Scripting, Motor Testing, Project Management, Cross-Functional Team Collaboration</p>
-                </div>
+<!-- ══ TOOLBAR ══ -->
+<div class="toolbar">
+  <div class="toolbar-left">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search" placeholder="Search tasks…" oninput="renderTable()" />
+    </div>
+    <select id="filter-status" onchange="renderTable()">
+      <option value="">All Statuses</option>
+      <option>To Do</option><option>In Progress</option><option>In Review</option><option>Done</option><option>Blocked</option>
+    </select>
+    <select id="filter-priority" onchange="renderTable()">
+      <option value="">All Priorities</option>
+      <option>High</option><option>Medium</option><option>Low</option>
+    </select>
+    <select id="filter-assignee" onchange="renderTable()"><option value="">All Assignees</option></select>
+    <select id="filter-project" onchange="renderTable()"><option value="">All Projects</option></select>
+    <input type="date" id="filter-date-from" onchange="renderTable()" placeholder="From date" title="Due date from" />
+    <input type="date" id="filter-date-to" onchange="renderTable()" placeholder="To date" title="Due date to" />
+  </div>
+  <div class="toolbar-right">
+    <button class="btn btn-secondary btn-sm" onclick="showLastWeekModified()">📝 Last Week Modified</button>
+    <button class="btn btn-primary" onclick="openModal()">+ New Task</button>
+    <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Clear filters</button>
+  </div>
+</div>
 
-                <div class="cv-section">
-                    <h2>Work Experience</h2>
-                    
-                    <div class="job-entry">
-                        <div class="job-header">
-                            <div>
-                                <div class="job-title">Senior Motor Design Engineer</div>
-                                <div>El-Araby Group R&D center, Egypt</div>
-                            </div>
-                            <div class="job-date">Jan 2024 – Present</div>
-                        </div>
-                        <ul>
-                            <li>Design, optimize, prototype, and test home appliance motors.</li>
-                            <li>Conduct simulation testing and validation to ensure compliance with system performance requirements.</li>
-                            <li>Perform topology optimization for efficient lamination design and cost reduction.</li>
-                            <li>Continuously improve simulation methodologies to enhance accuracy and reduce time.</li>
-                        </ul>
-                    </div>
+<!-- ══ STATS BAR ══ -->
+<div class="stats-bar" id="stats-bar"></div>
 
-                    <div class="job-entry">
-                        <div class="job-header">
-                            <div>
-                                <div class="job-title">Motor Design Engineer</div>
-                                <div>El-Araby Group R&D center, Egypt</div>
-                            </div>
-                            <div class="job-date">Jan 2020 – Jan 2024</div>
-                        </div>
-                        <ul>
-                            <li>Optimized 15+ home appliance motors (SPIM), improving efficiency by up to 15% and reducing costs by up to 30%.</li>
-                            <li>Automated 2D/3D ANSYS simulations using Python (PyAEDT), reducing model construction time and errors by 90%.</li>
-                            <li>Designed and built an Epstein Frame Jig for steel performance data extraction in compliance with IEC 60404-2.</li>
-                            <li>Localized 9 SPIM motors, supported alternative material/component approvals.</li>
-                            <li>Conducted benchmarking activities, reverse engineering, and cost-performance analysis.</li>
-                        </ul>
-                    </div>
-                </div>
+<!-- ══ HINT ══ -->
+<div class="export-hint">
+  💡 <span><strong>Data Persistence:</strong> All edits auto-save to your <strong>browser's local storage</strong> on THIS device only. Data does NOT sync across devices. To share or backup: <strong>Export JSON</strong> → save to OneDrive/SharePoint → <strong>Import JSON</strong> on other devices (preserves all tasks, columns, formatting, and logo). Place <strong>ELARABY.LOGO</strong> file (4002×650px) in same folder for automatic logo loading.</span>
+</div>
 
-                <div class="cv-section">
-                    <h2>Education</h2>
-                    
-                    <div class="job-entry">
-                        <div class="job-header">
-                            <div>
-                                <div class="job-title">Master of Power Electronics Engineering</div>
-                                <div>Cairo University, Egypt</div>
-                            </div>
-                            <div class="job-date">Oct 2022 – Present</div>
-                        </div>
-                        <p><strong>Thesis:</strong> "EV SiC-Based Multilevel Inverter"</p>
-                        <p><strong>Areas of Interest:</strong> Multilevel Inverters, Wide Bandgap Devices, CMV Mitigation, High Power Density</p>
-                    </div>
+<!-- ══ TABLE ══ -->
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr id="table-head-row">
+        <th onclick="sortBy('id')">#<span class="sort-icon" id="sort-id">↕</span></th>
+        <th onclick="sortBy('title')">Task<span class="sort-icon" id="sort-title">↕</span></th>
+        <th onclick="sortBy('project')">Project<span class="sort-icon" id="sort-project">↕</span></th>
+        <th onclick="sortBy('assignee')">Assignee<span class="sort-icon" id="sort-assignee">↕</span></th>
+        <th onclick="sortBy('status')">Status<span class="sort-icon" id="sort-status">↕</span></th>
+        <th onclick="sortBy('priority')">Priority<span class="sort-icon" id="sort-priority">↕</span></th>
+        <th onclick="sortBy('dueDate')">Due Date<span class="sort-icon" id="sort-dueDate">↕</span></th>
+        <th>Progress</th>
+        <th>Depends On</th>
+        <th onclick="sortBy('task3DEXP')">Task on 3DEXP<span class="sort-icon" id="sort-task3DEXP">↕</span></th>
+        <th onclick="sortBy('projectType')">Project Type<span class="sort-icon" id="sort-projectType">↕</span></th>
+        <th onclick="sortBy('product')">Product<span class="sort-icon" id="sort-product">↕</span></th>
+        <th onclick="sortBy('projectPhase')">Project Phase<span class="sort-icon" id="sort-projectPhase">↕</span></th>
+        <!-- custom cols go here, before + -->
+        <th class="add-col-th" onclick="openAddColModal()" title="Add column">＋</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="task-tbody"></tbody>
+  </table>
+</div>
 
-                    <div class="job-entry">
-                        <div class="job-header">
-                            <div>
-                                <div class="job-title">Bachelor of Electric Machines & Power Systems</div>
-                                <div>Minufiya University, Egypt</div>
-                            </div>
-                            <div class="job-date">Sep 2014 – Jun 2019</div>
-                        </div>
-                    </div>
-                </div>
+</div><!-- END TASKS TAB -->
 
-                <div class="cv-section">
-                    <h2>Technical Skills</h2>
-                    <div class="skills-grid">
-                        <div class="skill-category">
-                            <h4>Simulation Tools</h4>
-                            <p>ANSYS Maxwell, Motor-CAD, JMAG, FEMM</p>
-                        </div>
-                        <div class="skill-category">
-                            <h4>Programming</h4>
-                            <p>Python (PyAEDT, PyFemm), MATLAB/Simulink</p>
-                        </div>
-                        <div class="skill-category">
-                            <h4>Motor Testing</h4>
-                            <p>Dynamometers, Power Analyzers, Oscilloscopes</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!-- ══ PROJECTS TAB ══ -->
+<div id="projects-tab" class="tab-content">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="project-search" placeholder="Search projects…" oninput="renderProjectsTable()" />
+      </div>
+      <select id="filter-project-stage" onchange="renderProjectsTable()">
+        <option value="">All Stages</option>
+        <option>Planning</option><option>Execution</option><option>Testing</option><option>Deployment</option><option>Maintenance</option>
+      </select>
+      <select id="filter-project-priority" onchange="renderProjectsTable()">
+        <option value="">All Priorities</option>
+        <option>High</option><option>Medium</option><option>Low</option>
+      </select>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn btn-primary" onclick="openProjectModal()">+ New Project</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearProjectFilters()">✕ Clear filters</button>
+    </div>
+  </div>
 
-            <!-- Work & Projects Tab -->
-            <div id="work" class="tab-content">
-                <div class="cv-section">
-                    <h2>Featured Projects</h2>
-                    <div class="project-grid">
-                        <div class="project-card" onclick="openProject('ltspice-project')">
-                            <h3>LTSpiceHandler</h3>
-                            <p><strong>Cairo University</strong></p>
-                            <p>Developed an automated optimization tool for predefined inverter topologies, enabling PWM techniques, result analysis, and accurate loss calculation according to IEC 60747-8.</p>
-                            <div>
-                                <span class="project-tag">Python</span>
-                                <span class="project-tag">MATLAB</span>
-                                <span class="project-tag">LTSpice</span>
-                            </div>
-                        </div>
+  <div class="table-wrap" style="padding-top:20px">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortProjectsBy('name')">Project Name<span class="sort-icon" id="psort-name">↕</span></th>
+          <th>Total Tasks</th>
+          <th>To Do</th>
+          <th>In Progress</th>
+          <th>Review</th>
+          <th>Done</th>
+          <th>Blocked</th>
+          <th>Completion %</th>
+          <th onclick="sortProjectsBy('startDate')">Start Date<span class="sort-icon" id="psort-startDate">↕</span></th>
+          <th onclick="sortProjectsBy('endDate')">End Date<span class="sort-icon" id="psort-endDate">↕</span></th>
+          <th>Objectives</th>
+          <th>KPIs</th>
+          <th onclick="sortProjectsBy('pic')">PIC<span class="sort-icon" id="psort-pic">↕</span></th>
+          <th onclick="sortProjectsBy('project3DEXP')">Project on 3DEXP<span class="sort-icon" id="psort-project3DEXP">↕</span></th>
+          <th onclick="sortProjectsBy('stage')">Stage<span class="sort-icon" id="psort-stage">↕</span></th>
+          <th onclick="sortProjectsBy('type')">Type<span class="sort-icon" id="psort-type">↕</span></th>
+          <th onclick="sortProjectsBy('platform')">Platform<span class="sort-icon" id="psort-platform">↕</span></th>
+          <th onclick="sortProjectsBy('priority')">Priority<span class="sort-icon" id="psort-priority">↕</span></th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="projects-tbody">
+        <tr><td colspan="12" style="text-align:center;padding:60px;color:var(--text-muted)">No projects yet. Click <strong>+ New Project</strong> to create one.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div><!-- END PROJECTS TAB -->
 
-                        <div class="project-card" onclick="openProject('dpt-project')">
-                            <h3>DPTHandler</h3>
-                            <p><strong>Cairo University</strong></p>
-                            <p>Automated double-pulse testing (DPT) for MOSFETs using LTspice, allowing comparison of results with defined datasheet curves.</p>
-                            <div>
-                                <span class="project-tag">Python</span>
-                                <span class="project-tag">LTSpice</span>
-                                <span class="project-tag">Testing</span>
-                            </div>
-                        </div>
-
-                        <div class="project-card" onclick="openProject('spim-project')">
-                            <h3>SPIM Manufacturing Localization</h3>
-                            <p><strong>El-Araby Group</strong></p>
-                            <p>Led a cross-functional team to localize nine single-phase induction motors (SPIM), reducing annual import costs significantly.</p>
-                            <div>
-                                <span class="project-tag">Project Management</span>
-                                <span class="project-tag">Motor Design</span>
-                                <span class="project-tag">Cost Optimization</span>
-                            </div>
-                        </div>
-
-                        <div class="project-card" onclick="openProject('sample-project')">
-                            <h3>Project Title</h3>
-                            <p><strong>Organization/Company</strong></p>
-                            <p>Project description goes here. Add details about what you built, the technologies used, and the impact it had.</p>
-                            <div>
-                                <span class="project-tag">Tag 1</span>
-                                <span class="project-tag">Tag 2</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Articles Tab -->
-            <div id="articles" class="tab-content">
-                <div class="cv-section">
-                    <h2>Technical Articles & Blog Posts</h2>
-                    <div class="article-list">
-                        <div class="article-item">
-                            <h3>Article Title Goes Here</h3>
-                            <div class="article-meta">Published on Month Day, Year • 5 min read</div>
-                            <p>Brief description or excerpt of the article. This should give readers an idea of what the article is about and entice them to read more.</p>
-                            <a href="#" class="read-more">Read More →</a>
-                        </div>
-
-                        <div class="article-item">
-                            <h3>Another Article Title</h3>
-                            <div class="article-meta">Published on Month Day, Year • 8 min read</div>
-                            <p>Brief description or excerpt of the article. This should give readers an idea of what the article is about and entice them to read more.</p>
-                            <a href="#" class="read-more">Read More →</a>
-                        </div>
-
-                        <div class="article-item">
-                            <h3>Third Article Title</h3>
-                            <div class="article-meta">Published on Month Day, Year • 6 min read</div>
-                            <p>Brief description or excerpt of the article. This should give readers an idea of what the article is about and entice them to read more.</p>
-                            <a href="#" class="read-more">Read More →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            <p>&copy; 2026 Ahmed Elsayed Mohamed. All rights reserved.</p>
-        </footer>
-
-        <!-- Project Detail Pages -->
-        <!-- LTSpiceHandler Project -->
-        <div id="ltspice-project" class="project-detail">
-            <button class="back-button" onclick="closeProject()">← Back to Projects</button>
-            
-            <h1>LTSpiceHandler</h1>
-            
-            <div class="project-meta">
-                <div class="project-meta-item">
-                    <strong>Organization</strong>
-                    <span>Cairo University</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Duration</strong>
-                    <span>Add project duration</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Role</strong>
-                    <span>Lead Developer</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Technologies</strong>
-                    <span>Python, MATLAB, LTSpice</span>
-                </div>
-            </div>
-
-            <h2>Overview</h2>
-            <p>Developed an automated optimization tool for predefined inverter topologies, enabling PWM techniques, result analysis, and accurate loss calculation according to IEC 60747-8 standards. This tool significantly reduces the time required for inverter design optimization and ensures compliance with international standards.</p>
-
-            <h2>Key Features</h2>
-            <ul>
-                <li>Automated inverter topology optimization</li>
-                <li>Multiple PWM technique implementations</li>
-                <li>Comprehensive result analysis and visualization</li>
-                <li>IEC 60747-8 compliant loss calculations</li>
-                <li>Integration with LTSpice simulation environment</li>
-            </ul>
-
-            <h2>Technical Challenges</h2>
-            <p>Add details about the technical challenges you faced and how you overcame them.</p>
-
-            <h2>Results & Impact</h2>
-            <p>Add measurable results and the impact this project had on research or development processes.</p>
-
-            <h2>Project Images</h2>
-            <div class="project-images">
-                <div class="project-image-placeholder">Screenshot 1</div>
-                <div class="project-image-placeholder">Screenshot 2</div>
-                <div class="project-image-placeholder">Diagram/Chart</div>
-            </div>
-        </div>
-
-        <!-- DPTHandler Project -->
-        <div id="dpt-project" class="project-detail">
-            <button class="back-button" onclick="closeProject()">← Back to Projects</button>
-            
-            <h1>DPTHandler</h1>
-            
-            <div class="project-meta">
-                <div class="project-meta-item">
-                    <strong>Organization</strong>
-                    <span>Cairo University</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Duration</strong>
-                    <span>Add project duration</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Role</strong>
-                    <span>Lead Developer</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Technologies</strong>
-                    <span>Python, LTSpice</span>
-                </div>
-            </div>
-
-            <h2>Overview</h2>
-            <p>Automated double-pulse testing (DPT) tool for MOSFETs using LTspice, enabling efficient characterization and validation against manufacturer datasheet specifications.</p>
-
-            <h2>Key Features</h2>
-            <ul>
-                <li>Automated DPT setup and execution in LTSpice</li>
-                <li>Datasheet curve comparison and validation</li>
-                <li>Switching loss characterization</li>
-                <li>Automated report generation</li>
-            </ul>
-
-            <h2>Technical Details</h2>
-            <p>Add technical implementation details, methodologies used, and the testing framework.</p>
-
-            <h2>Results & Impact</h2>
-            <p>Add measurable results and how this tool improved the testing workflow.</p>
-
-            <h2>Project Images</h2>
-            <div class="project-images">
-                <div class="project-image-placeholder">Test Setup</div>
-                <div class="project-image-placeholder">Results Comparison</div>
-            </div>
-        </div>
-
-        <!-- SPIM Localization Project -->
-        <div id="spim-project" class="project-detail">
-            <button class="back-button" onclick="closeProject()">← Back to Projects</button>
-            
-            <h1>SPIM Manufacturing Localization</h1>
-            
-            <div class="project-meta">
-                <div class="project-meta-item">
-                    <strong>Organization</strong>
-                    <span>El-Araby Group</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Duration</strong>
-                    <span>Jan 2020 - Jan 2024</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Role</strong>
-                    <span>Project Lead</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Team Size</strong>
-                    <span>Cross-functional team</span>
-                </div>
-            </div>
-
-            <h2>Overview</h2>
-            <p>Led a comprehensive cross-functional initiative to localize nine single-phase induction motors (SPIM), significantly reducing annual import costs while maintaining or improving performance standards.</p>
-
-            <h2>Key Achievements</h2>
-            <ul>
-                <li>Successfully localized 9 SPIM motors</li>
-                <li>Reduced import costs by up to 30%</li>
-                <li>Improved motor efficiency by up to 15%</li>
-                <li>Established local supply chain partnerships</li>
-                <li>Created comprehensive testing and validation protocols</li>
-            </ul>
-
-            <h2>Project Scope</h2>
-            <p>Detail the full scope of the project including design, prototyping, testing, supplier qualification, and production ramp-up.</p>
-
-            <h2>Challenges & Solutions</h2>
-            <p>Add details about the challenges faced during localization and the innovative solutions implemented.</p>
-
-            <h2>Impact</h2>
-            <p>Describe the business impact, cost savings, and strategic advantages gained from the localization effort.</p>
-
-            <h2>Project Images</h2>
-            <div class="project-images">
-                <div class="project-image-placeholder">Motor Design</div>
-                <div class="project-image-placeholder">Testing Setup</div>
-                <div class="project-image-placeholder">Performance Data</div>
-            </div>
-        </div>
-
-        <!-- Sample Project Template -->
-        <div id="sample-project" class="project-detail">
-            <button class="back-button" onclick="closeProject()">← Back to Projects</button>
-            
-            <h1>Project Title</h1>
-            
-            <div class="project-meta">
-                <div class="project-meta-item">
-                    <strong>Organization</strong>
-                    <span>Organization Name</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Duration</strong>
-                    <span>Project duration</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Role</strong>
-                    <span>Your role</span>
-                </div>
-                <div class="project-meta-item">
-                    <strong>Technologies</strong>
-                    <span>Tech stack</span>
-                </div>
-            </div>
-
-            <h2>Overview</h2>
-            <p>Comprehensive project description goes here. Explain what the project was about, what problem it solved, and why it was important.</p>
-
-            <h2>Key Features</h2>
-            <ul>
-                <li>Feature 1 description</li>
-                <li>Feature 2 description</li>
-                <li>Feature 3 description</li>
-            </ul>
-
-            <h2>Technical Implementation</h2>
-            <p>Describe the technical approach, architecture, and key design decisions.</p>
-
-            <h2>Results & Impact</h2>
-            <p>Quantifiable results and the overall impact of the project.</p>
-
-            <h2>Project Images</h2>
-            <div class="project-images">
-                <div class="project-image-placeholder">Add images here</div>
-                <div class="project-image-placeholder">Add images here</div>
-            </div>
-        </div>
+<!-- ══ STATISTICS TAB ══ -->
+<div id="statistics-tab" class="tab-content">
+  <div style="padding:20px 28px">
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px">📊 Project & Task Statistics</h2>
+    
+    <!-- Overall Summary -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:30px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px">
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Total Projects</div>
+        <div style="font-size:32px;font-weight:700;color:var(--accent2)" id="stat-total-projects">0</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px">
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Total Tasks</div>
+        <div style="font-size:32px;font-weight:700;color:var(--accent2)" id="stat-total-tasks">0</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px">
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Overall Completion</div>
+        <div style="font-size:32px;font-weight:700;color:#10b981" id="stat-overall-completion">0%</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px">
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Active Tasks</div>
+        <div style="font-size:32px;font-weight:700;color:#f59e0b" id="stat-active-tasks">0</div>
+      </div>
     </div>
 
-    <script>
-        function showTab(tabName) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
+    <!-- Project Performance -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px">
+      <h3 style="font-size:16px;font-weight:600;margin-bottom:16px">🎯 Project Performance</h3>
+      <div id="project-performance-list"></div>
+    </div>
 
-            // Remove active class from all nav links
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => link.classList.remove('active'));
+    <!-- Task Status Breakdown -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px">
+      <h3 style="font-size:16px;font-weight:600;margin-bottom:16px">📋 Task Status Distribution</h3>
+      <div id="status-breakdown" style="display:flex;gap:20px;flex-wrap:wrap"></div>
+    </div>
 
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
+    <!-- Recommendations -->
+    <div style="background:var(--accent2-soft);border:1px solid #bfdbfe;border-radius:var(--radius);padding:24px;margin-bottom:20px">
+      <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;color:#1e40af">💡 Insights & Recommendations</h3>
+      <div id="recommendations-list"></div>
+    </div>
 
-            // Add active class to clicked nav link
-            event.target.classList.add('active');
+    <!-- Team Workload -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px">
+      <h3 style="font-size:16px;font-weight:600;margin-bottom:16px">👥 Team Workload</h3>
+      <div id="team-workload-list"></div>
+    </div>
+  </div>
+</div><!-- END STATISTICS TAB -->
+
+<!-- ══ TASK MODAL ══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeOverlay(event,'modal-overlay')">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-header">
+      <h2 id="modal-title">Add Task</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group full"><label>Task Title *</label><input type="text" id="f-title" placeholder="What needs to be done?" /></div>
+        <div class="form-group full"><label>Description</label><textarea id="f-desc" placeholder="Optional details…"></textarea></div>
+        <div class="form-group"><label>Project *</label>
+          <select id="f-project" style="width:100%">
+            <option value="">-- Select Project --</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Assignee</label><input type="text" id="f-assignee" list="assignee-list" /><datalist id="assignee-list"></datalist></div>
+        <div class="form-group"><label>Status</label><select id="f-status"><option>To Do</option><option>In Progress</option><option>In Review</option><option>Done</option><option>Blocked</option></select></div>
+        <div class="form-group"><label>Priority</label><select id="f-priority"><option>Medium</option><option>High</option><option>Low</option></select></div>
+        <div class="form-group"><label>Due Date</label><input type="date" id="f-due" /></div>
+        <div class="form-group"><label>Progress (%)</label><input type="number" id="f-progress" min="0" max="100" value="0" /></div>
+        <div class="form-group"><label>Task on 3DEXP</label><input type="text" id="f-task3DEXP" placeholder="3DEXP task reference" /></div>
+        <div class="form-group"><label>Project Type</label><select id="f-projectType"><option value="">—</option></select></div>
+        <div class="form-group"><label>Product</label><select id="f-product"><option value="">—</option></select></div>
+        <div class="form-group"><label>Project Phase</label><select id="f-projectPhase"><option value="">—</option></select></div>
+        <div class="form-group full"><label>Notes</label><textarea id="f-notes" placeholder="Extra notes or links…"></textarea></div>
+        <div class="form-group full"><label>Depends On</label><div class="dep-selector" id="dep-selector"></div></div>
+        <div id="custom-fields-wrap" style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:14px;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-overlay')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD COLUMN MODAL ══ -->
+<div class="modal-overlay" id="addcol-modal" onclick="closeOverlay(event,'addcol-modal')">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-header">
+      <h2>Manage Columns</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('addcol-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Your Custom Columns</div>
+        <div class="custom-cols-list" id="custom-cols-list"><span style="color:var(--text-light);font-size:12px;padding:4px">No custom columns yet</span></div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border)" />
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Add New Column</div>
+        <div class="form-group" style="margin-bottom:12px"><label>Column Name</label><input type="text" id="new-col-name" placeholder="e.g. Sprint, Category, Reviewer…" /></div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Column Type</div>
+        <div class="col-type-grid">
+          <button class="col-type-btn selected" data-type="text" onclick="selectColType(this)"><div class="col-type-icon">📝</div><div class="col-type-name">Text</div><div class="col-type-desc">Free-form input</div></button>
+          <button class="col-type-btn" data-type="number" onclick="selectColType(this)"><div class="col-type-icon">🔢</div><div class="col-type-name">Number</div><div class="col-type-desc">Numeric value</div></button>
+          <button class="col-type-btn" data-type="date" onclick="selectColType(this)"><div class="col-type-icon">📅</div><div class="col-type-name">Date</div><div class="col-type-desc">Date picker</div></button>
+          <button class="col-type-btn" data-type="select" onclick="selectColType(this)"><div class="col-type-icon">🔽</div><div class="col-type-name">Dropdown</div><div class="col-type-desc">Choose from options</div></button>
+        </div>
+        <div id="select-options-group" class="form-group" style="display:none;margin-top:12px"><label>Options (comma-separated)</label><input type="text" id="new-col-options" placeholder="Option A, Option B, Option C" /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addcol-modal')">Close</button>
+      <button class="btn btn-primary" onclick="addCustomColumn()">Add Column</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHART MODAL ══ -->
+<div class="modal-overlay" id="chart-modal" onclick="closeOverlay(event,'chart-modal')">
+  <div class="modal" style="max-width:800px">
+    <div class="modal-header">
+      <h2>📊 Team Statistics</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('chart-modal')">✕</button>
+    </div>
+    <div style="padding:12px 24px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <span style="font-size:12px;font-weight:600;color:var(--text-muted);">Filter by:</span>
+      <select id="stats-filter-product" onchange="refreshCharts()" style="font-size:12px;padding:5px 10px;border:1px solid var(--border-strong);border-radius:6px;background:var(--surface);">
+        <option value="">All Products</option>
+      </select>
+      <select id="stats-filter-project-type" onchange="refreshCharts()" style="font-size:12px;padding:5px 10px;border:1px solid var(--border-strong);border-radius:6px;background:var(--surface);">
+        <option value="">All Project Types</option>
+      </select>
+      <button class="btn btn-xs btn-secondary" onclick="clearStatsFilters()">Clear</button>
+    </div>
+    <div class="chart-tabs">
+      <button class="chart-tab active" onclick="switchTab('tab-person',0)">Tasks per Person</button>
+      <button class="chart-tab" onclick="switchTab('tab-status',1)">Status Breakdown</button>
+      <button class="chart-tab" onclick="switchTab('tab-priority',2)">Priority Mix</button>
+      <button class="chart-tab" onclick="switchTab('tab-progress',3)">Avg. Progress</button>
+    </div>
+    <div class="chart-panel active" id="tab-person">
+      <div class="chart-canvas-wrap" style="height:270px"><canvas id="chart-person" class="chart"></canvas></div>
+      <div class="person-cards" id="person-cards"></div>
+    </div>
+    <div class="chart-panel" id="tab-status">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center">
+        <div class="chart-canvas-wrap" style="height:260px"><canvas id="chart-status" class="chart"></canvas></div>
+        <div id="status-legend"></div>
+      </div>
+    </div>
+    <div class="chart-panel" id="tab-priority">
+      <div class="chart-canvas-wrap" style="height:270px"><canvas id="chart-priority" class="chart"></canvas></div>
+    </div>
+    <div class="chart-panel" id="tab-progress">
+      <div class="chart-canvas-wrap" style="height:270px"><canvas id="chart-progress" class="chart"></canvas></div>
+    </div>
+    <div style="padding:0 24px 16px;font-size:11px;color:var(--text-light)">Based on <span id="chart-total">0</span> filtered tasks</div>
+  </div>
+</div>
+
+<!-- ══ CONDITIONAL FORMATTING MODAL ══ -->
+<div class="modal-overlay" id="cf-modal" onclick="closeOverlay(event,'cf-modal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>🎨 Conditional Formatting Rules</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('cf-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Apply automatic formatting to rows based on conditions. Rules are applied in order.</p>
+      
+      <h3 style="font-size:13px;font-weight:600;margin-bottom:10px">Quick Presets</h3>
+      <div class="cf-preset-grid">
+        <div class="cf-preset-btn" onclick="addPresetRule('overdue')">
+          <div class="cf-preset-name">⏰ Overdue Tasks</div>
+          <div class="cf-preset-desc">Red background for past due dates</div>
+        </div>
+        <div class="cf-preset-btn" onclick="addPresetRule('high-priority')">
+          <div class="cf-preset-name">🔥 High Priority</div>
+          <div class="cf-preset-desc">Yellow background for urgent items</div>
+        </div>
+        <div class="cf-preset-btn" onclick="addPresetRule('blocked')">
+          <div class="cf-preset-name">🚫 Blocked Status</div>
+          <div class="cf-preset-desc">Red border for blocked tasks</div>
+        </div>
+        <div class="cf-preset-btn" onclick="addPresetRule('almost-done')">
+          <div class="cf-preset-name">✅ Almost Done</div>
+          <div class="cf-preset-desc">Green background for 80%+ progress</div>
+        </div>
+      </div>
+      
+      <h3 style="font-size:13px;font-weight:600;margin:20px 0 10px">Custom Rules</h3>
+      <div class="cf-rules-list" id="cf-rules-list"></div>
+      <button class="cf-add-rule" onclick="addCFRule()">+ Add Custom Rule</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="applyCFRules()">Apply Rules</button>
+      <button class="btn btn-secondary" onclick="closeModal('cf-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INFO MODAL ══ -->
+<div class="modal-overlay" id="info-modal" onclick="closeOverlay(event,'info-modal')">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h2>ℹ️ About Data Storage & Sync</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('info-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <h3 style="font-size:14px;font-weight:600;margin-bottom:10px">🔒 How Your Data is Stored</h3>
+      <p style="font-size:13px;line-height:1.6;margin-bottom:16px;color:var(--text-muted)">
+        All your tasks, custom columns, formatting rules, and settings are saved automatically in your <strong>browser's local storage</strong>. This means:
+      </p>
+      <ul style="font-size:13px;line-height:1.8;margin-left:20px;margin-bottom:20px;color:var(--text)">
+        <li><strong>No cloud storage</strong> - Your data stays on your device</li>
+        <li><strong>Privacy-first</strong> - Nothing is sent to external servers</li>
+        <li><strong>Instant saves</strong> - Every edit auto-saves immediately</li>
+        <li><strong>Offline capable</strong> - Works without internet connection</li>
+      </ul>
+
+      <h3 style="font-size:14px;font-weight:600;margin-bottom:10px;margin-top:24px">⚠️ Important Limitations</h3>
+      <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:12px 14px;border-radius:8px;margin-bottom:16px">
+        <p style="font-size:13px;line-height:1.6;color:#92400e;margin:0">
+          <strong>Data does NOT sync across devices or browsers!</strong><br>
+          Each device/browser has its own separate copy. Opening this file on another computer will show a fresh task board.
+        </p>
+      </div>
+
+      <h3 style="font-size:14px;font-weight:600;margin-bottom:10px;margin-top:24px">📤 How to Share Data Across Devices</h3>
+      <ol style="font-size:13px;line-height:1.8;margin-left:20px;color:var(--text)">
+        <li>Click <strong>⬇ Export JSON</strong> on Device A</li>
+        <li>Save the JSON file to OneDrive, SharePoint, or email it to yourself</li>
+        <li>Open the task board on Device B</li>
+        <li>Click <strong>⬆ Import JSON</strong> and select the file</li>
+        <li>Your tasks, columns, formatting rules, and logo are now on Device B!</li>
+      </ol>
+
+      <h3 style="font-size:14px;font-weight:600;margin-bottom:10px;margin-top:24px">💾 What Gets Exported/Imported</h3>
+      <ul style="font-size:13px;line-height:1.8;margin-left:20px;color:var(--text)">
+        <li>✅ All task data (title, status, dates, progress, product, project type, etc.)</li>
+        <li>✅ All projects (with objectives, KPIs, dates, PIC, 3DEXP, etc.)</li>
+        <li>✅ Custom columns and their data</li>
+        <li>✅ Conditional formatting rules</li>
+        <li>✅ Company logo</li>
+        <li>✅ Board title</li>
+        <li>✅ Last modified timestamp for each task</li>
+        <li>❌ Filters (these reset when you reload)</li>
+        <li>❌ Sort settings (these reset when you reload)</li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('info-modal')">Got it!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROJECT MODAL ══ -->
+<div class="modal-overlay" id="project-modal" onclick="closeOverlay(event,'project-modal')">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <h2 id="project-modal-title">Add Project</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('project-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group full"><label>Project Name *</label><input type="text" id="pf-name" placeholder="Enter project name" /></div>
+      
+      <div class="form-row">
+        <div class="form-group"><label>Start Date</label><input type="date" id="pf-startDate" /></div>
+        <div class="form-group"><label>End Date</label><input type="date" id="pf-endDate" /></div>
+      </div>
+
+      <div class="form-group full"><label>Objectives</label><textarea id="pf-objectives" placeholder="Project objectives and goals" style="min-height:70px"></textarea></div>
+      <div class="form-group full"><label>KPIs</label><textarea id="pf-kpis" placeholder="Key Performance Indicators" style="min-height:70px"></textarea></div>
+
+      <div class="form-row">
+        <div class="form-group"><label>PIC (Person in Charge)</label><input type="text" id="pf-pic" placeholder="Name" /></div>
+        <div class="form-group"><label>Project on 3DEXP</label><input type="text" id="pf-project3DEXP" placeholder="3DEXPERIENCE project reference" /></div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group"><label>Stage</label>
+          <select id="pf-stage">
+            <option>Planning</option><option>Execution</option><option>Testing</option><option>Deployment</option><option>Maintenance</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Type</label><input type="text" id="pf-type" placeholder="e.g., Development, Research" /></div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group"><label>Platform</label><input type="text" id="pf-platform" placeholder="e.g., Web, Mobile, Desktop" /></div>
+        <div class="form-group"><label>Priority</label>
+          <select id="pf-priority">
+            <option>Medium</option><option>High</option><option>Low</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('project-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// ══════════ CONSTANTS & STATE ══════════
+const SK='team_tasks_v3', LK='team_tasks_logo', CK='team_tasks_custom_cols', CFG='team_tasks_config', PK='team_tasks_projects';
+const CHART_COLORS=['#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f97316','#06b6d4','#84cc16','#ef4444','#f59e0b','#10b981'];
+const STATUS_COLORS={'To Do':'#a8a09a','In Progress':'#f59e0b','In Review':'#6366f1','Done':'#10b981','Blocked':'#ef4444'};
+const PRIO_COLORS={'High':'#ef4444','Medium':'#f59e0b','Low':'#10b981'};
+
+// Project-related dropdowns
+const PROJECT_TYPES=['New Development','Sole Supplier or Alternative','Localization','Standardization','Process Improvement','Mechanical Design','Electrical Design','VAVE','Others'];
+const PRODUCTS=['STAND FAN','VENTALIATION FAN','CEILING FAN','AIR CONDITIONER','WASHING MACHINE','Fridge','COMPRESSOR','OTHERS'];
+const PROJECT_PHASES=['CP','T0','T1','T2','PR','PP','MP'];
+
+function od(d){const dt=new Date();dt.setDate(dt.getDate()+d);return dt.toISOString().slice(0,10);}
+
+const SAMPLE_PROJECTS=[
+  {id:1,name:'Stand Fan Development',startDate:'2025-01-15',endDate:'2025-06-30',objectives:'Develop new energy-efficient stand fan model with smart features',kpis:'Cost reduction 15%, Energy efficiency +20%, Market launch Q2',pic:'Ahmed Hassan',project3DEXP:'SF-2025-001',stage:'Execution',type:'New Development',platform:'Hardware',priority:'High'},
+  {id:2,name:'AC Compressor Localization',startDate:'2025-02-01',endDate:'2025-08-31',objectives:'Localize compressor production to reduce import costs',kpis:'Local content 70%, Cost saving $2M annually',pic:'Sarah Mohamed',project3DEXP:'AC-COMP-2025',stage:'Planning',type:'Localization',platform:'Manufacturing',priority:'High'},
+  {id:3,name:'Washing Machine UI Redesign',startDate:'2024-12-01',endDate:'2025-04-15',objectives:'Modernize control panel and add mobile app integration',kpis:'User satisfaction +30%, App downloads 50K',pic:'Omar Ali',project3DEXP:'WM-UI-2024',stage:'Testing',type:'Process Improvement',platform:'Mobile/Hardware',priority:'Medium'},
+  {id:4,name:'Fridge Energy Optimization',startDate:'2025-01-10',endDate:'2025-07-20',objectives:'Improve energy rating from B to A++ through design optimization',kpis:'Energy consumption -25%, Certification A++',pic:'Layla Ibrahim',project3DEXP:'FRDG-ENR-2025',stage:'Execution',type:'VAVE',platform:'Hardware',priority:'High'},
+  {id:5,name:'Ceiling Fan Export Model',startDate:'2025-03-01',endDate:'2025-09-30',objectives:'Develop export-ready ceiling fan for GCC markets',kpis:'Export sales $5M, Market entry 3 countries',pic:'Mohamed Salah',project3DEXP:'CF-EXP-2025',stage:'Planning',type:'New Development',platform:'Hardware',priority:'Medium'},
+];
+
+const SAMPLE=[
+  {id:1,title:'Design new landing page',desc:'Wireframes and mockups',project:'Stand Fan Development',assignee:'Sara K.',status:'In Progress',priority:'High',dueDate:od(3),progress:45,notes:'',deps:[],customData:{},task3DEXP:'SF-TASK-001',projectType:'',product:'',projectPhase:'',lastModified:Date.now()},
+  {id:2,title:'Fix login bug on Safari',desc:'Token expiry issue',project:'Washing Machine UI Redesign',assignee:'Ahmed R.',status:'To Do',priority:'High',dueDate:od(-1),progress:0,notes:'Reproduced on iOS 17',deps:[],customData:{},task3DEXP:'WM-TASK-005',projectType:'',product:'',projectPhase:'',lastModified:Date.now()},
+  {id:3,title:'Q2 budget report',desc:'',project:'AC Compressor Localization',assignee:'Layla M.',status:'Done',priority:'Medium',dueDate:od(-7),progress:100,notes:'',deps:[],customData:{},task3DEXP:'AC-TASK-012',projectType:'',product:'',projectPhase:'',lastModified:Date.now()},
+  {id:4,title:'Update API docs',desc:'Add v3 endpoints',project:'Washing Machine UI Redesign',assignee:'Ahmed R.',status:'In Review',priority:'Medium',dueDate:od(5),progress:80,notes:'',deps:[2],customData:{},task3DEXP:'WM-TASK-006',projectType:'',product:'',projectPhase:'',lastModified:Date.now()},
+  {id:5,title:'Onboard new contractors',desc:'',project:'Fridge Energy Optimization',assignee:'Sara K.',status:'Blocked',priority:'High',dueDate:od(1),progress:20,notes:'Waiting on IT access',deps:[3],customData:{},task3DEXP:'FRDG-TASK-003',projectType:'',product:'',projectPhase:'',lastModified:Date.now()},
+  {id:6,title:'Write social media plan',desc:'For May–July',project:'Ceiling Fan Export Model',assignee:'Omar T.',status:'To Do',priority:'Low',dueDate:od(10),progress:0,notes:'',deps:[],customData:{},task3DEXP:'CF-TASK-008',projectType:'',product:'',projectPhase:'',lastModified:Date.now()},
+];
+
+let tasks=[],nextId=1,editingId=null,sortCol='id',sortDir=1,customCols=[],chartInst={},selColType='text',cfRules=[],appConfig={};
+let projects=[],nextProjectId=1,editingProjectId=null,projectSortCol='name',projectSortDir=1;
+
+// ══════════ LOAD / SAVE ══════════
+function loadAll(){
+  try{const r=localStorage.getItem(SK);if(r){const d=JSON.parse(r);tasks=d.tasks||[];nextId=d.nextId||(tasks.length?Math.max(...tasks.map(t=>t.id))+1:1);}else{tasks=SAMPLE;nextId=10;saveAll();}}catch{tasks=SAMPLE;nextId=10;}
+  try{customCols=JSON.parse(localStorage.getItem(CK))||[];}catch{customCols=[];}
+  try{cfRules=JSON.parse(localStorage.getItem('team_tasks_cf_rules'))||[];}catch{cfRules=[];}
+  try{appConfig=JSON.parse(localStorage.getItem(CFG))||{};}catch{appConfig={};}
+  try{const pr=localStorage.getItem(PK);if(pr){const pd=JSON.parse(pr);projects=pd.projects||[];nextProjectId=pd.nextProjectId||(projects.length?Math.max(...projects.map(p=>p.id))+1:1);}else{projects=SAMPLE_PROJECTS;nextProjectId=10;saveProjects();}}catch{projects=SAMPLE_PROJECTS;nextProjectId=10;}
+  const logo=localStorage.getItem(LK);
+  if(logo){const img=document.getElementById('logo-img');img.src=logo;img.classList.add('loaded');document.getElementById('logo-default').style.display='none';}
+  restoreConfig();
+}
+function saveAll(){
+  tasks.forEach(t=>{if(!t.lastModified)t.lastModified=Date.now();});
+  localStorage.setItem(SK,JSON.stringify({tasks,nextId}));
+}
+function saveProjects(){
+  localStorage.setItem(PK,JSON.stringify({projects,nextProjectId}));
+}
+function saveCols(){localStorage.setItem(CK,JSON.stringify(customCols));}
+function saveCFRules(){localStorage.setItem('team_tasks_cf_rules',JSON.stringify(cfRules));}
+function saveConfig(){
+  appConfig.filters={
+    search:document.getElementById('search').value,
+    status:document.getElementById('filter-status').value,
+    priority:document.getElementById('filter-priority').value,
+    assignee:document.getElementById('filter-assignee').value,
+    project:document.getElementById('filter-project').value,
+    dateFrom:document.getElementById('filter-date-from').value,
+    dateTo:document.getElementById('filter-date-to').value
+  };
+  appConfig.lastSelectedTask=editingId;
+  localStorage.setItem(CFG,JSON.stringify(appConfig));
+}
+function restoreConfig(){
+  if(!appConfig.filters)return;
+  const f=appConfig.filters;
+  if(f.search)document.getElementById('search').value=f.search;
+  if(f.status)document.getElementById('filter-status').value=f.status;
+  if(f.priority)document.getElementById('filter-priority').value=f.priority;
+  if(f.assignee)document.getElementById('filter-assignee').value=f.assignee;
+  if(f.project)document.getElementById('filter-project').value=f.project;
+  if(f.dateFrom)document.getElementById('filter-date-from').value=f.dateFrom;
+  if(f.dateTo)document.getElementById('filter-date-to').value=f.dateTo;
+}
+
+// ══════════ WEEK BADGE ══════════
+function renderWeekBadge(){
+  const now=new Date(),day=now.getDay(),diff=(day===0?-6:1)-day;
+  const mon=new Date(now);mon.setDate(now.getDate()+diff);
+  const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  const soy=new Date(now.getFullYear(),0,1);
+  const wk=Math.ceil(((mon-soy)/86400000+soy.getDay()+1)/7);
+  const fmt=d=>`${d.getDate()} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]}`;
+  document.getElementById('week-badge').innerHTML=
+    `<span class="wk-num">Week ${wk}</span><span class="wk-sep">·</span><span class="wk-range">${fmt(mon)} – ${fmt(sun)} ${sun.getFullYear()}</span>`;
+}
+
+// ══════════ LOGO ══════════
+function handleLogoUpload(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{
+    const src=ev.target.result;localStorage.setItem(LK,src);
+    const img=document.getElementById('logo-img');img.src=src;img.classList.add('loaded');
+    document.getElementById('logo-default').style.display='none';
+  };r.readAsDataURL(f);e.target.value='';
+}
+
+// ══════════ TABLE ══════════
+const SC={'To Do':'tag-todo','In Progress':'tag-inprogress','In Review':'tag-review','Done':'tag-done','Blocked':'tag-blocked'};
+const PC={'High':'tag-high','Medium':'tag-medium','Low':'tag-low'};
+
+function getFiltered(){
+  const s=document.getElementById('search').value.toLowerCase();
+  const fS=document.getElementById('filter-status').value;
+  const fP=document.getElementById('filter-priority').value;
+  const fA=document.getElementById('filter-assignee').value;
+  const fPr=document.getElementById('filter-project').value;
+  const fDateFrom=document.getElementById('filter-date-from').value;
+  const fDateTo=document.getElementById('filter-date-to').value;
+  return tasks.filter(t=>{
+    if(s&&![t.title,t.desc,t.assignee,t.project,t.notes].join(' ').toLowerCase().includes(s))return false;
+    if(fS&&t.status!==fS)return false;if(fP&&t.priority!==fP)return false;
+    if(fA&&t.assignee!==fA)return false;if(fPr&&t.project!==fPr)return false;
+    if(fDateFrom&&t.dueDate&&t.dueDate<fDateFrom)return false;
+    if(fDateTo&&t.dueDate&&t.dueDate>fDateTo)return false;
+    return true;
+  });
+}
+function getSorted(arr){
+  return[...arr].sort((a,b)=>{
+    let av=a[sortCol]??'',bv=b[sortCol]??'';
+    if(sortCol==='id')return(av-bv)*sortDir;
+    if(sortCol==='dueDate')return(av<bv?-1:av>bv?1:0)*sortDir;
+    return av.toString().localeCompare(bv.toString())*sortDir;
+  });
+}
+
+function renderTable(){
+  renderCustomColHeaders();
+  const tbody=document.getElementById('task-tbody');
+  const filtered=getSorted(getFiltered());
+  updateStats();updateFilterDropdowns();updateSortIcons();saveConfig();
+  if(!filtered.length){
+    tbody.innerHTML=`<tr><td colspan="${14+customCols.length}"><div class="no-results"><div class="icon">🔍</div>No tasks match your filters.</div></td></tr>`;
+    return;
+  }
+  const today=new Date().toISOString().slice(0,10),soon=od(3);
+  tbody.innerHTML=filtered.map(t=>{
+    const isDone=t.status==='Done',isOv=t.dueDate&&t.dueDate<today&&!isDone,isSoon=t.dueDate&&t.dueDate>=today&&t.dueDate<=soon&&!isDone;
+    const cfClass=getCFClass(t);
+    const init=t.assignee?t.assignee.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase():'?';
+    const ac=strColor(t.assignee||'');
+    const prog=Math.min(100,Math.max(0,parseInt(t.progress)||0));
+    const customTds=customCols.map(col=>{
+      const val=(t.customData||{})[col.key]||'';
+      if(col.type==='select'){
+        const opts=(col.options||[]);
+        return `<td class="td-custom"><select class="inline-edit" onchange="updateCustomField(${t.id},'${col.key}',this.value)"><option value="">—</option>${opts.map(o=>`<option${val===o?' selected':''}>${e(o)}</option>`).join('')}</select></td>`;
+      }
+      return `<td class="td-custom"><input class="inline-edit" type="${col.type==='number'?'number':col.type==='date'?'date':'text'}" value="${e(val)}" placeholder="—" onblur="updateCustomField(${t.id},'${col.key}',this.value)" /></td>`;
+    }).join('');
+    return `<tr class="${isDone?'row-done':''} ${cfClass}" data-id="${t.id}">
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-light)">#${String(t.id).padStart(3,'0')}</td>
+      <td class="task-name"><span class="task-title" title="${e(t.title)}">${e(t.title)}</span>${t.desc?`<span class="task-desc">${e(t.desc)}</span>`:''}</td>
+      <td><span style="font-size:12px;color:var(--text-muted)">${e(t.project||'—')}</span></td>
+      <td>${t.assignee?`<span class="assignee-chip"><span class="assignee-avatar" style="background:${ac}">${init}</span>${e(t.assignee)}</span>`:'<span style="color:var(--text-light)">—</span>'}</td>
+      <td><span class="tag ${SC[t.status]||'tag-todo'}">${e(t.status)}</span></td>
+      <td><span class="tag ${PC[t.priority]||'tag-medium'}">${e(t.priority)}</span></td>
+      <td>${t.dueDate?`<span class="due-date ${isOv?'due-overdue':isSoon?'due-soon':''}">${isOv?'⚠ ':''}${fmtDate(t.dueDate)}</span>`:'<span style="color:var(--text-light)">—</span>'}</td>
+      <td><div style="display:flex;align-items:center;gap:7px"><div class="progress-bar"><div class="progress-fill" style="width:${prog}%"></div></div><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);min-width:28px">${prog}%</span></div></td>
+      <td>${depChips(t)}</td>
+      <td><input class="inline-edit" type="text" value="${e(t.task3DEXP||'')}" placeholder="—" onblur="updateTaskField(${t.id},'task3DEXP',this.value)" /></td>
+      <td><select class="inline-edit" onchange="updateTaskField(${t.id},'projectType',this.value)"><option value="">—</option>${PROJECT_TYPES.map(pt=>`<option${(t.projectType||'')=== pt?' selected':''}>${e(pt)}</option>`).join('')}</select></td>
+      <td><select class="inline-edit" onchange="updateTaskField(${t.id},'product',this.value)"><option value="">—</option>${PRODUCTS.map(p=>`<option${(t.product||'')=== p?' selected':''}>${e(p)}</option>`).join('')}</select></td>
+      <td><select class="inline-edit" onchange="updateTaskField(${t.id},'projectPhase',this.value)"><option value="">—</option>${PROJECT_PHASES.map(ph=>`<option${(t.projectPhase||'')=== ph?' selected':''}>${e(ph)}</option>`).join('')}</select></td>
+      ${customTds}
+      <td></td>
+      <td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="openModal(${t.id})">✏</button><button class="btn btn-danger btn-sm" onclick="deleteTask(${t.id})">🗑</button></div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderCustomColHeaders(){
+  const hr=document.getElementById('table-head-row');
+  hr.querySelectorAll('.col-custom').forEach(th=>th.remove());
+  const ths=[...hr.querySelectorAll('th')];
+  const addTh=ths[ths.length-2];
+  const icons={'text':'📝','number':'🔢','date':'📅','select':'🔽'};
+  customCols.forEach(col=>{
+    const th=document.createElement('th');th.className='col-custom';
+    th.innerHTML=`${icons[col.type]||'📝'} ${e(col.name)} <button class="btn btn-xs btn-danger" style="margin-left:4px" onclick="removeCustomCol('${col.key}');event.stopPropagation()">✕</button>`;
+    hr.insertBefore(th,addTh);
+  });
+}
+
+function updateCustomField(id,key,val){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  if(!t.customData)t.customData={};t.customData[key]=val;
+  t.lastModified=Date.now();
+  saveAll();
+}
+
+function updateTaskField(id,field,val){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  t[field]=val;
+  t.lastModified=Date.now();
+  saveAll();
+}
+
+// Deps
+function depChips(t){
+  const deps=t.deps||[];if(!deps.length)return'<span style="color:var(--text-light);font-size:11px">—</span>';
+  return`<div class="dep-chips">${deps.map(id=>{
+    const dep=tasks.find(x=>x.id===id);
+    if(!dep)return`<span class="dep-chip dep-open" onclick="highlightTask(${id})">⚠ #${String(id).padStart(3,'0')}</span>`;
+    const cls=dep.status==='Done'?'dep-done':dep.status==='Blocked'?'dep-blocked':'dep-open';
+    const ic=dep.status==='Done'?'✓':dep.status==='Blocked'?'⛔':'⏳';
+    return`<span class="dep-chip ${cls}" title="${e(dep.title)}" onclick="highlightTask(${id})">${ic} #${String(id).padStart(3,'0')}</span>`;
+  }).join('')}</div>`;
+}
+function highlightTask(id){
+  clearFilters();
+  setTimeout(()=>{const row=document.querySelector(`tr[data-id="${id}"]`);if(!row)return;
+    row.classList.add('row-highlighted');row.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>row.classList.remove('row-highlighted'),2500);},100);
+}
+
+// Stats
+function updateStats(){
+  const bar=document.getElementById('stats-bar');
+  const counts={};tasks.forEach(t=>{counts[t.status]=(counts[t.status]||0)+1;});
+  const fS=document.getElementById('filter-status').value;
+  const statuses=['To Do','In Progress','In Review','Done','Blocked'];
+  bar.innerHTML=`<span class="stat-pill ${!fS?'active':''}" onclick="setStatusFilter('')" style="font-weight:600"><span class="count">${tasks.length}</span> Total</span>`
+    +statuses.map(s=>`<span class="stat-pill ${fS===s?'active':''}" onclick="setStatusFilter('${s}')"><span class="dot" style="background:${STATUS_COLORS[s]}"></span><span class="count">${counts[s]||0}</span> ${s}</span>`).join('');
+}
+function setStatusFilter(v){document.getElementById('filter-status').value=v;renderTable();}
+function updateFilterDropdowns(){
+  const assignees=[...new Set(tasks.map(t=>t.assignee).filter(Boolean))].sort();
+  const projects=[...new Set(tasks.map(t=>t.project).filter(Boolean))].sort();
+  const fa=document.getElementById('filter-assignee'),fp=document.getElementById('filter-project');
+  const ca=fa.value,cp=fp.value;
+  fa.innerHTML=`<option value="">All Assignees</option>`+assignees.map(a=>`<option value="${e(a)}">${e(a)}</option>`).join('');
+  fp.innerHTML=`<option value="">All Projects</option>`+projects.map(p=>`<option value="${e(p)}">${e(p)}</option>`).join('');
+  fa.value=ca;fp.value=cp;
+  document.getElementById('assignee-list').innerHTML=assignees.map(a=>`<option value="${e(a)}">`).join('');
+}
+function updateSortIcons(){
+  ['id','title','project','assignee','status','priority','dueDate'].forEach(col=>{
+    const el=document.getElementById('sort-'+col);if(!el)return;
+    const th=el.parentElement;
+    if(col===sortCol){el.textContent=sortDir===1?'↑':'↓';th.classList.add('sorted');}
+    else{el.textContent='↕';th.classList.remove('sorted');}
+  });
+}
+function sortBy(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}renderTable();}
+function clearFilters(){
+  document.getElementById('search').value='';
+  ['filter-status','filter-priority','filter-assignee','filter-project','filter-date-from','filter-date-to'].forEach(id=>document.getElementById(id).value='');
+  renderTable();
+}
+
+function showLastWeekModified(){
+  clearFilters();
+  const oneWeekAgo=Date.now()-(7*24*60*60*1000);
+  const lastWeekTasks=tasks.filter(t=>t.lastModified && t.lastModified>=oneWeekAgo);
+  if(!lastWeekTasks.length){
+    alert('No tasks modified in the last 7 days.');
+    return;
+  }
+  // Store filtered IDs temporarily
+  const ids=lastWeekTasks.map(t=>t.id);
+  // Highlight these tasks
+  setTimeout(()=>{
+    ids.forEach(id=>{
+      const row=document.querySelector(`tr[data-id="${id}"]`);
+      if(row)row.classList.add('row-highlighted');
+    });
+  },100);
+  alert(`Found ${lastWeekTasks.length} task(s) modified in the last 7 days (highlighted in yellow).`);
+}
+
+// ══════════ CRUD ══════════
+function openModal(id=null){
+  editingId=id;document.getElementById('modal-title').textContent=id?'Edit Task':'Add Task';
+  const t=id?tasks.find(x=>x.id===id):null;
+  document.getElementById('f-title').value=t?.title||'';document.getElementById('f-desc').value=t?.desc||'';
+  
+  // Update project dropdown first
+  updateProjectDropdown();
+  document.getElementById('f-project').value=t?.project||'';
+  
+  document.getElementById('f-assignee').value=t?.assignee||'';
+  document.getElementById('f-status').value=t?.status||'To Do';document.getElementById('f-priority').value=t?.priority||'Medium';
+  document.getElementById('f-due').value=t?.dueDate||'';document.getElementById('f-progress').value=t?.progress??0;
+  document.getElementById('f-notes').value=t?.notes||'';
+  // New fields
+  document.getElementById('f-task3DEXP').value=t?.task3DEXP||'';
+  document.getElementById('f-projectType').innerHTML='<option value="">—</option>'+PROJECT_TYPES.map(pt=>`<option${(t?.projectType||'')=== pt?' selected':''}>${e(pt)}</option>`).join('');
+  document.getElementById('f-product').innerHTML='<option value="">—</option>'+PRODUCTS.map(p=>`<option${(t?.product||'')=== p?' selected':''}>${e(p)}</option>`).join('');
+  document.getElementById('f-projectPhase').innerHTML='<option value="">—</option>'+PROJECT_PHASES.map(ph=>`<option${(t?.projectPhase||'')=== ph?' selected':''}>${e(ph)}</option>`).join('');
+  // deps
+  const deps=t?.deps||[],others=tasks.filter(x=>x.id!==(id||-1));
+  const sel=document.getElementById('dep-selector');
+  sel.innerHTML=!others.length?'<span style="color:var(--text-light);font-size:12px;padding:4px">No other tasks yet</span>':
+    others.map(x=>`<label class="dep-option"><input type="checkbox" value="${x.id}"${deps.includes(x.id)?' checked':''}/><span class="dep-opt-id">#${String(x.id).padStart(3,'0')}</span><span class="dep-opt-title">${e(x.title)}</span><span class="tag ${SC[x.status]||'tag-todo'}" style="font-size:10px;padding:2px 6px">${e(x.status)}</span></label>`).join('');
+  // custom fields
+  const cfw=document.getElementById('custom-fields-wrap');
+  const icons={'text':'📝','number':'🔢','date':'📅','select':'🔽'};
+  cfw.innerHTML=customCols.map(col=>{
+    const val=(t?.customData||{})[col.key]||'';
+    const inp=col.type==='select'
+      ?`<select id="cf-${col.key}" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%"><option value="">—</option>${(col.options||[]).map(o=>`<option${val===o?' selected':''}>${e(o)}</option>`).join('')}</select>`
+      :`<input id="cf-${col.key}" type="${col.type==='number'?'number':col.type==='date'?'date':'text'}" value="${e(val)}" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%" />`;
+    return`<div class="form-group"><label>${icons[col.type]||'📝'} ${e(col.name)}</label>${inp}</div>`;
+  }).join('');
+  updateFilterDropdowns();
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('f-title').focus(),100);
+}
+function saveTask(){
+  const title=document.getElementById('f-title').value.trim();
+  if(!title){document.getElementById('f-title').focus();document.getElementById('f-title').style.borderColor='var(--accent)';return;}
+  document.getElementById('f-title').style.borderColor='';
+  
+  const project=document.getElementById('f-project').value.trim();
+  if(!project){
+    alert('Please select a project.\n\nIf no projects are available, go to the Projects tab and create one first.');
+    document.getElementById('f-project').focus();
+    document.getElementById('f-project').style.borderColor='var(--accent)';
+    return;
+  }
+  document.getElementById('f-project').style.borderColor='';
+  
+  const customData={};customCols.forEach(col=>{const el=document.getElementById('cf-'+col.key);if(el)customData[col.key]=el.value;});
+  const task={id:editingId||nextId++,title,desc:document.getElementById('f-desc').value.trim(),
+    project,assignee:document.getElementById('f-assignee').value.trim(),
+    status:document.getElementById('f-status').value,priority:document.getElementById('f-priority').value,
+    dueDate:document.getElementById('f-due').value,progress:parseInt(document.getElementById('f-progress').value)||0,
+    notes:document.getElementById('f-notes').value.trim(),
+    deps:[...document.querySelectorAll('#dep-selector input[type=checkbox]:checked')].map(cb=>parseInt(cb.value)),
+    task3DEXP:document.getElementById('f-task3DEXP').value.trim(),
+    projectType:document.getElementById('f-projectType').value,
+    product:document.getElementById('f-product').value,
+    projectPhase:document.getElementById('f-projectPhase').value,
+    lastModified:Date.now(),
+    customData};
+  if(editingId){const i=tasks.findIndex(t=>t.id===editingId);if(i!==-1)tasks[i]=task;}else tasks.push(task);
+  saveAll();closeModal('modal-overlay');renderTable();
+}
+function deleteTask(id){if(!confirm('Delete this task?'))return;tasks=tasks.filter(t=>t.id!==id);saveAll();renderTable();}
+
+// ══════════ CUSTOM COLUMNS ══════════
+function selectColType(btn){
+  document.querySelectorAll('.col-type-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selColType=btn.dataset.type;
+  document.getElementById('select-options-group').style.display=selColType==='select'?'flex':'none';
+}
+function openAddColModal(){
+  renderColsList();document.getElementById('new-col-name').value='';document.getElementById('new-col-options').value='';
+  document.querySelectorAll('.col-type-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelector('.col-type-btn[data-type="text"]').classList.add('selected');selColType='text';
+  document.getElementById('select-options-group').style.display='none';
+  document.getElementById('addcol-modal').classList.add('open');
+}
+function renderColsList(){
+  const list=document.getElementById('custom-cols-list');
+  const icons={'text':'📝','number':'🔢','date':'📅','select':'🔽'};
+  list.innerHTML=!customCols.length?'<span style="color:var(--text-light);font-size:12px;padding:4px">No custom columns yet</span>':
+    customCols.map(col=>`<div class="custom-col-item"><span class="col-icon">${icons[col.type]||'📝'}</span><span class="col-name">${e(col.name)}</span><span class="col-type-tag">${col.type}</span><button class="btn btn-danger btn-xs" onclick="removeCustomCol('${col.key}')">Remove</button></div>`).join('');
+}
+function addCustomColumn(){
+  const name=document.getElementById('new-col-name').value.trim();
+  if(!name){document.getElementById('new-col-name').focus();document.getElementById('new-col-name').style.borderColor='var(--accent)';return;}
+  document.getElementById('new-col-name').style.borderColor='';
+  const col={key:'col_'+Date.now(),name,type:selColType};
+  if(selColType==='select')col.options=document.getElementById('new-col-options').value.split(',').map(s=>s.trim()).filter(Boolean);
+  customCols.push(col);saveCols();renderColsList();renderTable();document.getElementById('new-col-name').value='';
+}
+function removeCustomCol(key){
+  if(!confirm('Remove this column? Data will be lost.'))return;
+  customCols=customCols.filter(c=>c.key!==key);saveCols();renderColsList();renderTable();
+}
+
+// ══════════ CHARTS ══════════
+function openChartModal(){
+  // Populate filter dropdowns
+  const products=[...new Set(tasks.map(t=>t.product).filter(Boolean))].sort();
+  const projectTypes=[...new Set(tasks.map(t=>t.projectType).filter(Boolean))].sort();
+  
+  const productFilter=document.getElementById('stats-filter-product');
+  const projectTypeFilter=document.getElementById('stats-filter-project-type');
+  
+  productFilter.innerHTML='<option value="">All Products</option>'+
+    products.map(p=>`<option value="${e(p)}">${e(p)}</option>`).join('');
+  
+  projectTypeFilter.innerHTML='<option value="">All Project Types</option>'+
+    projectTypes.map(pt=>`<option value="${e(pt)}">${e(pt)}</option>`).join('');
+  
+  updateChartTotal();
+  document.getElementById('chart-modal').classList.add('open');
+  setTimeout(buildAllCharts,60);
+}
+
+function getFilteredTasksForCharts(){
+  const productFilter=document.getElementById('stats-filter-product')?.value||'';
+  const projectTypeFilter=document.getElementById('stats-filter-project-type')?.value||'';
+  
+  return tasks.filter(t=>{
+    const matchProduct=!productFilter||t.product===productFilter;
+    const matchProjectType=!projectTypeFilter||t.projectType===projectTypeFilter;
+    return matchProduct&&matchProjectType;
+  });
+}
+
+function updateChartTotal(){
+  const filtered=getFilteredTasksForCharts();
+  document.getElementById('chart-total').textContent=filtered.length;
+}
+
+function refreshCharts(){
+  updateChartTotal();
+  buildAllCharts();
+}
+
+function clearStatsFilters(){
+  document.getElementById('stats-filter-product').value='';
+  document.getElementById('stats-filter-project-type').value='';
+  refreshCharts();
+}
+
+function openInfoModal(){
+  document.getElementById('info-modal').classList.add('open');
+}
+function switchTab(id,idx){
+  document.querySelectorAll('.chart-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.chart-tab')[idx].classList.add('active');
+}
+function destroyChart(id){if(chartInst[id]){chartInst[id].destroy();delete chartInst[id];}}
+
+function buildAllCharts(){buildPersonChart();buildStatusChart();buildPriorityChart();buildProgressChart();}
+
+function buildPersonChart(){
+  destroyChart('cp');
+  const filteredTasks=getFilteredTasksForCharts();
+  const assignees=[...new Set(filteredTasks.map(t=>t.assignee).filter(Boolean))].sort();
+  if(!assignees.length)return;
+  const sts=['To Do','In Progress','In Review','Done','Blocked'];
+  const datasets=sts.map(s=>({label:s,data:assignees.map(a=>filteredTasks.filter(t=>t.assignee===a&&t.status===s).length),backgroundColor:STATUS_COLORS[s]+'cc',borderColor:STATUS_COLORS[s],borderWidth:1,borderRadius:4}));
+  const ctx=document.getElementById('chart-person').getContext('2d');
+  chartInst['cp']=new Chart(ctx,{type:'bar',data:{labels:assignees,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{stepSize:1},grid:{color:'#f0ede8'}}}}});
+  const cards=document.getElementById('person-cards');
+  cards.innerHTML=assignees.map((a,i)=>{
+    const mt=filteredTasks.filter(t=>t.assignee===a);const color=CHART_COLORS[i%CHART_COLORS.length];
+    const init=a.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
+    const maxCnt=Math.max(...sts.map(s=>mt.filter(t=>t.status===s).length),1);
+    const bars=sts.filter(s=>mt.filter(t=>t.status===s).length>0).map(s=>{const cnt=mt.filter(t=>t.status===s).length;
+      return`<div class="mini-bar-row"><span class="mini-bar-label">${s}</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${(cnt/maxCnt)*100}%;background:${STATUS_COLORS[s]}"></div></div><span class="mini-bar-num">${cnt}</span></div>`;}).join('');
+    return`<div class="person-card"><div class="person-card-top"><div class="person-card-avatar" style="background:${color}">${init}</div><div><div class="person-card-name">${e(a)}</div><div class="person-card-count">${mt.length} task${mt.length!==1?'s':''}</div></div></div><div class="mini-bars">${bars}</div></div>`;
+  }).join('');
+}
+
+function buildStatusChart(){
+  destroyChart('cs');
+  const filteredTasks=getFilteredTasksForCharts();
+  const sts=['To Do','In Progress','In Review','Done','Blocked'];
+  const sClrs=['#a8a09a','#f59e0b','#6366f1','#10b981','#ef4444'];
+  const counts=sts.map(s=>filteredTasks.filter(t=>t.status===s).length);
+  const ctx=document.getElementById('chart-status').getContext('2d');
+  chartInst['cs']=new Chart(ctx,{type:'doughnut',data:{labels:sts,datasets:[{data:counts,backgroundColor:sClrs.map(c=>c+'cc'),borderColor:sClrs,borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'62%'}});
+  document.getElementById('status-legend').innerHTML=sts.map((s,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="width:12px;height:12px;border-radius:3px;background:${sClrs[i]};flex-shrink:0"></span><span style="font-size:13px;flex:1">${s}</span><span style="font-family:'DM Mono',monospace;font-size:14px;font-weight:700">${counts[i]}</span></div>`).join('');
+}
+
+function buildPriorityChart(){
+  destroyChart('cpr');
+  const filteredTasks=getFilteredTasksForCharts();
+  const assignees=[...new Set(filteredTasks.map(t=>t.assignee).filter(Boolean))].sort();if(!assignees.length)return;
+  const datasets=['High','Medium','Low'].map(p=>({label:p,data:assignees.map(a=>filteredTasks.filter(t=>t.assignee===a&&t.priority===p).length),backgroundColor:PRIO_COLORS[p]+'bb',borderColor:PRIO_COLORS[p],borderWidth:1,borderRadius:4}));
+  const ctx=document.getElementById('chart-priority').getContext('2d');
+  chartInst['cpr']=new Chart(ctx,{type:'bar',data:{labels:assignees,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}},scales:{x:{grid:{display:false}},y:{ticks:{stepSize:1},grid:{color:'#f0ede8'}}}}});
+}
+
+function buildProgressChart(){
+  destroyChart('cpg');
+  const filteredTasks=getFilteredTasksForCharts();
+  const assignees=[...new Set(filteredTasks.map(t=>t.assignee).filter(Boolean))].sort();if(!assignees.length)return;
+  const avg=assignees.map(a=>{const mt=filteredTasks.filter(t=>t.assignee===a);return mt.length?Math.round(mt.reduce((s,t)=>s+(t.progress||0),0)/mt.length):0;});
+  const ctx=document.getElementById('chart-progress').getContext('2d');
+  chartInst['cpg']=new Chart(ctx,{type:'bar',data:{labels:assignees,datasets:[{label:'Avg. Progress %',data:avg,backgroundColor:CHART_COLORS.map(c=>c+'bb'),borderColor:CHART_COLORS,borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:'#f0ede8'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
+}
+
+// ══════════ CSV ══════════
+// ══════════ JSON EXPORT/IMPORT ══════════
+function exportJSON(){
+  const exportData={
+    version:'3.0',
+    exportDate:new Date().toISOString(),
+    boardTitle:document.getElementById('board-title').textContent,
+    tasks:tasks,
+    projects:projects,
+    customCols:customCols,
+    cfRules:cfRules,
+    logo:localStorage.getItem('companyLogo')||null
+  };
+  const json=JSON.stringify(exportData,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='team-tasks-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importJSON(){
+  document.getElementById('json-input').click();
+}
+
+function handleJSONImport(e){
+  const f=e.target.files[0];
+  if(!f)return;
+  
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const importData=JSON.parse(ev.target.result);
+      
+      // Validate the data
+      if(!importData.tasks||!Array.isArray(importData.tasks)){
+        alert('Invalid JSON file format.');
+        return;
+      }
+      
+      const taskCount=importData.tasks.length;
+      const projectCount=(importData.projects||[]).length;
+      const hasCustomCols=importData.customCols&&importData.customCols.length>0;
+      const hasCFRules=importData.cfRules&&importData.cfRules.length>0;
+      
+      let confirmMsg=`Import ${taskCount} task${taskCount!==1?'s':''}?`;
+      if(projectCount)confirmMsg+=`\n• ${projectCount} project${projectCount!==1?'s':''}`;
+      if(hasCustomCols)confirmMsg+=`\n• ${importData.customCols.length} custom column${importData.customCols.length!==1?'s':''}`;
+      if(hasCFRules)confirmMsg+=`\n• ${importData.cfRules.length} formatting rule${importData.cfRules.length!==1?'s':''}`;
+      confirmMsg+='\n\nThis will replace all current data.';
+      
+      if(confirm(confirmMsg)){
+        // Import all data
+        tasks=importData.tasks||[];
+        projects=importData.projects||[];
+        customCols=importData.customCols||[];
+        cfRules=importData.cfRules||[];
+        
+        if(importData.boardTitle){
+          document.getElementById('board-title').textContent=importData.boardTitle;
         }
-
-        function openProject(projectId) {
-            // Hide main content
-            document.querySelector('.content').style.display = 'none';
-            
-            // Show project detail page
-            document.getElementById(projectId).style.display = 'block';
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
+        
+        if(importData.logo){
+          localStorage.setItem('companyLogo',importData.logo);
+          loadLogo();
         }
+        
+        // Update nextId
+        nextId=tasks.length>0?Math.max(...tasks.map(t=>t.id))+1:1;
+        nextProjectId=projects.length>0?Math.max(...projects.map(p=>p.id))+1:1;
+        
+        // Save everything
+        saveAll();
+        saveProjects();
+        saveCols();
+        
+        // Re-render
+        renderTable();
+        renderProjectsTable();
+        updateProjectDropdown();
+        
+        alert(`✅ Successfully imported!\n• ${taskCount} tasks\n• ${projectCount} projects\n• ${customCols.length} custom columns\n• ${cfRules.length} formatting rules`);
+      }
+    }catch(err){
+      console.error(err);
+      alert('Error reading JSON file. Please check the file format.');
+    }
+  };
+  r.readAsText(f);
+  e.target.value='';
+}
 
-        function closeProject() {
-            // Hide all project details
-            const projectDetails = document.querySelectorAll('.project-detail');
-            projectDetails.forEach(detail => detail.style.display = 'none');
-            
-            // Show main content
-            document.querySelector('.content').style.display = 'block';
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        }
-    </script>
+// ══════════ CONDITIONAL FORMATTING ══════════
+function openCFModal(){
+  renderCFRules();
+  document.getElementById('cf-modal').classList.add('open');
+}
+
+function renderCFRules(){
+  const list=document.getElementById('cf-rules-list');
+  if(!cfRules.length){
+    list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">No custom rules yet. Use presets or add a custom rule.</div>';
+    return;
+  }
+  list.innerHTML=cfRules.map((rule,i)=>{
+    const previewBg=getPreviewBg(rule);
+    return`<div class="cf-rule-item">
+      <div class="cf-rule-header">
+        <div class="cf-rule-toggle ${rule.enabled?'active':''}" onclick="toggleCFRule(${i})">
+          <div class="cf-rule-toggle-knob"></div>
+        </div>
+        <div class="cf-rule-name">${e(rule.name)}</div>
+        <div class="cf-rule-preview" style="background:${previewBg}"></div>
+        <button class="btn btn-ghost btn-xs" onclick="deleteCFRule(${i})">🗑️</button>
+      </div>
+      <div class="cf-rule-condition">
+        <select onchange="updateCFRule(${i},'field',this.value)" class="inline-edit">
+          <option value="status" ${rule.field==='status'?'selected':''}>Status</option>
+          <option value="priority" ${rule.field==='priority'?'selected':''}>Priority</option>
+          <option value="progress" ${rule.field==='progress'?'selected':''}>Progress</option>
+          <option value="dueDate" ${rule.field==='dueDate'?'selected':''}>Due Date</option>
+          <option value="assignee" ${rule.field==='assignee'?'selected':''}>Assignee</option>
+        </select>
+        <select onchange="updateCFRule(${i},'operator',this.value)" class="inline-edit">
+          <option value="equals" ${rule.operator==='equals'?'selected':''}>Equals</option>
+          <option value="contains" ${rule.operator==='contains'?'selected':''}>Contains</option>
+          <option value="greater" ${rule.operator==='greater'?'selected':''}>Greater than</option>
+          <option value="less" ${rule.operator==='less'?'selected':''}>Less than</option>
+          <option value="overdue" ${rule.operator==='overdue'?'selected':''}>Is overdue</option>
+        </select>
+        <input type="text" class="inline-edit" value="${e(rule.value||'')}" 
+          onchange="updateCFRule(${i},'value',this.value)" 
+          placeholder="Value" ${rule.operator==='overdue'?'disabled':''}>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addCFRule(){
+  cfRules.push({
+    name:'Custom Rule '+(cfRules.length+1),
+    enabled:true,
+    field:'status',
+    operator:'equals',
+    value:'',
+    style:'cf-custom-1'
+  });
+  renderCFRules();
+}
+
+function addPresetRule(type){
+  const presets={
+    'overdue':{name:'Overdue Tasks',field:'dueDate',operator:'overdue',value:'',style:'cf-overdue'},
+    'high-priority':{name:'High Priority',field:'priority',operator:'equals',value:'High',style:'cf-high-priority'},
+    'blocked':{name:'Blocked Tasks',field:'status',operator:'equals',value:'Blocked',style:'cf-blocked'},
+    'almost-done':{name:'Almost Done',field:'progress',operator:'greater',value:'80',style:'cf-almost-done'}
+  };
+  const preset=presets[type];
+  if(!preset)return;
+  // Check if rule already exists
+  const exists=cfRules.find(r=>r.name===preset.name);
+  if(exists){
+    alert('This preset rule already exists!');
+    return;
+  }
+  cfRules.push({...preset,enabled:true});
+  renderCFRules();
+  saveCFRules();
+}
+
+function toggleCFRule(i){
+  cfRules[i].enabled=!cfRules[i].enabled;
+  renderCFRules();
+  saveCFRules();
+}
+
+function updateCFRule(i,field,value){
+  cfRules[i][field]=value;
+  saveCFRules();
+}
+
+function deleteCFRule(i){
+  if(confirm('Delete this rule?')){
+    cfRules.splice(i,1);
+    renderCFRules();
+    saveCFRules();
+  }
+}
+
+function applyCFRules(){
+  saveCFRules();
+  renderTable();
+  closeModal('cf-modal');
+}
+
+function getPreviewBg(rule){
+  const colors={
+    'cf-overdue':'#fee2e2',
+    'cf-high-priority':'#fef3c7',
+    'cf-blocked':'linear-gradient(90deg, #dc2626 4px, #fee2e2 4px)',
+    'cf-almost-done':'#dcfce7',
+    'cf-stale':'#f3f4f6',
+    'cf-custom-1':'linear-gradient(90deg, #f59e0b 4px, #fef3c7 4px)',
+    'cf-custom-2':'linear-gradient(90deg, #3b82f6 4px, #dbeafe 4px)',
+    'cf-custom-3':'linear-gradient(90deg, #c026d3 4px, #fae8ff 4px)'
+  };
+  return colors[rule.style]||'#f3f4f6';
+}
+
+function checkCFRule(task,rule){
+  if(!rule.enabled)return false;
+  const{field,operator,value}=rule;
+  const taskVal=task[field];
+  
+  switch(operator){
+    case'equals':return String(taskVal).toLowerCase()===String(value).toLowerCase();
+    case'contains':return String(taskVal).toLowerCase().includes(String(value).toLowerCase());
+    case'greater':return parseFloat(taskVal)>parseFloat(value);
+    case'less':return parseFloat(taskVal)<parseFloat(value);
+    case'overdue':
+      if(!task.dueDate)return false;
+      const due=new Date(task.dueDate);
+      const today=new Date();
+      today.setHours(0,0,0,0);
+      return due<today && task.status!=='Done';
+    default:return false;
+  }
+}
+
+function getCFClass(task){
+  // Return first matching rule class
+  for(const rule of cfRules){
+    if(checkCFRule(task,rule)){
+      return rule.style;
+    }
+  }
+  return'';
+}
+
+// ══════════ PROJECTS ══════════
+function switchMainTab(tab){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(tab+'-tab').classList.add('active');
+  if(tab==='projects')renderProjectsTable();
+  if(tab==='tasks'){renderTable();updateFilterDropdowns();}
+  if(tab==='statistics')renderStatistics();
+}
+
+function openProjectModal(id=null){
+  editingProjectId=id;
+  document.getElementById('project-modal-title').textContent=id?'Edit Project':'Add Project';
+  const p=id?projects.find(x=>x.id===id):null;
+  document.getElementById('pf-name').value=p?.name||'';
+  document.getElementById('pf-startDate').value=p?.startDate||'';
+  document.getElementById('pf-endDate').value=p?.endDate||'';
+  document.getElementById('pf-objectives').value=p?.objectives||'';
+  document.getElementById('pf-kpis').value=p?.kpis||'';
+  document.getElementById('pf-pic').value=p?.pic||'';
+  document.getElementById('pf-project3DEXP').value=p?.project3DEXP||'';
+  document.getElementById('pf-stage').value=p?.stage||'Planning';
+  document.getElementById('pf-type').value=p?.type||'';
+  document.getElementById('pf-platform').value=p?.platform||'';
+  document.getElementById('pf-priority').value=p?.priority||'Medium';
+  document.getElementById('project-modal').classList.add('open');
+}
+
+function saveProject(){
+  const name=document.getElementById('pf-name').value.trim();
+  if(!name){alert('Please enter a project name');return;}
+  const project={
+    id:editingProjectId||nextProjectId++,
+    name,
+    startDate:document.getElementById('pf-startDate').value,
+    endDate:document.getElementById('pf-endDate').value,
+    objectives:document.getElementById('pf-objectives').value,
+    kpis:document.getElementById('pf-kpis').value,
+    pic:document.getElementById('pf-pic').value,
+    project3DEXP:document.getElementById('pf-project3DEXP').value,
+    stage:document.getElementById('pf-stage').value,
+    type:document.getElementById('pf-type').value,
+    platform:document.getElementById('pf-platform').value,
+    priority:document.getElementById('pf-priority').value
+  };
+  if(editingProjectId){
+    const idx=projects.findIndex(p=>p.id===editingProjectId);
+    if(idx!==-1)projects[idx]=project;
+  }else{
+    projects.push(project);
+  }
+  saveProjects();
+  renderProjectsTable();
+  updateProjectDropdown();
+  updateFilterDropdowns();
+  closeModal('project-modal');
+}
+
+function deleteProject(id){
+  if(!confirm('Delete this project?\n\nNote: Tasks linked to this project will NOT be deleted, but their project field will still show the old project name.'))return;
+  projects=projects.filter(p=>p.id!==id);
+  saveProjects();
+  renderProjectsTable();
+  updateProjectDropdown();
+}
+
+function renderProjectsTable(){
+  const search=document.getElementById('project-search').value.toLowerCase();
+  const fStage=document.getElementById('filter-project-stage').value;
+  const fPriority=document.getElementById('filter-project-priority').value;
+  
+  let filtered=projects.filter(p=>{
+    if(search&&![p.name,p.type,p.platform,p.pic].join(' ').toLowerCase().includes(search))return false;
+    if(fStage&&p.stage!==fStage)return false;
+    if(fPriority&&p.priority!==fPriority)return false;
+    return true;
+  });
+  
+  const sorted=[...filtered].sort((a,b)=>{
+    let av=a[projectSortCol]??'',bv=b[projectSortCol]??'';
+    if(['startDate','endDate'].includes(projectSortCol))return(av<bv?-1:av>bv?1:0)*projectSortDir;
+    return av.toString().localeCompare(bv.toString())*projectSortDir;
+  });
+  
+  const tbody=document.getElementById('projects-tbody');
+  if(!sorted.length){
+    tbody.innerHTML='<tr><td colspan="18" style="text-align:center;padding:60px;color:var(--text-muted)">No projects found</td></tr>';
+    return;
+  }
+  
+  const stageTags={'Planning':'tag-todo','Execution':'tag-inprogress','Testing':'tag-review','Deployment':'tag-done','Maintenance':'tag-blocked'};
+  
+  tbody.innerHTML=sorted.map(p=>{
+    // Calculate task statistics for this project
+    const projectTasks=tasks.filter(t=>t.project===p.name);
+    const total=projectTasks.length;
+    const todo=projectTasks.filter(t=>t.status==='To Do').length;
+    const inProgress=projectTasks.filter(t=>t.status==='In Progress').length;
+    const review=projectTasks.filter(t=>t.status==='In Review').length;
+    const done=projectTasks.filter(t=>t.status==='Done').length;
+    const blocked=projectTasks.filter(t=>t.status==='Blocked').length;
+    const completion=total>0?Math.round((done/total)*100):0;
+    
+    return`
+    <tr>
+      <td style="font-weight:500">${e(p.name)}</td>
+      <td style="text-align:center;font-family:'DM Mono',monospace;font-weight:600">${total}</td>
+      <td style="text-align:center"><span class="tag tag-todo" style="padding:2px 6px;font-size:10px">${todo}</span></td>
+      <td style="text-align:center"><span class="tag tag-inprogress" style="padding:2px 6px;font-size:10px">${inProgress}</span></td>
+      <td style="text-align:center"><span class="tag tag-review" style="padding:2px 6px;font-size:10px">${review}</span></td>
+      <td style="text-align:center"><span class="tag tag-done" style="padding:2px 6px;font-size:10px">${done}</span></td>
+      <td style="text-align:center"><span class="tag tag-blocked" style="padding:2px 6px;font-size:10px">${blocked}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;height:6px;background:var(--border);border-radius:100px;overflow:hidden">
+            <div style="height:100%;background:${completion===100?'#10b981':completion>=75?'#3b82f6':completion>=50?'#f59e0b':'#ef4444'};width:${completion}%;transition:width .3s"></div>
+          </div>
+          <span style="font-size:11px;font-family:'DM Mono',monospace;font-weight:600;min-width:35px">${completion}%</span>
+        </div>
+      </td>
+      <td>${fmtDate(p.startDate)}</td>
+      <td>${fmtDate(p.endDate)}</td>
+      <td style="max-width:150px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${e(p.objectives)}">${e(p.objectives)||'—'}</td>
+      <td style="max-width:150px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${e(p.kpis)}">${e(p.kpis)||'—'}</td>
+      <td>${e(p.pic)||'—'}</td>
+      <td>${e(p.project3DEXP)||'—'}</td>
+      <td><span class="tag ${stageTags[p.stage]||'tag-todo'}">${e(p.stage)}</span></td>
+      <td>${e(p.type)||'—'}</td>
+      <td>${e(p.platform)||'—'}</td>
+      <td><span class="tag ${PC[p.priority]}">${e(p.priority)}</span></td>
+      <td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="openProjectModal(${p.id})">✏</button><button class="btn btn-danger btn-sm" onclick="deleteProject(${p.id})">🗑</button></div></td>
+    </tr>`;
+  }).join('');
+  
+  updateProjectSortIcons();
+}
+
+function sortProjectsBy(col){
+  if(projectSortCol===col)projectSortDir*=-1;
+  else{projectSortCol=col;projectSortDir=1;}
+  renderProjectsTable();
+}
+
+function updateProjectSortIcons(){
+  ['name','startDate','endDate','pic','project3DEXP','stage','type','platform','priority'].forEach(col=>{
+    const el=document.getElementById('psort-'+col);
+    if(!el)return;
+    const th=el.parentElement;
+    if(col===projectSortCol){el.textContent=projectSortDir===1?'↑':'↓';th.classList.add('sorted');}
+    else{el.textContent='↕';th.classList.remove('sorted');}
+  });
+}
+
+function clearProjectFilters(){
+  document.getElementById('project-search').value='';
+  document.getElementById('filter-project-stage').value='';
+  document.getElementById('filter-project-priority').value='';
+  renderProjectsTable();
+}
+
+function updateProjectDropdown(){
+  const select=document.getElementById('f-project');
+  if(!select)return;
+  const currentVal=select.value;
+  select.innerHTML='<option value="">-- Select Project --</option>'+
+    projects.map(p=>`<option value="${e(p.name)}">${e(p.name)}</option>`).join('');
+  if(currentVal)select.value=currentVal;
+}
+
+// ══════════ STATISTICS ══════════
+function renderStatistics(){
+  // Overall stats
+  document.getElementById('stat-total-projects').textContent=projects.length;
+  document.getElementById('stat-total-tasks').textContent=tasks.length;
+  const doneTasks=tasks.filter(t=>t.status==='Done').length;
+  const overallCompletion=tasks.length>0?Math.round((doneTasks/tasks.length)*100):0;
+  document.getElementById('stat-overall-completion').textContent=overallCompletion+'%';
+  const activeTasks=tasks.filter(t=>t.status==='In Progress'||t.status==='In Review').length;
+  document.getElementById('stat-active-tasks').textContent=activeTasks;
+  
+  // Project Performance
+  const perfList=document.getElementById('project-performance-list');
+  if(projects.length===0){
+    perfList.innerHTML='<div style="color:var(--text-muted);font-size:13px">No projects to display</div>';
+  }else{
+    const projectStats=projects.map(p=>{
+      const projectTasks=tasks.filter(t=>t.project===p.name);
+      const total=projectTasks.length;
+      const done=projectTasks.filter(t=>t.status==='Done').length;
+      const completion=total>0?Math.round((done/total)*100):0;
+      return{project:p,total,done,completion};
+    }).sort((a,b)=>b.completion-a.completion);
+    
+    perfList.innerHTML=projectStats.map(ps=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px">
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:14px;margin-bottom:4px">${e(ps.project.name)}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${ps.total} task${ps.total!==1?'s':''} • ${ps.done} done</div>
+        </div>
+        <div style="width:150px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="flex:1;height:6px;background:var(--border);border-radius:100px;overflow:hidden">
+              <div style="height:100%;background:${ps.completion===100?'#10b981':ps.completion>=75?'#3b82f6':ps.completion>=50?'#f59e0b':'#ef4444'};width:${ps.completion}%;transition:width .3s"></div>
+            </div>
+            <span style="font-size:12px;font-family:'DM Mono',monospace;font-weight:600;min-width:35px">${ps.completion}%</span>
+          </div>
+        </div>
+        <span class="tag ${ps.completion===100?'tag-done':ps.completion>=75?'tag-review':ps.completion>=50?'tag-inprogress':'tag-todo'}" style="font-size:11px">
+          ${ps.completion===100?'✓ Complete':ps.completion>=75?'Almost There':ps.completion>=50?'In Progress':'Getting Started'}
+        </span>
+      </div>
+    `).join('');
+  }
+  
+  // Status Breakdown
+  const statusBreakdown=document.getElementById('status-breakdown');
+  const statusCounts={
+    'To Do':tasks.filter(t=>t.status==='To Do').length,
+    'In Progress':tasks.filter(t=>t.status==='In Progress').length,
+    'In Review':tasks.filter(t=>t.status==='In Review').length,
+    'Done':tasks.filter(t=>t.status==='Done').length,
+    'Blocked':tasks.filter(t=>t.status==='Blocked').length
+  };
+  const statusColors={'To Do':'#a8a09a','In Progress':'#f59e0b','In Review':'#6366f1','Done':'#10b981','Blocked':'#ef4444'};
+  
+  statusBreakdown.innerHTML=Object.entries(statusCounts).map(([status,count])=>`
+    <div style="text-align:center">
+      <div style="width:80px;height:80px;border-radius:50%;background:${statusColors[status]}20;border:3px solid ${statusColors[status]};display:flex;align-items:center;justify-content:center;margin:0 auto 8px">
+        <div style="font-size:24px;font-weight:700;color:${statusColors[status]}">${count}</div>
+      </div>
+      <div style="font-size:12px;font-weight:600">${status}</div>
+    </div>
+  `).join('');
+  
+  // Recommendations
+  const recommendations=[];
+  const blockedTasks=tasks.filter(t=>t.status==='Blocked');
+  if(blockedTasks.length>0){
+    recommendations.push({
+      icon:'🚨',
+      text:`<strong>${blockedTasks.length} blocked task${blockedTasks.length!==1?'s':''}</strong> need${blockedTasks.length===1?'s':''} attention`,
+      action:'Review and unblock these tasks to improve team velocity'
+    });
+  }
+  
+  const overdueTasks=tasks.filter(t=>{
+    if(!t.dueDate||t.status==='Done')return false;
+    const due=new Date(t.dueDate);
+    const today=new Date();
+    today.setHours(0,0,0,0);
+    return due<today;
+  });
+  if(overdueTasks.length>0){
+    recommendations.push({
+      icon:'⏰',
+      text:`<strong>${overdueTasks.length} overdue task${overdueTasks.length!==1?'s':''}</strong> past deadline`,
+      action:'Prioritize these tasks or update their due dates'
+    });
+  }
+  
+  const lowProgressProjects=projects.filter(p=>{
+    const projectTasks=tasks.filter(t=>t.project===p.name);
+    const total=projectTasks.length;
+    const done=projectTasks.filter(t=>t.status==='Done').length;
+    return total>0&&(done/total)<0.25;
+  });
+  if(lowProgressProjects.length>0){
+    recommendations.push({
+      icon:'📉',
+      text:`<strong>${lowProgressProjects.length} project${lowProgressProjects.length!==1?'s':''}</strong> with low completion (<25%)`,
+      action:'Consider redistributing resources or revisiting project scope'
+    });
+  }
+  
+  const highLoadAssignees=Object.entries(
+    tasks.filter(t=>t.status!=='Done'&&t.assignee).reduce((acc,t)=>{
+      acc[t.assignee]=(acc[t.assignee]||0)+1;
+      return acc;
+    },{})
+  ).filter(([,count])=>count>=5);
+  
+  if(highLoadAssignees.length>0){
+    recommendations.push({
+      icon:'👤',
+      text:`<strong>${highLoadAssignees.length} team member${highLoadAssignees.length!==1?'s':''}</strong> with 5+ active tasks`,
+      action:'Consider load balancing to prevent burnout'
+    });
+  }
+  
+  if(recommendations.length===0){
+    recommendations.push({
+      icon:'✅',
+      text:'<strong>Everything looks good!</strong>',
+      action:'Keep up the great work. Team is on track.'
+    });
+  }
+  
+  document.getElementById('recommendations-list').innerHTML=recommendations.map(r=>`
+    <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #bfdbfe">
+      <div style="font-size:24px;flex-shrink:0">${r.icon}</div>
+      <div>
+        <div style="font-size:14px;color:#1e40af;margin-bottom:4px">${r.text}</div>
+        <div style="font-size:12px;color:#3b82f6">${r.action}</div>
+      </div>
+    </div>
+  `).join('');
+  
+  // Team Workload
+  const teamWorkload=Object.entries(
+    tasks.filter(t=>t.assignee).reduce((acc,t)=>{
+      if(!acc[t.assignee])acc[t.assignee]={total:0,done:0,inProgress:0,blocked:0};
+      acc[t.assignee].total++;
+      if(t.status==='Done')acc[t.assignee].done++;
+      if(t.status==='In Progress')acc[t.assignee].inProgress++;
+      if(t.status==='Blocked')acc[t.assignee].blocked++;
+      return acc;
+    },{})
+  ).sort((a,b)=>b[1].total-a[1].total);
+  
+  const workloadList=document.getElementById('team-workload-list');
+  if(teamWorkload.length===0){
+    workloadList.innerHTML='<div style="color:var(--text-muted);font-size:13px">No assigned tasks</div>';
+  }else{
+    workloadList.innerHTML=teamWorkload.map(([name,stats])=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px">
+        <div style="width:36px;height:36px;border-radius:50%;background:${strColor(name)};color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          ${name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2)}
+        </div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:14px">${e(name)}</div>
+          <div style="font-size:12px;color:var(--text-muted)">
+            ${stats.total} total • ${stats.inProgress} in progress • ${stats.done} done
+            ${stats.blocked>0?` • <span style="color:#ef4444;font-weight:600">${stats.blocked} blocked</span>`:''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// ══════════ UTILS ══════════
+function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtDate(s){if(!s)return'';const[y,m,d]=s.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return`${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`;}
+function strColor(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);const c=['#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f97316','#06b6d4','#84cc16','#ef4444'];return c[Math.abs(h)%c.length];}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  if(id==='modal-overlay')editingId=null;
+  if(id==='project-modal')editingProjectId=null;
+}
+function closeOverlay(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+
+document.addEventListener('keydown',ev=>{
+  if(ev.key==='n'&&!ev.ctrlKey&&!ev.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&document.activeElement.contentEditable!=='true')openModal();
+  if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
+});
+
+// ══════════ INIT ══════════
+loadAll();renderWeekBadge();renderTable();updateProjectDropdown();
+</script>
 </body>
 </html>
