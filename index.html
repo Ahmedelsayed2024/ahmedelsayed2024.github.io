@@ -226,6 +226,70 @@
     .form-row{grid-template-columns:1fr;}
     .header-right .btn-sm:not(.btn-primary){display:none;}
   }
+
+  /* ─ Working Hours ─ */
+  .wh-wrap{padding:20px 28px 40px;}
+  .wh-inner-tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:24px;}
+  .wh-inner-tab{padding:10px 20px;background:transparent;border:none;font-family:inherit;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;position:relative;transition:all .15s;}
+  .wh-inner-tab:hover{color:var(--text);}
+  .wh-inner-tab.active{color:var(--accent2);font-weight:600;}
+  .wh-inner-tab.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--accent2);}
+  .wh-inner-panel{display:none;}
+  .wh-inner-panel.active{display:block;}
+
+  /* Week Navigation */
+  .wh-week-nav{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap;}
+  .wh-week-label{font-size:15px;font-weight:600;color:var(--text);min-width:220px;}
+  .wh-week-sub{font-size:12px;color:var(--text-muted);font-weight:400;}
+
+  /* Hours Entry Grid */
+  .wh-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .wh-table thead th{background:#faf9f7;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .wh-table thead th.day-col{text-align:center;min-width:70px;}
+  .wh-table thead th.total-col{text-align:center;min-width:70px;background:#f0f4ff;color:var(--accent2);}
+  .wh-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+  .wh-table tbody tr:last-child{border-bottom:none;}
+  .wh-table tbody tr:hover{background:#faf9f7;}
+  .wh-table tbody tr.wh-total-row{background:#f0f4ff;font-weight:700;border-top:2px solid var(--border);}
+  .wh-table td{padding:10px 12px;font-size:13px;vertical-align:middle;}
+  .wh-table td.day-td{text-align:center;}
+  .wh-table td.total-td{text-align:center;font-family:'DM Mono',monospace;font-weight:700;color:var(--accent2);background:#f0f4ff;}
+  .wh-hours-input{width:60px;text-align:center;font-family:'DM Mono',monospace;font-size:13px;border:1px solid transparent;border-radius:6px;padding:4px 6px;background:transparent;color:var(--text);outline:none;transition:all .15s;}
+  .wh-hours-input:hover{background:var(--bg);border-color:var(--border);}
+  .wh-hours-input:focus{background:#fff;border-color:var(--accent2);}
+  .wh-hours-input::-webkit-inner-spin-button,.wh-hours-input::-webkit-outer-spin-button{opacity:.4;}
+  .wh-project-name{font-weight:500;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .wh-exp-badge{display:inline-block;font-size:10px;font-family:'DM Mono',monospace;background:var(--accent2-soft);color:var(--accent2);border:1px solid #bfdbfe;border-radius:4px;padding:2px 6px;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis;}
+  .wh-task-title{font-size:11px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+  .wh-weekend{background:#faf7f4!important;color:var(--text-light);}
+  .wh-day-header{display:flex;flex-direction:column;align-items:center;gap:1px;}
+  .wh-day-name{font-size:10px;letter-spacing:.5px;}
+  .wh-day-date{font-size:11px;font-weight:700;color:var(--text);}
+  .wh-day-today .wh-day-date{color:var(--accent2);background:var(--accent2-soft);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
+
+  /* Submit Hours Tab */
+  .wh-weeks-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+  .wh-week-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:16px;}
+  .wh-week-card:hover{border-color:var(--accent2);box-shadow:0 2px 10px rgba(37,99,235,.1);}
+  .wh-week-card.selected{border-color:var(--accent2);background:var(--accent2-soft);}
+  .wh-week-card-info{flex:1;}
+  .wh-week-card-label{font-weight:600;font-size:14px;}
+  .wh-week-card-range{font-size:12px;color:var(--text-muted);}
+  .wh-week-card-total{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--accent2);}
+  .wh-submitted-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;}
+  .wh-submitted-badge.done{background:#d1fae5;color:#065f46;}
+  .wh-submitted-badge.pending{background:#fef3c7;color:#92400e;}
+
+  /* Week detail report */
+  .wh-report-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;}
+  .wh-report-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .wh-report-title{font-size:16px;font-weight:600;}
+  .wh-duration-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .wh-duration-bar label{font-size:12px;font-weight:600;color:var(--text-muted);}
+  .wh-report-project-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px;}
+  .wh-report-bar-track{flex:1;height:8px;background:var(--border);border-radius:100px;overflow:hidden;}
+  .wh-report-bar-fill{height:100%;border-radius:100px;background:var(--accent2);}
+  .wh-no-data{text-align:center;padding:40px;color:var(--text-muted);font-size:13px;}
 </style>
 </head>
 <body>
@@ -259,6 +323,7 @@
   <button class="tab active" onclick="switchMainTab('tasks')">✓ Tasks</button>
   <button class="tab" onclick="switchMainTab('projects')">📁 Projects</button>
   <button class="tab" onclick="switchMainTab('statistics')">📊 Statistics</button>
+  <button class="tab" onclick="switchMainTab('workinghours')">⏱ Working Hours</button>
 </div>
 
 <!-- ══ TASKS TAB ══ -->
@@ -433,6 +498,85 @@
     </div>
   </div>
 </div><!-- END STATISTICS TAB -->
+
+<!-- ══ WORKING HOURS TAB ══ -->
+<div id="workinghours-tab" class="tab-content">
+  <div class="wh-wrap">
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:4px">⏱ Working Hours</h2>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Log hours per task by day. Only <strong>In Progress</strong> tasks are shown.</p>
+
+    <!-- Inner tabs -->
+    <div class="wh-inner-tabs">
+      <button class="wh-inner-tab active" onclick="switchWHTab('entry')">📝 Enter Working Hours</button>
+      <button class="wh-inner-tab" onclick="switchWHTab('submit')">📤 Submit Working Hours</button>
+    </div>
+
+    <!-- ── ENTRY PANEL ── -->
+    <div id="wh-panel-entry" class="wh-inner-panel active">
+      <div class="wh-week-nav">
+        <button class="btn btn-secondary btn-sm" onclick="whNavWeek(-1)">← Prev Week</button>
+        <div>
+          <div class="wh-week-label" id="wh-week-label">—</div>
+          <div class="wh-week-sub" id="wh-week-sub">—</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="whNavWeek(1)">Next Week →</button>
+        <button class="btn btn-ghost btn-sm" onclick="whGoCurrentWeek()">Today</button>
+        <span style="flex:1"></span>
+        <div style="font-size:12px;color:var(--text-muted)">Total this week: <strong id="wh-week-total" style="color:var(--accent2);font-family:'DM Mono',monospace">0h</strong></div>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table class="wh-table" id="wh-entry-table">
+          <thead>
+            <tr id="wh-head-row">
+              <th style="min-width:200px">Task</th>
+              <th style="min-width:160px">Project</th>
+              <th style="min-width:130px">3DEXP</th>
+              <!-- day headers injected by JS -->
+              <th class="total-col">Total</th>
+            </tr>
+          </thead>
+          <tbody id="wh-tbody"></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="whSaveEntry()">💾 Save Hours</button>
+        <span style="font-size:12px;color:var(--text-muted)" id="wh-save-status"></span>
+      </div>
+    </div>
+
+    <!-- ── SUBMIT PANEL ── -->
+    <div id="wh-panel-submit" class="wh-inner-panel">
+      <!-- Export bar -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:600;">📊 Export Working Hours Report</span>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1">
+          <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Duration:</label>
+          <input type="date" id="export-from-date" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:6px;padding:5px 10px;background:var(--bg);color:var(--text);outline:none;" />
+          <span style="color:var(--text-muted);font-size:12px;">to</span>
+          <input type="date" id="export-to-date" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:6px;padding:5px 10px;background:var(--bg);color:var(--text);outline:none;" />
+          <button class="btn btn-ghost btn-sm" onclick="whSetExportCurrentMonth()">Current Month</button>
+        </div>
+        <button class="btn btn-primary" onclick="whExportToExcel()">⬇ Export to Excel (.xlsx)</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start" id="wh-submit-grid">
+
+        <!-- Left: weeks list -->
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Weeks (most recent first)</div>
+          <div class="wh-weeks-list" id="wh-weeks-list"></div>
+        </div>
+
+        <!-- Right: week detail report -->
+        <div id="wh-report-area">
+          <div class="wh-no-data">← Select a week to view its report</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- END WORKING HOURS TAB -->
 
 <!-- ══ TASK MODAL ══ -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeOverlay(event,'modal-overlay')">
@@ -692,6 +836,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 // ══════════ CONSTANTS & STATE ══════════
 const SK='team_tasks_v3', LK='team_tasks_logo', CK='team_tasks_custom_cols', CFG='team_tasks_config', PK='team_tasks_projects';
@@ -1189,6 +1334,8 @@ function exportJSON(){
     projects:projects,
     customCols:customCols,
     cfRules:cfRules,
+    workingHours:whHours,
+    workingHoursSubmitted:whSubmitted,
     logo:localStorage.getItem('companyLogo')||null
   };
   const json=JSON.stringify(exportData,null,2);
@@ -1254,6 +1401,7 @@ function handleJSONImport(e){
         saveAll();
         saveProjects();
         saveCols();
+        if(importData.workingHours){whHours=importData.workingHours;whSubmitted=importData.workingHoursSubmitted||{};whSaveData();}
         
         // Re-render
         renderTable();
@@ -1427,6 +1575,7 @@ function switchMainTab(tab){
   if(tab==='projects')renderProjectsTable();
   if(tab==='tasks'){renderTable();updateFilterDropdowns();}
   if(tab==='statistics')renderStatistics();
+  if(tab==='workinghours'){whLoadData();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
 }
 
 function openProjectModal(id=null){
@@ -1759,6 +1908,751 @@ function renderStatistics(){
   }
 }
 
+// ══════════ WORKING HOURS ══════════
+const WHK = 'team_tasks_working_hours'; // localStorage key
+let whHours = {}; // { 'YYYY-Www': { taskId: { 'YYYY-MM-DD': hours } } }
+let whSubmitted = {}; // { 'YYYY-Www': true/false }
+let whCurrentWeekOffset = 0; // 0 = current week, -1 = last week, etc.
+let whSelectedWeek = null; // for submit panel
+
+function whLoadData() {
+  try { whHours = JSON.parse(localStorage.getItem(WHK + '_hours')) || {}; } catch { whHours = {}; }
+  try { whSubmitted = JSON.parse(localStorage.getItem(WHK + '_submitted')) || {}; } catch { whSubmitted = {}; }
+}
+function whSaveData() {
+  localStorage.setItem(WHK + '_hours', JSON.stringify(whHours));
+  localStorage.setItem(WHK + '_submitted', JSON.stringify(whSubmitted));
+}
+
+// Get Monday of week offset from today
+function whGetWeekDates(offset) {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun
+  const diffToMon = day === 0 ? -6 : 1 - day;
+  const mon = new Date(now);
+  mon.setDate(now.getDate() + diffToMon + offset * 7);
+  mon.setHours(0,0,0,0);
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mon);
+    d.setDate(mon.getDate() + i);
+    days.push(d);
+  }
+  return days;
+}
+
+function whGetWeekKey(days) {
+  // ISO week key: YYYY-Www
+  const mon = days[0];
+  const soy = new Date(mon.getFullYear(), 0, 1);
+  const wk = Math.ceil(((mon - soy) / 86400000 + soy.getDay() + 1) / 7);
+  return `${mon.getFullYear()}-W${String(wk).padStart(2,'0')}`;
+}
+
+function whFmtDay(d) {
+  const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${d.getDate()} ${mn[d.getMonth()]}`;
+}
+function whFmtISO(d) {
+  return d.toISOString().slice(0,10);
+}
+
+function whNavWeek(delta) {
+  whCurrentWeekOffset += delta;
+  renderWHEntryPanel();
+}
+function whGoCurrentWeek() {
+  whCurrentWeekOffset = 0;
+  renderWHEntryPanel();
+}
+
+function switchWHTab(tab) {
+  document.querySelectorAll('.wh-inner-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.wh-inner-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('wh-panel-' + tab).classList.add('active');
+  const tabs = document.querySelectorAll('.wh-inner-tab');
+  if (tab === 'entry') tabs[0].classList.add('active');
+  else { tabs[1].classList.add('active'); whSetExportCurrentMonth(); renderWHSubmitPanel(); }
+}
+
+function renderWHEntryPanel() {
+  const days = whGetWeekDates(whCurrentWeekOffset);
+  const weekKey = whGetWeekKey(days);
+  const today = whFmtISO(new Date());
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  // Label
+  document.getElementById('wh-week-label').textContent =
+    `Week ${weekKey.split('-W')[1]} · ${whFmtDay(days[0])} – ${whFmtDay(days[6])} ${days[6].getFullYear()}`;
+  document.getElementById('wh-week-sub').textContent =
+    whCurrentWeekOffset === 0 ? 'Current Week' : whCurrentWeekOffset === -1 ? 'Last Week' : whCurrentWeekOffset < 0 ? `${Math.abs(whCurrentWeekOffset)} weeks ago` : `${whCurrentWeekOffset} week(s) ahead`;
+
+  // Build day headers
+  const headRow = document.getElementById('wh-head-row');
+  // Remove old day headers (keep first 3 fixed cols + last total col)
+  headRow.querySelectorAll('.wh-dh').forEach(th => th.remove());
+  const totalTh = headRow.querySelector('.total-col');
+  days.forEach(d => {
+    const iso = whFmtISO(d);
+    const isWknd = d.getDay() === 0 || d.getDay() === 6;
+    const isTdy = iso === today;
+    const th = document.createElement('th');
+    th.className = 'day-col wh-dh' + (isWknd ? ' wh-weekend' : '');
+    th.innerHTML = `<div class="wh-day-header ${isTdy ? 'wh-day-today' : ''}">
+      <span class="wh-day-name">${dayNames[d.getDay()]}</span>
+      <span class="wh-day-date">${d.getDate()}</span>
+    </div>`;
+    headRow.insertBefore(th, totalTh);
+  });
+
+  // Filter In Progress tasks
+  const inProgressTasks = tasks.filter(t => t.status === 'In Progress');
+  const tbody = document.getElementById('wh-tbody');
+
+  if (!inProgressTasks.length) {
+    tbody.innerHTML = `<tr><td colspan="${3 + 7 + 1}"><div class="wh-no-data">No tasks with status <strong>In Progress</strong>. Add tasks and set them to In Progress first.</div></td></tr>`;
+    document.getElementById('wh-week-total').textContent = '0h';
+    return;
+  }
+
+  const weekData = whHours[weekKey] || {};
+  let weekTotal = 0;
+
+  tbody.innerHTML = inProgressTasks.map(t => {
+    const taskData = weekData[t.id] || {};
+    let rowTotal = 0;
+    const project = projects.find(p => p.name === t.project);
+    const exp3 = t.task3DEXP || (project ? project.project3DEXP : '') || '—';
+
+    const dayCells = days.map(d => {
+      const iso = whFmtISO(d);
+      const isWknd = d.getDay() === 0 || d.getDay() === 6;
+      const val = taskData[iso] || '';
+      if (val) rowTotal += parseFloat(val) || 0;
+      return `<td class="day-td${isWknd ? ' wh-weekend' : ''}">
+        <input class="wh-hours-input" type="number" min="0" max="24" step="0.5"
+          value="${val}" placeholder="—"
+          data-task="${t.id}" data-date="${iso}"
+          oninput="whUpdateCell(this)" />
+      </td>`;
+    }).join('');
+
+    weekTotal += rowTotal;
+
+    return `<tr>
+      <td>
+        <div class="wh-project-name" title="${e(t.title)}">${e(t.title)}</div>
+        <div style="margin-top:3px"><span class="tag tag-inprogress" style="font-size:10px;padding:2px 6px">In Progress</span></div>
+      </td>
+      <td><span style="font-size:12px;color:var(--text-muted)">${e(t.project || '—')}</span></td>
+      <td><span class="wh-exp-badge" title="${e(exp3)}">${e(exp3)}</span></td>
+      ${dayCells}
+      <td class="total-td" id="wh-row-total-${t.id}">${rowTotal ? rowTotal + 'h' : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  // Total row
+  const totalDayCells = days.map(d => {
+    const iso = whFmtISO(d);
+    const isWknd = d.getDay() === 0 || d.getDay() === 6;
+    let daySum = 0;
+    inProgressTasks.forEach(t => {
+      const v = (weekData[t.id] || {})[iso];
+      if (v) daySum += parseFloat(v) || 0;
+    });
+    return `<td class="day-td${isWknd ? ' wh-weekend' : ''}" style="font-family:'DM Mono',monospace;font-weight:700;color:var(--text);font-size:13px">${daySum ? daySum + 'h' : '—'}</td>`;
+  }).join('');
+
+  tbody.innerHTML += `<tr class="wh-total-row">
+    <td colspan="3" style="font-size:12px;color:var(--text-muted)">📊 DAILY TOTALS</td>
+    ${totalDayCells}
+    <td class="total-td">${weekTotal}h</td>
+  </tr>`;
+
+  document.getElementById('wh-week-total').textContent = weekTotal + 'h';
+}
+
+function whUpdateCell(input) {
+  const taskId = parseInt(input.dataset.task);
+  const date = input.dataset.date;
+  const val = parseFloat(input.value) || 0;
+  const days = whGetWeekDates(whCurrentWeekOffset);
+  const weekKey = whGetWeekKey(days);
+
+  if (!whHours[weekKey]) whHours[weekKey] = {};
+  if (!whHours[weekKey][taskId]) whHours[weekKey][taskId] = {};
+  if (val > 0) {
+    whHours[weekKey][taskId][date] = val;
+  } else {
+    delete whHours[weekKey][taskId][date];
+    if (!Object.keys(whHours[weekKey][taskId]).length) delete whHours[weekKey][taskId];
+  }
+
+  // Update row total
+  const inProgressTasks = tasks.filter(t => t.status === 'In Progress');
+  const taskData = whHours[weekKey]?.[taskId] || {};
+  const rowTotal = days.reduce((s, d) => s + (parseFloat(taskData[whFmtISO(d)]) || 0), 0);
+  const rowTotalEl = document.getElementById('wh-row-total-' + taskId);
+  if (rowTotalEl) rowTotalEl.textContent = rowTotal ? rowTotal + 'h' : '—';
+
+  // Update week total
+  let weekTotal = 0;
+  inProgressTasks.forEach(t => {
+    const td = whHours[weekKey]?.[t.id] || {};
+    days.forEach(d => { weekTotal += parseFloat(td[whFmtISO(d)]) || 0; });
+  });
+  document.getElementById('wh-week-total').textContent = weekTotal + 'h';
+}
+
+function whSaveEntry() {
+  whSaveData();
+  const status = document.getElementById('wh-save-status');
+  status.textContent = '✅ Saved at ' + new Date().toLocaleTimeString();
+  setTimeout(() => { status.textContent = ''; }, 3000);
+}
+
+// ── Submit Panel ──
+function renderWHSubmitPanel() {
+  const list = document.getElementById('wh-weeks-list');
+  // Get all weeks that have data, sorted most recent first
+  const weekKeys = Object.keys(whHours).sort((a, b) => b.localeCompare(a));
+
+  // Also ensure current week appears even if empty
+  const nowDays = whGetWeekDates(0);
+  const nowKey = whGetWeekKey(nowDays);
+  if (!weekKeys.includes(nowKey)) weekKeys.unshift(nowKey);
+
+  if (!weekKeys.length) {
+    list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:20px">No working hours logged yet.</div>';
+    return;
+  }
+
+  list.innerHTML = weekKeys.map(wk => {
+    // Reconstruct days from key
+    const [yr, wNum] = wk.split('-W');
+    const jan1 = new Date(parseInt(yr), 0, 1);
+    const dayOfWeek = jan1.getDay() || 7;
+    const mondayOfWeek1 = new Date(jan1);
+    mondayOfWeek1.setDate(jan1.getDate() + (dayOfWeek <= 4 ? 1 - dayOfWeek : 8 - dayOfWeek));
+    const mon = new Date(mondayOfWeek1);
+    mon.setDate(mondayOfWeek1.getDate() + (parseInt(wNum) - 1) * 7);
+    const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+
+    const totalHours = Object.values(whHours[wk] || {}).reduce((s, taskDates) =>
+      s + Object.values(taskDates).reduce((ts, h) => ts + (parseFloat(h) || 0), 0), 0);
+    const submitted = whSubmitted[wk];
+    const isSelected = whSelectedWeek === wk;
+
+    return `<div class="wh-week-card${isSelected ? ' selected' : ''}" onclick="whSelectWeek('${wk}')">
+      <div style="font-size:22px">${submitted ? '✅' : '🕐'}</div>
+      <div class="wh-week-card-info">
+        <div class="wh-week-card-label">Week ${wNum} · ${yr}</div>
+        <div class="wh-week-card-range">${whFmtDay(mon)} – ${whFmtDay(sun)}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <div class="wh-week-card-total">${totalHours}h</div>
+        <span class="wh-submitted-badge ${submitted ? 'done' : 'pending'}">${submitted ? '✓ Submitted' : '⏳ Pending'}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function whSelectWeek(weekKey) {
+  whSelectedWeek = weekKey;
+  renderWHSubmitPanel();
+  renderWHWeekReport(weekKey);
+}
+
+function renderWHWeekReport(weekKey) {
+  const area = document.getElementById('wh-report-area');
+  const [yr, wNum] = weekKey.split('-W');
+  const jan1 = new Date(parseInt(yr), 0, 1);
+  const dayOfWeek = jan1.getDay() || 7;
+  const mondayOfWeek1 = new Date(jan1);
+  mondayOfWeek1.setDate(jan1.getDate() + (dayOfWeek <= 4 ? 1 - dayOfWeek : 8 - dayOfWeek));
+  const mon = new Date(mondayOfWeek1);
+  mon.setDate(mondayOfWeek1.getDate() + (parseInt(wNum) - 1) * 7);
+  const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+
+  const isSubmitted = whSubmitted[weekKey];
+  const weekData = whHours[weekKey] || {};
+  const totalWeekHours = Object.values(weekData).reduce((s, td) =>
+    s + Object.values(td).reduce((ts, h) => ts + (parseFloat(h)||0), 0), 0);
+
+  // Default: current month
+  const now = new Date();
+  const defaultFrom = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
+  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  const defaultTo = whFmtISO(lastDay);
+
+  area.innerHTML = `<div class="wh-report-wrap">
+    <div class="wh-report-header">
+      <div>
+        <div class="wh-report-title">Week ${wNum} · ${yr}</div>
+        <div style="font-size:12px;color:var(--text-muted)">${whFmtDay(mon)} – ${whFmtDay(sun)} · <strong style="color:var(--accent2);font-family:'DM Mono',monospace">${totalWeekHours}h</strong> total</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="wh-submitted-badge ${isSubmitted ? 'done' : 'pending'}" style="font-size:12px;padding:6px 14px">
+          ${isSubmitted ? '✓ Submitted' : '⏳ Pending Submission'}
+        </span>
+        <button class="btn ${isSubmitted ? 'btn-secondary' : 'btn-primary'} btn-sm" onclick="whToggleSubmit('${weekKey}')">
+          ${isSubmitted ? '↩ Mark as Not Submitted' : '📤 Mark as Submitted'}
+        </button>
+      </div>
+    </div>
+
+    <div class="wh-duration-bar" style="margin-bottom:20px;padding:12px;background:var(--bg);border-radius:8px">
+      <label>Duration filter:</label>
+      <input type="date" id="wh-from-date" value="${defaultFrom}" onchange="whRefreshReport('${weekKey}')" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:6px;padding:5px 10px;background:var(--surface);color:var(--text)" />
+      <span style="color:var(--text-muted)">to</span>
+      <input type="date" id="wh-to-date" value="${defaultTo}" onchange="whRefreshReport('${weekKey}')" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:6px;padding:5px 10px;background:var(--surface);color:var(--text)" />
+      <button class="btn btn-ghost btn-sm" onclick="whResetDuration('${weekKey}')">Reset to Current Month</button>
+    </div>
+
+    <div id="wh-report-content"><!-- filled by JS --></div>
+  </div>`;
+
+  whRefreshReport(weekKey);
+}
+
+function whRefreshReport(weekKey) {
+  const fromDate = document.getElementById('wh-from-date')?.value || '';
+  const toDate = document.getElementById('wh-to-date')?.value || '';
+  const content = document.getElementById('wh-report-content');
+  if (!content) return;
+
+  // Gather all hours within the date range across all weeks
+  const projectHours = {}; // { projectName: { exp3: str, tasks: { taskId: { title, hours } }, total: 0 } }
+
+  Object.entries(whHours).forEach(([wk, weekData]) => {
+    Object.entries(weekData).forEach(([taskId, dateMap]) => {
+      const task = tasks.find(t => t.id === parseInt(taskId));
+      if (!task) return;
+      const proj = task.project || '(No Project)';
+      const project = projects.find(p => p.name === proj);
+      const exp3 = task.task3DEXP || (project ? project.project3DEXP : '') || '—';
+
+      Object.entries(dateMap).forEach(([date, hrs]) => {
+        if (fromDate && date < fromDate) return;
+        if (toDate && date > toDate) return;
+        const h = parseFloat(hrs) || 0;
+        if (!h) return;
+        if (!projectHours[proj]) projectHours[proj] = { exp3, tasks: {}, total: 0 };
+        if (!projectHours[proj].tasks[taskId]) projectHours[proj].tasks[taskId] = { title: task.title, hours: 0 };
+        projectHours[proj].tasks[taskId].hours += h;
+        projectHours[proj].total += h;
+      });
+    });
+  });
+
+  const grandTotal = Object.values(projectHours).reduce((s, p) => s + p.total, 0);
+
+  if (!grandTotal) {
+    content.innerHTML = '<div class="wh-no-data">No hours logged in this date range.</div>';
+    return;
+  }
+
+  const sorted = Object.entries(projectHours).sort((a, b) => b[1].total - a[1].total);
+
+  content.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--text-muted)">Projects & Hours</div>
+      <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--accent2)">${grandTotal}h total</div>
+    </div>
+    ${sorted.map(([projName, projData]) => {
+      const pct = grandTotal > 0 ? Math.round((projData.total / grandTotal) * 100) : 0;
+      const taskRows = Object.values(projData.tasks).map(t =>
+        `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;color:var(--text-muted)">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--border);flex-shrink:0"></span>
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e(t.title)}</span>
+          <span style="font-family:'DM Mono',monospace;font-weight:600;color:var(--text)">${t.hours}h</span>
+        </div>`
+      ).join('');
+      return `<div class="wh-report-project-row" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:14px">${e(projName)}</div>
+            <div style="font-size:11px;color:var(--text-muted)"><span class="wh-exp-badge">${e(projData.exp3)}</span></div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:16px;color:var(--accent2)">${projData.total}h</div>
+            <div style="font-size:11px;color:var(--text-muted)">${pct}% of total</div>
+          </div>
+        </div>
+        <div class="wh-report-bar-track" style="margin-bottom:8px">
+          <div class="wh-report-bar-fill" style="width:${pct}%"></div>
+        </div>
+        ${taskRows}
+      </div>`;
+    }).join('')}`;
+}
+
+function whResetDuration(weekKey) {
+  const now = new Date();
+  const defaultFrom = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
+  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  document.getElementById('wh-from-date').value = defaultFrom;
+  document.getElementById('wh-to-date').value = whFmtISO(lastDay);
+  whRefreshReport(weekKey);
+}
+
+function whToggleSubmit(weekKey) {
+  whSubmitted[weekKey] = !whSubmitted[weekKey];
+  whSaveData();
+  renderWHSubmitPanel();
+  renderWHWeekReport(weekKey);
+}
+
+// ── Set current month defaults for export date pickers ──
+function whSetExportCurrentMonth() {
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+  const firstDay = `${y}-${String(m+1).padStart(2,'0')}-01`;
+  const lastDay = whFmtISO(new Date(y, m+1, 0));
+  const fromEl = document.getElementById('export-from-date');
+  const toEl = document.getElementById('export-to-date');
+  if (fromEl) fromEl.value = firstDay;
+  if (toEl) toEl.value = lastDay;
+}
+
+// ── Excel Export ──
+function whExportToExcel() {
+  const fromDate = document.getElementById('export-from-date')?.value || '';
+  const toDate = document.getElementById('export-to-date')?.value || '';
+
+  if (!fromDate || !toDate) {
+    alert('Please select a date range before exporting.');
+    return;
+  }
+  if (fromDate > toDate) {
+    alert('Start date must be before end date.');
+    return;
+  }
+
+  // ── Step 1: collect all week keys in range, sorted ascending ──
+  const allWeekKeys = Object.keys(whHours).sort();
+
+  // Helper: get all Mon–Sun dates for a weekKey
+  function getWeekDaysFromKey(wk) {
+    const [yr, wNum] = wk.split('-W');
+    const jan1 = new Date(parseInt(yr), 0, 1);
+    const dow = jan1.getDay() || 7;
+    const mon1 = new Date(jan1);
+    mon1.setDate(jan1.getDate() + (dow <= 4 ? 1 - dow : 8 - dow));
+    const mon = new Date(mon1);
+    mon.setDate(mon1.getDate() + (parseInt(wNum)-1)*7);
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(mon); d.setDate(mon.getDate()+i);
+      days.push(d);
+    }
+    return days;
+  }
+
+  // Filter week keys that overlap with range
+  const weeksInRange = allWeekKeys.filter(wk => {
+    const days = getWeekDaysFromKey(wk);
+    const wkStart = whFmtISO(days[0]);
+    const wkEnd   = whFmtISO(days[6]);
+    return wkStart <= toDate && wkEnd >= fromDate;
+  });
+
+  // Collect unique dates in range
+  const allDatesInRange = [];
+  const dateSet = new Set();
+  weeksInRange.forEach(wk => {
+    getWeekDaysFromKey(wk).forEach(d => {
+      const iso = whFmtISO(d);
+      if (iso >= fromDate && iso <= toDate && !dateSet.has(iso)) {
+        dateSet.add(iso);
+        allDatesInRange.push({iso, d});
+      }
+    });
+  });
+  allDatesInRange.sort((a,b) => a.iso.localeCompare(b.iso));
+
+  if (!allDatesInRange.length) {
+    alert('No dates found in the selected range.');
+    return;
+  }
+
+  // ── Step 2: Collect per-project, per-task, per-date hours ──
+  // Structure: { projectName: { exp3, tasks: { taskId: { title, exp3task, dates: {iso: h} } } } }
+  const projectMap = {};
+
+  Object.entries(whHours).forEach(([wk, weekData]) => {
+    Object.entries(weekData).forEach(([taskIdStr, dateMap]) => {
+      const taskId = parseInt(taskIdStr);
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      const projName = task.project || '(No Project)';
+      const project = projects.find(p => p.name === projName);
+      const projExp3 = project?.project3DEXP || '—';
+      const taskExp3 = task.task3DEXP || '—';
+
+      Object.entries(dateMap).forEach(([date, hrs]) => {
+        if (date < fromDate || date > toDate) return;
+        const h = parseFloat(hrs) || 0;
+        if (!h) return;
+
+        if (!projectMap[projName]) projectMap[projName] = { exp3: projExp3, tasks: {} };
+        if (!projectMap[projName].tasks[taskIdStr])
+          projectMap[projName].tasks[taskIdStr] = { title: task.title, exp3: taskExp3, dates: {} };
+        projectMap[projName].tasks[taskIdStr].dates[date] =
+          (projectMap[projName].tasks[taskIdStr].dates[date] || 0) + h;
+      });
+    });
+  });
+
+  if (!Object.keys(projectMap).length) {
+    alert('No working hours data found in the selected date range.');
+    return;
+  }
+
+  // ── Step 3: Build week columns (group dates by week) ──
+  // Each week = Mon label (e.g. "Week 12\n10 Mar")
+  const weekColMap = {}; // weekKey → [isoDate, ...]
+  allDatesInRange.forEach(({iso, d}) => {
+    // find week key for this date
+    const day = d.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    const mon = new Date(d); mon.setDate(d.getDate() + diff);
+    const soy = new Date(mon.getFullYear(), 0, 1);
+    const wk = Math.ceil(((mon - soy) / 86400000 + soy.getDay() + 1) / 7);
+    const wkKey = `${mon.getFullYear()}-W${String(wk).padStart(2,'0')}`;
+    if (!weekColMap[wkKey]) weekColMap[wkKey] = [];
+    weekColMap[wkKey].push(iso);
+  });
+  const weekColKeys = Object.keys(weekColMap).sort();
+
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // ── Step 4: Build XLSX with openpyxl-style using SheetJS ──
+  const wb = XLSX.utils.book_new();
+
+  // ─ SHEET 1: Weekly Summary (Project | 3DEXP | Week1 | Week2 | ... | Total) ─
+  function buildSummarySheet() {
+    const aoa = []; // array of arrays
+
+    // Title row
+    aoa.push([`Working Hours Report — ${fromDate} to ${toDate}`]);
+    aoa.push([`Generated: ${new Date().toLocaleString()}`]);
+    aoa.push([]);
+
+    // Header row
+    const header = ['Project', '3DEXP (Project)', 'Task', '3DEXP (Task)'];
+    weekColKeys.forEach(wk => {
+      const [yr, wNum] = wk.split('-W');
+      const dates = weekColMap[wk];
+      const monDate = dates[0]; // first date in this week within range
+      const d = new Date(monDate);
+      header.push(`Wk ${wNum}\n(${d.getDate()} ${monthNames[d.getMonth()]})`);
+    });
+    header.push('TOTAL HOURS');
+    aoa.push(header);
+
+    // Data rows
+    const sortedProjects = Object.entries(projectMap).sort((a,b) => a[0].localeCompare(b[0]));
+    sortedProjects.forEach(([projName, projData]) => {
+      const sortedTasks = Object.entries(projData.tasks).sort((a,b) => a[1].title.localeCompare(b[1].title));
+      sortedTasks.forEach(([taskId, taskData], ti) => {
+        const row = [
+          ti === 0 ? projName : '',          // Project (only on first task row)
+          ti === 0 ? projData.exp3 : '',     // Project 3DEXP
+          taskData.title,
+          taskData.exp3
+        ];
+        let rowTotal = 0;
+        weekColKeys.forEach(wk => {
+          const datesInWk = weekColMap[wk];
+          const wkHrs = datesInWk.reduce((s, iso) => s + (taskData.dates[iso] || 0), 0);
+          row.push(wkHrs || '');
+          rowTotal += wkHrs;
+        });
+        row.push(rowTotal || '');
+        aoa.push(row);
+      });
+
+      // Project subtotal row
+      const subtotalRow = ['', '', 'SUBTOTAL', ''];
+      let projGrandTotal = 0;
+      weekColKeys.forEach(wk => {
+        const datesInWk = weekColMap[wk];
+        const wkSub = Object.values(projData.tasks).reduce((s, t) =>
+          s + datesInWk.reduce((ds, iso) => ds + (t.dates[iso] || 0), 0), 0);
+        subtotalRow.push(wkSub || '');
+        projGrandTotal += wkSub;
+      });
+      subtotalRow.push(projGrandTotal || '');
+      aoa.push(subtotalRow);
+      aoa.push([]);
+    });
+
+    // Grand total row
+    const grandRow = ['GRAND TOTAL', '', '', ''];
+    let grandTotal = 0;
+    weekColKeys.forEach(wk => {
+      const datesInWk = weekColMap[wk];
+      const wkGrand = Object.values(projectMap).reduce((s, proj) =>
+        s + Object.values(proj.tasks).reduce((ts, t) =>
+          ts + datesInWk.reduce((ds, iso) => ds + (t.dates[iso] || 0), 0), 0), 0);
+      grandRow.push(wkGrand || '');
+      grandTotal += wkGrand;
+    });
+    grandRow.push(grandTotal || '');
+    aoa.push(grandRow);
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+    // Column widths
+    const wscols = [
+      {wch: 30}, {wch: 18}, {wch: 35}, {wch: 18},
+      ...weekColKeys.map(() => ({wch: 12})),
+      {wch: 14}
+    ];
+    ws['!cols'] = wscols;
+
+    // Merge title row across all columns
+    const totalCols = 4 + weekColKeys.length + 1;
+    ws['!merges'] = [
+      {s:{r:0,c:0}, e:{r:0,c:totalCols-1}},
+      {s:{r:1,c:0}, e:{r:1,c:totalCols-1}}
+    ];
+
+    return ws;
+  }
+
+  // ─ SHEET 2: Daily Detail (Project | 3DEXP | Task | Task3DEXP | Date1 | Date2 | ... | Total) ─
+  function buildDailySheet() {
+    const aoa = [];
+    aoa.push([`Daily Working Hours — ${fromDate} to ${toDate}`]);
+    aoa.push([]);
+
+    const header = ['Project', '3DEXP (Project)', 'Task', '3DEXP (Task)'];
+    allDatesInRange.forEach(({iso, d}) => {
+      header.push(`${dayNames[d.getDay()]}\n${d.getDate()} ${monthNames[d.getMonth()]}`);
+    });
+    header.push('TOTAL');
+    aoa.push(header);
+
+    const sortedProjects = Object.entries(projectMap).sort((a,b) => a[0].localeCompare(b[0]));
+    sortedProjects.forEach(([projName, projData]) => {
+      const sortedTasks = Object.entries(projData.tasks).sort((a,b) => a[1].title.localeCompare(b[1].title));
+      sortedTasks.forEach(([taskId, taskData], ti) => {
+        const row = [
+          ti === 0 ? projName : '',
+          ti === 0 ? projData.exp3 : '',
+          taskData.title, taskData.exp3
+        ];
+        let total = 0;
+        allDatesInRange.forEach(({iso}) => {
+          const h = taskData.dates[iso] || '';
+          row.push(h);
+          total += parseFloat(h) || 0;
+        });
+        row.push(total || '');
+        aoa.push(row);
+      });
+
+      // Project subtotal
+      const sub = ['', '', 'SUBTOTAL', ''];
+      let projTotal = 0;
+      allDatesInRange.forEach(({iso}) => {
+        const s = Object.values(projData.tasks).reduce((a,t) => a + (t.dates[iso]||0), 0);
+        sub.push(s || '');
+        projTotal += s;
+      });
+      sub.push(projTotal || '');
+      aoa.push(sub);
+      aoa.push([]);
+    });
+
+    // Grand total
+    const grand = ['GRAND TOTAL','','',''];
+    let gt = 0;
+    allDatesInRange.forEach(({iso}) => {
+      const s = Object.values(projectMap).reduce((a,proj) =>
+        a + Object.values(proj.tasks).reduce((b,t) => b + (t.dates[iso]||0), 0), 0);
+      grand.push(s || '');
+      gt += s;
+    });
+    grand.push(gt || '');
+    aoa.push(grand);
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+    const wscols = [
+      {wch:30},{wch:18},{wch:35},{wch:18},
+      ...allDatesInRange.map(() => ({wch:10})),
+      {wch:10}
+    ];
+    ws['!cols'] = wscols;
+
+    const totalCols2 = 4 + allDatesInRange.length + 1;
+    ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:totalCols2-1}}];
+
+    return ws;
+  }
+
+  // ─ SHEET 3: Project Summary (Project | 3DEXP | Total Hours | Submitted weeks) ─
+  function buildProjectSummarySheet() {
+    const aoa = [];
+    aoa.push([`Project Summary — ${fromDate} to ${toDate}`]);
+    aoa.push([]);
+    aoa.push(['Project', '3DEXP (Project)', 'Tasks Count', 'Total Hours', '% of Grand Total']);
+
+    const sortedProjects = Object.entries(projectMap).sort((a,b) => {
+      const ta = Object.values(a[1].tasks).reduce((s,t) => s + Object.values(t.dates).reduce((x,h)=>x+h,0), 0);
+      const tb = Object.values(b[1].tasks).reduce((s,t) => s + Object.values(t.dates).reduce((x,h)=>x+h,0), 0);
+      return tb - ta;
+    });
+
+    const grandTotal = sortedProjects.reduce((s,[,p]) =>
+      s + Object.values(p.tasks).reduce((ts,t) => ts + Object.values(t.dates).reduce((ds,h)=>ds+h,0),0), 0);
+
+    sortedProjects.forEach(([projName, projData]) => {
+      const taskCount = Object.keys(projData.tasks).length;
+      const total = Object.values(projData.tasks).reduce((s,t) =>
+        s + Object.values(t.dates).reduce((ds,h)=>ds+(parseFloat(h)||0),0), 0);
+      const pct = grandTotal > 0 ? (total / grandTotal) : 0;
+      aoa.push([projName, projData.exp3, taskCount, total, pct]);
+    });
+
+    aoa.push([]);
+    aoa.push(['GRAND TOTAL', '', Object.values(projectMap).reduce((s,p)=>s+Object.keys(p.tasks).length,0), grandTotal, 1]);
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = [{wch:35},{wch:20},{wch:14},{wch:14},{wch:16}];
+
+    // Format percentage column (E) — rows 4 onward
+    const pctRows = sortedProjects.length + 1; // +1 for grand total
+    for (let r = 3; r < 3 + pctRows + 1; r++) {
+      const cell = ws[XLSX.utils.encode_cell({r, c:4})];
+      if (cell && typeof cell.v === 'number') {
+        cell.z = '0.0%';
+        cell.t = 'n';
+      }
+    }
+
+    ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:4}}];
+    return ws;
+  }
+
+  // Build all sheets
+  const wsSummary = buildSummarySheet();
+  const wsDaily = buildDailySheet();
+  const wsProjectSummary = buildProjectSummarySheet();
+
+  XLSX.utils.book_append_sheet(wb, wsProjectSummary, 'Project Summary');
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Weekly by Task');
+  XLSX.utils.book_append_sheet(wb, wsDaily, 'Daily Detail');
+
+  // Download
+  const rangeLabel = `${fromDate}_to_${toDate}`;
+  XLSX.writeFile(wb, `working-hours-${rangeLabel}.xlsx`);
+}
+
 // ══════════ UTILS ══════════
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtDate(s){if(!s)return'';const[y,m,d]=s.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return`${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`;}
@@ -1777,7 +2671,7 @@ document.addEventListener('keydown',ev=>{
 });
 
 // ══════════ INIT ══════════
-loadAll();renderWeekBadge();renderTable();updateProjectDropdown();
+loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();
 </script>
 </body>
 </html>
