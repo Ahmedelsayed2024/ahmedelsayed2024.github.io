@@ -290,6 +290,80 @@
   .wh-report-bar-track{flex:1;height:8px;background:var(--border);border-radius:100px;overflow:hidden;}
   .wh-report-bar-fill{height:100%;border-radius:100px;background:var(--accent2);}
   .wh-no-data{text-align:center;padding:40px;color:var(--text-muted);font-size:13px;}
+
+  /* ─ Samples Tab ─ */
+  .sl-wrap{padding:20px 28px 60px;}
+  .sl-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .sl-toolbar-left{display:flex;gap:10px;flex:1;flex-wrap:wrap;align-items:center;}
+  .sl-toolbar-right{display:flex;gap:8px;}
+
+  /* Lot cards grid */
+  .sl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:32px;}
+  .sl-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .15s,border-color .15s;cursor:pointer;}
+  .sl-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-strong);}
+  .sl-card-header{padding:14px 18px 10px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--border);}
+  .sl-lot-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .sl-card-meta{flex:1;min-width:0;}
+  .sl-lot-num{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--accent2);letter-spacing:.5px;margin-bottom:2px;}
+  .sl-lot-title{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sl-lot-phase{font-size:11px;color:var(--text-muted);margin-top:2px;}
+  .sl-card-body{padding:12px 18px;}
+  .sl-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:12px;}
+  .sl-row:last-child{margin-bottom:0;}
+  .sl-label{color:var(--text-muted);font-weight:500;min-width:90px;flex-shrink:0;}
+  .sl-val{color:var(--text);font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sl-card-footer{padding:10px 18px;background:var(--bg);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .sl-teams-wrap{display:flex;flex-wrap:wrap;gap:4px;flex:1;}
+  .sl-team-chip{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:100px;background:#e0e7ff;color:#3730a3;}
+  .sl-team-chip.received{background:#d1fae5;color:#065f46;}
+  .sl-card-actions{display:flex;gap:4px;flex-shrink:0;}
+
+  /* Status badges */
+  .sl-status{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;white-space:nowrap;}
+  .sl-status-pending{background:#fef3c7;color:#92400e;}
+  .sl-status-partial{background:#e0e7ff;color:#3730a3;}
+  .sl-status-delivered{background:#d1fae5;color:#065f46;}
+  .sl-status-overdue{background:#fee2e2;color:#991b1b;}
+
+  /* Table view */
+  .sl-table-wrap{overflow-x:auto;}
+  .sl-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .sl-table thead th{background:#faf9f7;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
+  .sl-table thead th:hover{color:var(--text);}
+  .sl-table thead th.sorted{color:var(--accent2);}
+  .sl-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+  .sl-table tbody tr:last-child{border-bottom:none;}
+  .sl-table tbody tr:hover{background:#faf9f7;}
+  .sl-table td{padding:10px 12px;font-size:12px;vertical-align:middle;}
+
+  /* Lot modal */
+  #sl-modal .modal{max-width:680px;}
+  .sl-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .sl-section-title:first-child{margin-top:0;}
+  .sl-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .sl-form-grid .full{grid-column:1/-1;}
+
+  /* Team receipt tracker inside modal */
+  .sl-receipt-list{display:flex;flex-direction:column;gap:8px;}
+  .sl-receipt-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--border);}
+  .sl-receipt-team{font-weight:600;font-size:13px;flex:1;}
+  .sl-receipt-date-wrap{display:flex;align-items:center;gap:6px;}
+  .sl-receipt-date-wrap label{font-size:11px;color:var(--text-muted);}
+  .sl-receipt-date-wrap input[type=date]{width:140px;font-size:12px;padding:5px 8px;}
+  .sl-receipt-check{accent-color:var(--accent2);width:16px;height:16px;cursor:pointer;flex-shrink:0;}
+  .sl-add-team-wrap{display:flex;gap:8px;margin-top:8px;}
+  .sl-add-team-wrap input{flex:1;}
+
+  /* Stats strip */
+  .sl-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .sl-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 18px;display:flex;align-items:center;gap:10px;}
+  .sl-stat-icon{font-size:20px;}
+  .sl-stat-val{font-size:22px;font-weight:700;font-family:'DM Mono',monospace;color:var(--accent2);}
+  .sl-stat-label{font-size:11px;color:var(--text-muted);font-weight:500;}
+
+  /* View toggle */
+  .sl-view-btn{padding:7px 10px;border:1px solid var(--border-strong);background:var(--surface);border-radius:8px;cursor:pointer;font-size:14px;transition:all .15s;}
+  .sl-view-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
 </style>
 </head>
 <body>
@@ -324,6 +398,7 @@
   <button class="tab" onclick="switchMainTab('projects')">📁 Projects</button>
   <button class="tab" onclick="switchMainTab('statistics')">📊 Statistics</button>
   <button class="tab" onclick="switchMainTab('workinghours')">⏱ Working Hours</button>
+  <button class="tab" onclick="switchMainTab('samples')">🧪 Samples</button>
 </div>
 
 <!-- ══ TASKS TAB ══ -->
@@ -577,6 +652,156 @@
     </div>
   </div>
 </div><!-- END WORKING HOURS TAB -->
+
+<!-- ══ SAMPLES TAB ══ -->
+<div id="samples-tab" class="tab-content">
+  <div class="sl-wrap">
+
+    <!-- Stats strip -->
+    <div class="sl-stats" id="sl-stats"></div>
+
+    <!-- Toolbar -->
+    <div class="sl-toolbar">
+      <div class="sl-toolbar-left">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="sl-search" placeholder="Search lots…" oninput="slRender()" style="width:200px" />
+        </div>
+        <select id="sl-filter-project" onchange="slRender()" style="min-width:160px">
+          <option value="">All Projects</option>
+        </select>
+        <select id="sl-filter-phase" onchange="slRender()">
+          <option value="">All Phases</option>
+          <option>CP</option><option>T0</option><option>T1</option><option>T2</option><option>PR</option><option>PP</option><option>MP</option>
+        </select>
+        <select id="sl-filter-status" onchange="slRender()">
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="partial">Partial</option>
+          <option value="delivered">Delivered</option>
+          <option value="overdue">Overdue</option>
+        </select>
+      </div>
+      <div class="sl-toolbar-right">
+        <button class="sl-view-btn active" id="sl-view-card" onclick="slSetView('card')" title="Card view">⊞</button>
+        <button class="sl-view-btn" id="sl-view-table" onclick="slSetView('table')" title="Table view">☰</button>
+        <button class="btn btn-ghost btn-sm" onclick="slClearFilters()">✕ Clear</button>
+        <button class="btn btn-secondary btn-sm" onclick="slExport()">⬇ Export</button>
+        <button class="btn btn-primary" onclick="slOpenModal()">＋ New Lot</button>
+      </div>
+    </div>
+
+    <!-- Card View -->
+    <div id="sl-card-view">
+      <div class="sl-grid" id="sl-grid"></div>
+    </div>
+
+    <!-- Table View -->
+    <div id="sl-table-view" style="display:none">
+      <div class="sl-table-wrap">
+        <table class="sl-table">
+          <thead>
+            <tr>
+              <th onclick="slSortBy('lotNumber')">Lot # <span id="slsort-lotNumber">↕</span></th>
+              <th onclick="slSortBy('project')">Project <span id="slsort-project">↕</span></th>
+              <th onclick="slSortBy('phase')">Phase <span id="slsort-phase">↕</span></th>
+              <th onclick="slSortBy('qty')">Qty <span id="slsort-qty">↕</span></th>
+              <th onclick="slSortBy('dateProd')">Prod. Date <span id="slsort-dateProd">↕</span></th>
+              <th onclick="slSortBy('dateDelivery')">Delivery <span id="slsort-dateDelivery">↕</span></th>
+              <th onclick="slSortBy('price')">Price <span id="slsort-price">↕</span></th>
+              <th>Purpose</th>
+              <th>Request Teams</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="sl-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div><!-- END SAMPLES TAB -->
+
+<!-- ══ SAMPLE LOT MODAL ══ -->
+<div class="modal-overlay" id="sl-modal" onclick="slCloseOverlay(event)">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <h2 id="sl-modal-title">New Sample Lot</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('sl-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="sl-section-title">📦 Lot Information</div>
+      <div class="sl-form-grid">
+        <div class="form-group">
+          <label>Project *</label>
+          <select id="sl-f-project" style="width:100%">
+            <option value="">— Select Project —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Phase *</label>
+          <select id="sl-f-phase">
+            <option value="">— Select Phase —</option>
+            <option>CP</option><option>T0</option><option>T1</option><option>T2</option><option>PR</option><option>PP</option><option>MP</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Lot Number *</label>
+          <input type="text" id="sl-f-lotNumber" placeholder="e.g. LOT-001" />
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="sl-f-qty" min="1" placeholder="e.g. 5" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Production Date</label>
+          <input type="date" id="sl-f-dateProd" style="width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Delivery Date</label>
+          <input type="date" id="sl-f-dateDelivery" style="width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Price (EGP)</label>
+          <input type="number" id="sl-f-price" min="0" step="0.01" placeholder="0.00" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Purpose</label>
+          <select id="sl-f-purpose">
+            <option value="">— Select —</option>
+            <option>Validation</option>
+            <option>Performance Test</option>
+            <option>Reliability Test</option>
+            <option>Safety Test</option>
+            <option>Certification</option>
+            <option>Customer Review</option>
+            <option>Internal Audit</option>
+            <option>Proto Build</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Notes / Description</label>
+          <textarea id="sl-f-notes" placeholder="Additional notes about this sample lot…" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;resize:vertical;min-height:60px;width:100%"></textarea>
+        </div>
+      </div>
+
+      <div class="sl-section-title">👥 Requesting Teams & Receipt Tracking</div>
+      <div class="sl-receipt-list" id="sl-receipt-list"></div>
+      <div class="sl-add-team-wrap">
+        <input type="text" id="sl-new-team-input" placeholder="Add team name (e.g. R&D, Quality, Marketing)…" onkeydown="if(event.key==='Enter')slAddTeam()" />
+        <button class="btn btn-secondary btn-sm" onclick="slAddTeam()">＋ Add Team</button>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('sl-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="slSaveLot()">Save Lot</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══ TASK MODAL ══ -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeOverlay(event,'modal-overlay')">
@@ -1327,7 +1552,7 @@ function buildProgressChart(){
 // ══════════ JSON EXPORT/IMPORT ══════════
 function exportJSON(){
   const exportData={
-    version:'3.0',
+    version:'4.0',
     exportDate:new Date().toISOString(),
     boardTitle:document.getElementById('board-title').textContent,
     tasks:tasks,
@@ -1336,7 +1561,9 @@ function exportJSON(){
     cfRules:cfRules,
     workingHours:whHours,
     workingHoursSubmitted:whSubmitted,
-    logo:localStorage.getItem('companyLogo')||null
+    sampleLots:sampleLots,
+    nextLotId:nextLotId,
+    logo:localStorage.getItem(LK)||null
   };
   const json=JSON.stringify(exportData,null,2);
   const blob=new Blob([json],{type:'application/json'});
@@ -1371,10 +1598,14 @@ function handleJSONImport(e){
       const hasCustomCols=importData.customCols&&importData.customCols.length>0;
       const hasCFRules=importData.cfRules&&importData.cfRules.length>0;
       
+      const lotCount=(importData.sampleLots||[]).length;
       let confirmMsg=`Import ${taskCount} task${taskCount!==1?'s':''}?`;
       if(projectCount)confirmMsg+=`\n• ${projectCount} project${projectCount!==1?'s':''}`;
       if(hasCustomCols)confirmMsg+=`\n• ${importData.customCols.length} custom column${importData.customCols.length!==1?'s':''}`;
       if(hasCFRules)confirmMsg+=`\n• ${importData.cfRules.length} formatting rule${importData.cfRules.length!==1?'s':''}`;
+      if(lotCount)confirmMsg+=`\n• ${lotCount} sample lot${lotCount!==1?'s':''}`;
+      const hasWH=importData.workingHours&&Object.keys(importData.workingHours).length>0;
+      if(hasWH)confirmMsg+=`\n• Working hours data`;
       confirmMsg+='\n\nThis will replace all current data.';
       
       if(confirm(confirmMsg)){
@@ -1402,13 +1633,17 @@ function handleJSONImport(e){
         saveProjects();
         saveCols();
         if(importData.workingHours){whHours=importData.workingHours;whSubmitted=importData.workingHoursSubmitted||{};whSaveData();}
+        if(importData.sampleLots){sampleLots=importData.sampleLots;nextLotId=importData.nextLotId||(sampleLots.length?Math.max(...sampleLots.map(l=>l.id))+1:1);slSaveData();}
         
         // Re-render
         renderTable();
         renderProjectsTable();
         updateProjectDropdown();
         
-        alert(`✅ Successfully imported!\n• ${taskCount} tasks\n• ${projectCount} projects\n• ${customCols.length} custom columns\n• ${cfRules.length} formatting rules`);
+        let doneMsg=`✅ Successfully imported!\n• ${taskCount} tasks\n• ${projectCount} projects\n• ${customCols.length} custom columns\n• ${cfRules.length} formatting rules`;
+        if(lotCount)doneMsg+=`\n• ${lotCount} sample lots`;
+        if(hasWH)doneMsg+=`\n• Working hours data`;
+        alert(doneMsg);
       }
     }catch(err){
       console.error(err);
@@ -1576,6 +1811,7 @@ function switchMainTab(tab){
   if(tab==='tasks'){renderTable();updateFilterDropdowns();}
   if(tab==='statistics')renderStatistics();
   if(tab==='workinghours'){whLoadData();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
+  if(tab==='samples'){slLoadData();slRender();}
 }
 
 function openProjectModal(id=null){
@@ -2653,6 +2889,393 @@ function whExportToExcel() {
   XLSX.writeFile(wb, `working-hours-${rangeLabel}.xlsx`);
 }
 
+// ══════════ SAMPLES FOLLOWUP ══════════
+const SLK = 'team_tasks_samples_v1';
+let sampleLots = [], nextLotId = 1, editingLotId = null;
+let slView = 'card', slSortCol = 'dateProd', slSortDir = -1;
+
+const PHASE_COLORS = {CP:'#f59e0b',T0:'#3b82f6',T1:'#8b5cf6',T2:'#ec4899',PR:'#14b8a6',PP:'#f97316',MP:'#10b981'};
+const PHASE_BG = {CP:'#fef3c7',T0:'#dbeafe',T1:'#ede9fe',T2:'#fce7f3',PR:'#ccfbf1',PP:'#ffedd5',MP:'#dcfce7'};
+const PHASE_TEXT = {CP:'#92400e',T0:'#1d4ed8',T1:'#5b21b6',T2:'#9d174d',PR:'#0f766e',PP:'#c2410c',MP:'#166534'};
+
+function slLoadData() {
+  try {
+    const raw = localStorage.getItem(SLK);
+    if (raw) { const d = JSON.parse(raw); sampleLots = d.lots||[]; nextLotId = d.nextId||(sampleLots.length?Math.max(...sampleLots.map(l=>l.id))+1:1); }
+    else { sampleLots = []; nextLotId = 1; }
+  } catch { sampleLots = []; nextLotId = 1; }
+}
+function slSaveData() {
+  localStorage.setItem(SLK, JSON.stringify({lots:sampleLots, nextId:nextLotId}));
+}
+
+function slGetStatus(lot) {
+  if (!lot.teams || !lot.teams.length) return 'pending';
+  const today = new Date().toISOString().slice(0,10);
+  const allReceived = lot.teams.every(t => t.received && t.receiveDate);
+  if (allReceived) return 'delivered';
+  const someReceived = lot.teams.some(t => t.received);
+  if (someReceived) return 'partial';
+  if (lot.dateDelivery && lot.dateDelivery < today) return 'overdue';
+  return 'pending';
+}
+
+function slStatusBadge(lot) {
+  const s = slGetStatus(lot);
+  const map = {
+    pending: {cls:'sl-status-pending', icon:'🕐', label:'Pending'},
+    partial: {cls:'sl-status-partial', icon:'📬', label:'Partial'},
+    delivered: {cls:'sl-status-delivered', icon:'✅', label:'Delivered'},
+    overdue: {cls:'sl-status-overdue', icon:'⚠', label:'Overdue'}
+  };
+  const m = map[s]||map.pending;
+  return `<span class="sl-status ${m.cls}">${m.icon} ${m.label}</span>`;
+}
+
+function slGetFiltered() {
+  const q = document.getElementById('sl-search').value.toLowerCase();
+  const fP = document.getElementById('sl-filter-project').value;
+  const fPh = document.getElementById('sl-filter-phase').value;
+  const fS = document.getElementById('sl-filter-status').value;
+  return sampleLots.filter(lot => {
+    if (q && ![lot.lotNumber,lot.project,lot.phase,lot.purpose,lot.notes,(lot.teams||[]).map(t=>t.name).join(' ')].join(' ').toLowerCase().includes(q)) return false;
+    if (fP && lot.project !== fP) return false;
+    if (fPh && lot.phase !== fPh) return false;
+    if (fS && slGetStatus(lot) !== fS) return false;
+    return true;
+  });
+}
+function slGetSorted(arr) {
+  return [...arr].sort((a,b) => {
+    let av = a[slSortCol]??'', bv = b[slSortCol]??'';
+    if (slSortCol === 'id' || slSortCol === 'qty' || slSortCol === 'price') return (parseFloat(av||0) - parseFloat(bv||0)) * slSortDir;
+    return String(av).localeCompare(String(bv)) * slSortDir;
+  });
+}
+function slSortBy(col) {
+  if (slSortCol === col) slSortDir *= -1; else { slSortCol = col; slSortDir = 1; }
+  slRender();
+}
+
+function slRender() {
+  slUpdateStats();
+  slUpdateProjectFilter();
+  slUpdateSortIcons();
+  const filtered = slGetSorted(slGetFiltered());
+  if (slView === 'card') slRenderCards(filtered);
+  else slRenderTable(filtered);
+}
+
+function slUpdateStats() {
+  const total = sampleLots.length;
+  const delivered = sampleLots.filter(l=>slGetStatus(l)==='delivered').length;
+  const overdue = sampleLots.filter(l=>slGetStatus(l)==='overdue').length;
+  const pending = sampleLots.filter(l=>['pending','partial'].includes(slGetStatus(l))).length;
+  document.getElementById('sl-stats').innerHTML = `
+    <div class="sl-stat"><span class="sl-stat-icon">🧪</span><div><div class="sl-stat-val">${total}</div><div class="sl-stat-label">Total Lots</div></div></div>
+    <div class="sl-stat"><span class="sl-stat-icon">✅</span><div><div class="sl-stat-val" style="color:#10b981">${delivered}</div><div class="sl-stat-label">Delivered</div></div></div>
+    <div class="sl-stat"><span class="sl-stat-icon">🕐</span><div><div class="sl-stat-val" style="color:#f59e0b">${pending}</div><div class="sl-stat-label">In Progress</div></div></div>
+    <div class="sl-stat"><span class="sl-stat-icon">⚠</span><div><div class="sl-stat-val" style="color:#ef4444">${overdue}</div><div class="sl-stat-label">Overdue</div></div></div>
+  `;
+}
+
+function slUpdateProjectFilter() {
+  const sel = document.getElementById('sl-filter-project');
+  const cur = sel.value;
+  const projs = [...new Set(sampleLots.map(l=>l.project).filter(Boolean))].sort();
+  sel.innerHTML = `<option value="">All Projects</option>` + projs.map(p=>`<option value="${e(p)}">${e(p)}</option>`).join('');
+  sel.value = cur;
+}
+
+function slUpdateSortIcons() {
+  ['lotNumber','project','phase','qty','dateProd','dateDelivery','price'].forEach(col=>{
+    const el = document.getElementById('slsort-'+col);
+    if (!el) return;
+    el.textContent = col===slSortCol ? (slSortDir===1?'↑':'↓') : '↕';
+    el.parentElement?.classList.toggle('sorted', col===slSortCol);
+  });
+}
+
+function slRenderCards(lots) {
+  const grid = document.getElementById('sl-grid');
+  if (!lots.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)">
+      <div style="font-size:40px;margin-bottom:12px">🧪</div>
+      <div style="font-size:14px">No sample lots found. Click <strong>＋ New Lot</strong> to create one.</div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = lots.map(lot => {
+    const phase = lot.phase||'—';
+    const phColor = PHASE_COLORS[phase]||'#94a3b8';
+    const phBg = PHASE_BG[phase]||'#f1f5f9';
+    const phText = PHASE_TEXT[phase]||'#475569';
+    const teams = lot.teams||[];
+    const receivedCount = teams.filter(t=>t.received).length;
+    const teamChips = teams.map(t=>`<span class="sl-team-chip ${t.received?'received':''}" title="${t.received?'Received '+t.receiveDate:t.name}">${t.received?'✓ ':''} ${e(t.name)}</span>`).join('');
+
+    return `<div class="sl-card" onclick="slOpenModal(${lot.id})">
+      <div class="sl-card-header">
+        <div class="sl-lot-icon" style="background:${phBg}">
+          <span style="font-size:16px">🧪</span>
+        </div>
+        <div class="sl-card-meta">
+          <div class="sl-lot-num">${e(lot.lotNumber||'—')}</div>
+          <div class="sl-lot-title">${e(lot.project||'No Project')}</div>
+          <div class="sl-lot-phase">
+            <span style="display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:${phBg};color:${phText};margin-top:2px">${e(phase)}</span>
+          </div>
+        </div>
+        <div style="flex-shrink:0">${slStatusBadge(lot)}</div>
+      </div>
+      <div class="sl-card-body">
+        <div class="sl-row"><span class="sl-label">📅 Prod. Date</span><span class="sl-val">${fmtDate(lot.dateProd)||'—'}</span></div>
+        <div class="sl-row"><span class="sl-label">🚚 Delivery</span><span class="sl-val ${(!lot.dateDelivery||slGetStatus(lot)==='overdue')?'due-overdue':''}">${fmtDate(lot.dateDelivery)||'—'}</span></div>
+        <div class="sl-row"><span class="sl-label">📦 Qty</span><span class="sl-val">${lot.qty||'—'} pcs</span></div>
+        <div class="sl-row"><span class="sl-label">💰 Price</span><span class="sl-val">${lot.price?Number(lot.price).toLocaleString()+' EGP':'—'}</span></div>
+        <div class="sl-row"><span class="sl-label">🎯 Purpose</span><span class="sl-val">${e(lot.purpose||'—')}</span></div>
+        ${lot.notes?`<div class="sl-row" style="align-items:flex-start"><span class="sl-label">📝 Notes</span><span class="sl-val" style="white-space:normal;font-size:11px;color:var(--text-muted)">${e(lot.notes)}</span></div>`:''}
+      </div>
+      <div class="sl-card-footer">
+        <div>
+          ${teams.length?`<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">Teams (${receivedCount}/${teams.length} received)</div>`:''}
+          <div class="sl-teams-wrap">${teamChips||'<span style="font-size:11px;color:var(--text-light)">No teams assigned</span>'}</div>
+        </div>
+        <div class="sl-card-actions" onclick="event.stopPropagation()">
+          <button class="btn btn-secondary btn-sm" onclick="slOpenModal(${lot.id})">✏</button>
+          <button class="btn btn-danger btn-sm" onclick="slDeleteLot(${lot.id})">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function slRenderTable(lots) {
+  const tbody = document.getElementById('sl-tbody');
+  if (!lots.length) {
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--text-muted)">No lots found</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lots.map(lot=>{
+    const teams = lot.teams||[];
+    const recv = teams.filter(t=>t.received).length;
+    const phase = lot.phase||'';
+    const phBg = PHASE_BG[phase]||'#f1f5f9';
+    const phText = PHASE_TEXT[phase]||'#475569';
+    return `<tr>
+      <td><span style="font-family:'DM Mono',monospace;font-weight:700;font-size:12px">${e(lot.lotNumber||'—')}</span></td>
+      <td>${e(lot.project||'—')}</td>
+      <td><span style="background:${phBg};color:${phText};font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px">${e(phase||'—')}</span></td>
+      <td style="text-align:center;font-family:'DM Mono',monospace">${lot.qty||'—'}</td>
+      <td>${fmtDate(lot.dateProd)||'—'}</td>
+      <td class="${slGetStatus(lot)==='overdue'?'due-overdue':''}">${fmtDate(lot.dateDelivery)||'—'}</td>
+      <td style="font-family:'DM Mono',monospace">${lot.price?Number(lot.price).toLocaleString()+' EGP':'—'}</td>
+      <td>${e(lot.purpose||'—')}</td>
+      <td style="max-width:160px">
+        <div style="display:flex;flex-wrap:wrap;gap:3px">${teams.map(t=>`<span class="sl-team-chip ${t.received?'received':''}" style="font-size:9px">${t.received?'✓ ':''} ${e(t.name)}</span>`).join('')||'—'}</div>
+      </td>
+      <td>${slStatusBadge(lot)}</td>
+      <td>
+        <div class="actions">
+          <button class="btn btn-secondary btn-sm" onclick="slOpenModal(${lot.id})">✏</button>
+          <button class="btn btn-danger btn-sm" onclick="slDeleteLot(${lot.id})">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function slSetView(v) {
+  slView = v;
+  document.getElementById('sl-card-view').style.display = v==='card'?'':'none';
+  document.getElementById('sl-table-view').style.display = v==='table'?'':'none';
+  document.getElementById('sl-view-card').classList.toggle('active', v==='card');
+  document.getElementById('sl-view-table').classList.toggle('active', v==='table');
+  slRender();
+}
+
+function slClearFilters() {
+  document.getElementById('sl-search').value = '';
+  document.getElementById('sl-filter-project').value = '';
+  document.getElementById('sl-filter-phase').value = '';
+  document.getElementById('sl-filter-status').value = '';
+  slRender();
+}
+
+// ── Modal ──
+let slTempTeams = []; // temp teams while modal is open
+
+function slOpenModal(id=null) {
+  editingLotId = id;
+  const lot = id ? sampleLots.find(l=>l.id===id) : null;
+  document.getElementById('sl-modal-title').textContent = id ? 'Edit Sample Lot' : 'New Sample Lot';
+
+  // Populate project dropdown
+  const projSel = document.getElementById('sl-f-project');
+  projSel.innerHTML = `<option value="">— Select Project —</option>` + projects.map(p=>`<option value="${e(p.name)}">${e(p.name)}</option>`).join('');
+
+  // Fill form
+  document.getElementById('sl-f-project').value = lot?.project||'';
+  document.getElementById('sl-f-phase').value = lot?.phase||'';
+  document.getElementById('sl-f-lotNumber').value = lot?.lotNumber||'';
+  document.getElementById('sl-f-qty').value = lot?.qty||'';
+  document.getElementById('sl-f-dateProd').value = lot?.dateProd||'';
+  document.getElementById('sl-f-dateDelivery').value = lot?.dateDelivery||'';
+  document.getElementById('sl-f-price').value = lot?.price||'';
+  document.getElementById('sl-f-purpose').value = lot?.purpose||'';
+  document.getElementById('sl-f-notes').value = lot?.notes||'';
+  document.getElementById('sl-new-team-input').value = '';
+
+  // Clone teams to temp
+  slTempTeams = (lot?.teams||[]).map(t=>({...t}));
+  slRenderReceiptList();
+
+  document.getElementById('sl-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('sl-f-project').focus(), 100);
+}
+
+function slRenderReceiptList() {
+  const list = document.getElementById('sl-receipt-list');
+  if (!slTempTeams.length) {
+    list.innerHTML = `<div style="padding:10px;font-size:12px;color:var(--text-light)">No teams added yet.</div>`;
+    return;
+  }
+  list.innerHTML = slTempTeams.map((t,i)=>`
+    <div class="sl-receipt-row">
+      <div style="width:22px;height:22px;border-radius:50%;background:${strColor(t.name)};color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${t.name.slice(0,2).toUpperCase()}</div>
+      <div class="sl-receipt-team">${e(t.name)}</div>
+      <div class="sl-receipt-date-wrap">
+        <label>Received:</label>
+        <input type="date" value="${t.receiveDate||''}" onchange="slSetReceiveDate(${i},this.value)"
+          style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:6px;padding:4px 8px;background:var(--bg);color:var(--text);outline:none;width:145px" />
+      </div>
+      <input type="checkbox" class="sl-receipt-check" ${t.received?'checked':''} title="Mark as received" onchange="slToggleReceived(${i},this.checked)" />
+      <button class="btn btn-ghost btn-xs" onclick="slRemoveTeam(${i})" title="Remove team" style="padding:3px 7px;color:var(--accent)">✕</button>
+    </div>
+  `).join('');
+}
+
+function slAddTeam() {
+  const inp = document.getElementById('sl-new-team-input');
+  const name = inp.value.trim();
+  if (!name) return;
+  if (slTempTeams.find(t=>t.name.toLowerCase()===name.toLowerCase())) {
+    inp.style.borderColor='var(--accent)'; setTimeout(()=>inp.style.borderColor='',1000); return;
+  }
+  slTempTeams.push({name, received:false, receiveDate:''});
+  inp.value = '';
+  slRenderReceiptList();
+}
+function slRemoveTeam(i) { slTempTeams.splice(i,1); slRenderReceiptList(); }
+function slToggleReceived(i, checked) {
+  slTempTeams[i].received = checked;
+  if (checked && !slTempTeams[i].receiveDate) slTempTeams[i].receiveDate = new Date().toISOString().slice(0,10);
+  slRenderReceiptList();
+}
+function slSetReceiveDate(i, val) {
+  slTempTeams[i].receiveDate = val;
+  if (val) slTempTeams[i].received = true;
+  slRenderReceiptList();
+}
+
+function slSaveLot() {
+  const project = document.getElementById('sl-f-project').value.trim();
+  const lotNumber = document.getElementById('sl-f-lotNumber').value.trim();
+  const phase = document.getElementById('sl-f-phase').value;
+  if (!project) { alert('Please select a project.'); return; }
+  if (!lotNumber) { alert('Please enter a lot number.'); return; }
+
+  const lot = {
+    id: editingLotId || nextLotId++,
+    project, phase, lotNumber,
+    qty: document.getElementById('sl-f-qty').value,
+    dateProd: document.getElementById('sl-f-dateProd').value,
+    dateDelivery: document.getElementById('sl-f-dateDelivery').value,
+    price: document.getElementById('sl-f-price').value,
+    purpose: document.getElementById('sl-f-purpose').value,
+    notes: document.getElementById('sl-f-notes').value.trim(),
+    teams: [...slTempTeams],
+    createdAt: editingLotId ? (sampleLots.find(l=>l.id===editingLotId)?.createdAt||Date.now()) : Date.now(),
+    updatedAt: Date.now()
+  };
+
+  if (editingLotId) {
+    const idx = sampleLots.findIndex(l=>l.id===editingLotId);
+    if (idx!==-1) sampleLots[idx] = lot;
+  } else {
+    sampleLots.push(lot);
+  }
+  slSaveData();
+  closeModal('sl-modal');
+  slRender();
+}
+
+function slDeleteLot(id) {
+  const lot = sampleLots.find(l=>l.id===id);
+  if (!lot) return;
+  if (!confirm(`Delete lot "${lot.lotNumber}"?\nThis cannot be undone.`)) return;
+  sampleLots = sampleLots.filter(l=>l.id!==id);
+  slSaveData();
+  slRender();
+}
+
+function slCloseOverlay(ev) {
+  if (ev.target === document.getElementById('sl-modal')) closeModal('sl-modal');
+}
+
+// ── Export Samples to Excel ──
+function slExport() {
+  if (!sampleLots.length) { alert('No sample lots to export.'); return; }
+  if (typeof XLSX === 'undefined') { alert('Export library not loaded. Please check your connection.'); return; }
+
+  const wb = XLSX.utils.book_new();
+  const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fmt = s => { if(!s)return''; const[y,m,d]=s.split('-'); return`${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`; };
+
+  // Summary sheet
+  const rows = [['Lot Number','Project','Phase','Qty','Production Date','Delivery Date','Price (EGP)','Purpose','Notes','Status','Teams (Requested)','Teams (Received)','Received Dates']];
+  sampleLots.forEach(lot => {
+    const teams = lot.teams||[];
+    const recvTeams = teams.filter(t=>t.received).map(t=>t.name).join(', ');
+    const recvDates = teams.filter(t=>t.received&&t.receiveDate).map(t=>`${t.name}: ${fmt(t.receiveDate)}`).join('; ');
+    rows.push([
+      lot.lotNumber||'', lot.project||'', lot.phase||'',
+      lot.qty?parseInt(lot.qty):'',
+      fmt(lot.dateProd)||'', fmt(lot.dateDelivery)||'',
+      lot.price?parseFloat(lot.price):'',
+      lot.purpose||'', lot.notes||'',
+      slGetStatus(lot).charAt(0).toUpperCase()+slGetStatus(lot).slice(1),
+      teams.map(t=>t.name).join(', '),
+      recvTeams, recvDates
+    ]);
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols'] = [{wch:14},{wch:28},{wch:8},{wch:7},{wch:15},{wch:15},{wch:14},{wch:16},{wch:30},{wch:12},{wch:25},{wch:25},{wch:35}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Sample Lots');
+
+  // Per-project sheet
+  const projNames = [...new Set(sampleLots.map(l=>l.project).filter(Boolean))];
+  projNames.forEach(pName => {
+    const pLots = sampleLots.filter(l=>l.project===pName);
+    const pRows = [['Lot #','Phase','Qty','Prod. Date','Delivery','Price','Purpose','Status','Teams']];
+    pLots.forEach(lot => {
+      pRows.push([
+        lot.lotNumber||'', lot.phase||'', lot.qty?parseInt(lot.qty):'',
+        fmt(lot.dateProd)||'', fmt(lot.dateDelivery)||'',
+        lot.price?parseFloat(lot.price):'', lot.purpose||'',
+        slGetStatus(lot), (lot.teams||[]).map(t=>`${t.name}${t.received?' ✓':''}`).join(', ')
+      ]);
+    });
+    const pws = XLSX.utils.aoa_to_sheet(pRows);
+    pws['!cols'] = [{wch:14},{wch:8},{wch:7},{wch:14},{wch:14},{wch:12},{wch:16},{wch:12},{wch:35}];
+    const sheetName = pName.slice(0,31).replace(/[\\/?*[\]]/g,'');
+    XLSX.utils.book_append_sheet(wb, pws, sheetName);
+  });
+
+  XLSX.writeFile(wb, `samples-followup-${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
 // ══════════ UTILS ══════════
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtDate(s){if(!s)return'';const[y,m,d]=s.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return`${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`;}
@@ -2662,16 +3285,17 @@ function closeModal(id){
   document.getElementById(id).classList.remove('open');
   if(id==='modal-overlay')editingId=null;
   if(id==='project-modal')editingProjectId=null;
+  if(id==='sl-modal')editingLotId=null;
 }
 function closeOverlay(e,id){if(e.target===document.getElementById(id))closeModal(id);}
 
 document.addEventListener('keydown',ev=>{
   if(ev.key==='n'&&!ev.ctrlKey&&!ev.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&document.activeElement.contentEditable!=='true')openModal();
-  if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
+  if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal','sl-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
 });
 
 // ══════════ INIT ══════════
-loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();
+loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();
 </script>
 </body>
 </html>
