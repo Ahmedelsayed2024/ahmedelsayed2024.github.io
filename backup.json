@@ -1,9 +1,8 @@
 {
-  "version": "4.0",
-  "exportDate": "2026-02-16T10:49:41.441Z",
-  "boardTitle": "Team Task Board",
+  "version": "1.0",
+  "exportDate": "2026-02-16T12:17:02.054Z",
   "tasks": [
-        {
+    {
       "id": 10,
       "title": "18\" Midea Fan - Motor Benchmark2",
       "desc": "",
@@ -12,14 +11,14 @@
       "status": "To Do",
       "priority": "Medium",
       "dueDate": "2026-02-19",
-      "progress": 0,
+      "progress": 50,
       "notes": "",
       "deps": [],
       "task3DEXP": "https://3dxprd.elarabygroup.com/3dspace/common/emxNavigator.jsp?isPopup=false&objectId=13112.37328.52660.11094",
       "projectType": "Others",
       "product": "STAND FAN",
       "projectPhase": "",
-      "lastModified": 1771223643245,
+      "lastModified": 1771243792831,
       "customData": {}
     },
     {
@@ -31,14 +30,14 @@
       "status": "In Progress",
       "priority": "Medium",
       "dueDate": "2026-02-09",
-      "progress": 0,
+      "progress": 10,
       "notes": "",
       "deps": [],
       "task3DEXP": "https://3dxprd.elarabygroup.com/3dspace/common/emxNavigator.jsp?isPopup=false&objectId=13112.37328.22535.34934",
       "projectType": "VAVE",
       "product": "STAND FAN",
       "projectPhase": "CP",
-      "lastModified": 1771223629085,
+      "lastModified": 1771243802181,
       "customData": {}
     },
     {
@@ -50,14 +49,14 @@
       "status": "In Progress",
       "priority": "Medium",
       "dueDate": "2025-12-17",
-      "progress": 0,
+      "progress": 50,
       "notes": "",
       "deps": [],
-      "task3DEXP": "",
+      "task3DEXP": "RnDPD-00000505",
       "projectType": "New Development",
       "product": "STAND FAN",
       "projectPhase": "PR",
-      "lastModified": 1771224289917,
+      "lastModified": 1771244041806,
       "customData": {}
     },
     {
@@ -96,6 +95,63 @@
       "product": "WASHING MACHINE",
       "projectPhase": "CP",
       "lastModified": 1771224492548,
+      "customData": {}
+    },
+    {
+      "id": 15,
+      "title": "Followup with Product the Updates : Compact & Other Suppliers",
+      "desc": "",
+      "project": "TSF14 - STAND FAN MOTOR",
+      "assignee": "ahmed elsayed",
+      "status": "In Progress",
+      "priority": "Medium",
+      "dueDate": "2026-02-11",
+      "progress": 30,
+      "notes": "",
+      "deps": [],
+      "task3DEXP": "",
+      "projectType": "Sole Supplier or Alternative",
+      "product": "STAND FAN",
+      "projectPhase": "PR",
+      "lastModified": 1771243819789,
+      "customData": {}
+    },
+    {
+      "id": 16,
+      "title": "refrigrator Cooling Fan - NMB FANS - SHARP / TORNADO",
+      "desc": "",
+      "project": "VAVE TEAM",
+      "assignee": "ahmed elsayed",
+      "status": "In Progress",
+      "priority": "Medium",
+      "dueDate": "2026-02-11",
+      "progress": 90,
+      "notes": "",
+      "deps": [],
+      "task3DEXP": "",
+      "projectType": "Sole Supplier or Alternative",
+      "product": "Fridge",
+      "projectPhase": "PR",
+      "lastModified": 1771243826743,
+      "customData": {}
+    },
+    {
+      "id": 17,
+      "title": "TSF18 - CCA BASED DESIGN - Optimization",
+      "desc": "",
+      "project": "New Platform Fan Motor - Concentrated",
+      "assignee": "ahmed elsayed",
+      "status": "To Do",
+      "priority": "Medium",
+      "dueDate": "2026-03-01",
+      "progress": 0,
+      "notes": "",
+      "deps": [],
+      "task3DEXP": "",
+      "projectType": "New Development",
+      "product": "STAND FAN",
+      "projectPhase": "CP",
+      "lastModified": 1771243747664,
       "customData": {}
     }
   ],
@@ -185,10 +241,6 @@
       "priority": "Medium"
     }
   ],
-  "customCols": [],
-  "cfRules": [],
-  "workingHours": {},
-  "workingHoursSubmitted": {},
   "sampleLots": [
     {
       "id": 1,
@@ -212,6 +264,13 @@
       "updatedAt": 1771228428840
     }
   ],
-  "nextLotId": 2,
-  "logo": null
+  "vfItems": [],
+  "whWorkdays": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "customCols": []
 }
