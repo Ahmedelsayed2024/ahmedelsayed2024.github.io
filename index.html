@@ -125,6 +125,10 @@
   .dep-chip.dep-done{background:#d1fae5;color:#065f46;border-color:#6ee7b7;text-decoration:line-through;opacity:.7;}
   .dep-chip.dep-blocked{background:#fee2e2;color:#991b1b;border-color:#fca5a5;}
   .dep-chip:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.1);}
+  /* ─ 3DEXP link ─ */
+  .dexp-link{color:var(--accent2);font-size:12px;font-family:'DM Mono',monospace;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;display:inline-block;vertical-align:middle;border-bottom:1px dashed var(--accent2);}
+  .dexp-link:hover{color:#1d4ed8;border-bottom-style:solid;}
+
   .dep-selector{border:1px solid var(--border-strong);border-radius:8px;background:var(--bg);max-height:150px;overflow-y:auto;padding:6px;display:flex;flex-direction:column;gap:3px;}
   .dep-option{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;transition:background .1s;}
   .dep-option:hover{background:var(--surface);}
@@ -364,6 +368,71 @@
   /* View toggle */
   .sl-view-btn{padding:7px 10px;border:1px solid var(--border-strong);background:var(--surface);border-radius:8px;cursor:pointer;font-size:14px;transition:all .15s;}
   .sl-view-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
+  /* ─ Tools Tab ─ */
+  .tools-wrap{padding:24px 28px 60px;display:flex;flex-direction:column;gap:28px;}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;align-items:start;}
+  .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
+  .tool-card-header{display:flex;align-items:center;gap:10px;padding:16px 20px 12px;border-bottom:1px solid var(--border);background:#fafaf8;}
+  .tool-card-icon{font-size:22px;flex-shrink:0;}
+  .tool-card-title{font-size:14px;font-weight:700;color:var(--text);}
+  .tool-card-sub{font-size:11px;color:var(--text-muted);}
+  .tool-card-body{padding:18px 20px;}
+  /* Calculator */
+  .calc-display{background:#1a1714;border-radius:10px;padding:12px 16px;margin-bottom:12px;text-align:right;}
+  .calc-expr{font-family:'DM Mono',monospace;font-size:11px;color:#7a736b;min-height:16px;word-break:break-all;}
+  .calc-result{font-family:'DM Mono',monospace;font-size:26px;font-weight:600;color:#fff;min-height:34px;word-break:break-all;}
+  .calc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+  .calc-btn{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;border:none;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all .12s;background:var(--bg);color:var(--text);}
+  .calc-btn:hover{filter:brightness(.93);}
+  .calc-btn:active{transform:scale(.94);}
+  .calc-btn.op{background:#fef3c7;color:#92400e;}
+  .calc-btn.fn{background:#ede9fe;color:#5b21b6;font-size:10px;}
+  .calc-btn.eq{background:var(--accent2);color:#fff;grid-column:span 2;}
+  .calc-btn.clr{background:#fee2e2;color:#991b1b;}
+  .calc-btn.num{background:#f4f2ee;}
+  .calc-btn.zero{grid-column:span 2;}
+  .calc-history{max-height:100px;overflow-y:auto;margin-top:10px;background:var(--bg);border-radius:8px;padding:6px 10px;}
+  .calc-hist-item{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);padding:2px 0;cursor:pointer;border-bottom:1px solid var(--border);}
+  .calc-hist-item:last-child{border:none;}
+  .calc-hist-item:hover{color:var(--text);}
+  /* Unit Converter */
+  .uc-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;}
+  .uc-tab{padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:var(--bg);color:var(--text-muted);transition:all .12s;}
+  .uc-tab.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+  .uc-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:10px;}
+  .uc-val{font-family:'DM Mono',monospace;font-size:14px;border:1.5px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%;transition:border-color .15s;}
+  .uc-val:focus{border-color:var(--accent2);background:#fff;}
+  .uc-arrow{color:var(--accent2);font-size:18px;font-weight:700;text-align:center;}
+  .uc-select{font-family:inherit;font-size:12px;border:1.5px solid var(--border-strong);border-radius:8px;padding:9px 10px;background:var(--bg);color:var(--text);outline:none;width:100%;}
+  .uc-result-box{background:var(--accent2-soft);border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;text-align:center;margin-top:6px;}
+  .uc-result-val{font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--accent2);}
+  .uc-result-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
+  /* Date Calc */
+  .dc-section{margin-bottom:14px;}
+  .dc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:7px;}
+  .dc-result{font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent2);background:var(--accent2-soft);border-radius:8px;padding:8px 12px;margin-top:6px;}
+  /* Currency */
+  .fx-rate-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .fx-rate-label{font-size:12px;color:var(--text-muted);}
+  .fx-rate-input{font-family:'DM Mono',monospace;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:7px 10px;width:100px;background:var(--bg);color:var(--text);outline:none;}
+  .fx-pair{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .fx-pair label{font-size:11px;color:var(--text-muted);min-width:60px;}
+  /* Percentage */
+  .pct-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .pct-inp{font-family:'DM Mono',monospace;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;width:100%;background:var(--bg);color:var(--text);outline:none;}
+  .pct-result{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin-top:8px;text-align:center;}
+  /* Day pills */
+  .dc-day-pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:20px;border:1.5px solid var(--border-strong);background:var(--bg);cursor:pointer;transition:all .12s;user-select:none;}
+  .dc-day-pill input{accent-color:var(--accent2);width:14px;height:14px;cursor:pointer;}
+  .dc-day-pill:has(input:checked){background:var(--accent2);color:#fff;border-color:var(--accent2);}
+  /* Materials table */
+  .mat-td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  .mat-td-num{font-family:'DM Mono',monospace;font-size:12px;text-align:right;}
+  .mat-row:hover td{background:#f8f9fa;}
+  .mat-row:nth-child(even) td{background:#fafaf8;}
+  .mat-mat-name{font-weight:600;font-size:13px;}
+  .mat-sub{font-size:10px;color:var(--text-muted);}
 </style>
 </head>
 <body>
@@ -399,6 +468,7 @@
   <button class="tab" onclick="switchMainTab('statistics')">📊 Statistics</button>
   <button class="tab" onclick="switchMainTab('workinghours')">⏱ Working Hours</button>
   <button class="tab" onclick="switchMainTab('samples')">🧪 Samples</button>
+  <button class="tab" onclick="switchMainTab('tools')">🛠 Tools</button>
 </div>
 
 <!-- ══ TASKS TAB ══ -->
@@ -723,6 +793,317 @@
   </div>
 </div><!-- END SAMPLES TAB -->
 
+<!-- ══ TOOLS TAB ══ -->
+<div id="tools-tab" class="tab-content">
+<div class="tools-wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:4px">
+    <div>
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:3px">🛠 Tools</h2>
+      <p style="font-size:13px;color:var(--text-muted)">Handy calculators and converters — all offline, nothing leaves your device.</p>
+    </div>
+  </div>
+
+  <div class="tools-grid">
+
+    <!-- ╔══ SCIENTIFIC CALCULATOR ══╗ -->
+    <div class="tool-card" style="grid-row:span 2">
+      <div class="tool-card-header">
+        <div class="tool-card-icon">🔢</div>
+        <div><div class="tool-card-title">Scientific Calculator</div><div class="tool-card-sub">Arithmetic, trig, log, powers, constants</div></div>
+      </div>
+      <div class="tool-card-body">
+        <div class="calc-display">
+          <div class="calc-expr" id="calc-expr"></div>
+          <div class="calc-result" id="calc-result">0</div>
+        </div>
+        <div class="calc-grid">
+          <!-- Row 1: sci functions -->
+          <button class="calc-btn fn" onclick="calcFn('sin(')">sin</button>
+          <button class="calc-btn fn" onclick="calcFn('cos(')">cos</button>
+          <button class="calc-btn fn" onclick="calcFn('tan(')">tan</button>
+          <button class="calc-btn fn" onclick="calcFn('log(')">log</button>
+          <button class="calc-btn fn" onclick="calcFn('ln(')">ln</button>
+          <!-- Row 2 -->
+          <button class="calc-btn fn" onclick="calcFn('asin(')">sin⁻¹</button>
+          <button class="calc-btn fn" onclick="calcFn('acos(')">cos⁻¹</button>
+          <button class="calc-btn fn" onclick="calcFn('atan(')">tan⁻¹</button>
+          <button class="calc-btn fn" onclick="calcFn('sqrt(')">√</button>
+          <button class="calc-btn fn" onclick="calcFn('cbrt(')">∛</button>
+          <!-- Row 3 -->
+          <button class="calc-btn fn" onclick="calcFn('π')">π</button>
+          <button class="calc-btn fn" onclick="calcFn('e')">e</button>
+          <button class="calc-btn fn" onclick="calcFn('^')">xⁿ</button>
+          <button class="calc-btn fn" onclick="calcFn('!')">x!</button>
+          <button class="calc-btn fn" onclick="calcFn('%')">%</button>
+          <!-- Row 4 -->
+          <button class="calc-btn clr" onclick="calcClear()">AC</button>
+          <button class="calc-btn clr" onclick="calcDel()">⌫</button>
+          <button class="calc-btn fn" onclick="calcFn('(')">(</button>
+          <button class="calc-btn fn" onclick="calcFn(')')">)</button>
+          <button class="calc-btn op" onclick="calcFn('÷')">÷</button>
+          <!-- Row 5 -->
+          <button class="calc-btn num" onclick="calcFn('7')">7</button>
+          <button class="calc-btn num" onclick="calcFn('8')">8</button>
+          <button class="calc-btn num" onclick="calcFn('9')">9</button>
+          <button class="calc-btn op" onclick="calcFn('×')">×</button>
+          <button class="calc-btn fn" onclick="calcFn('abs(')">|x|</button>
+          <!-- Row 6 -->
+          <button class="calc-btn num" onclick="calcFn('4')">4</button>
+          <button class="calc-btn num" onclick="calcFn('5')">5</button>
+          <button class="calc-btn num" onclick="calcFn('6')">6</button>
+          <button class="calc-btn op" onclick="calcFn('−')">−</button>
+          <button class="calc-btn fn" onclick="calcFn('floor(')">⌊x⌋</button>
+          <!-- Row 7 -->
+          <button class="calc-btn num" onclick="calcFn('1')">1</button>
+          <button class="calc-btn num" onclick="calcFn('2')">2</button>
+          <button class="calc-btn num" onclick="calcFn('3')">3</button>
+          <button class="calc-btn op" onclick="calcFn('+')">+</button>
+          <button class="calc-btn fn" onclick="calcFn('ceil(')">⌈x⌉</button>
+          <!-- Row 8 -->
+          <button class="calc-btn num zero" onclick="calcFn('0')">0</button>
+          <button class="calc-btn num" onclick="calcFn('.')">.</button>
+          <button class="calc-btn eq" onclick="calcEquals()">=</button>
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;color:var(--text-muted)">📋 History (click to reuse)</span>
+          <button class="btn btn-ghost btn-xs" onclick="calcClearHistory()">Clear</button>
+        </div>
+        <div class="calc-history" id="calc-history"><div style="font-size:11px;color:var(--text-light);padding:4px">No history yet</div></div>
+      </div>
+    </div>
+
+    <!-- ╔══ UNIT CONVERTER ══╗ -->
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-card-icon">📏</div>
+        <div><div class="tool-card-title">Unit Converter</div><div class="tool-card-sub">Length, weight, temperature, area, volume, speed, force</div></div>
+      </div>
+      <div class="tool-card-body">
+        <div class="uc-tabs" id="uc-tabs">
+          <span class="uc-tab active" onclick="ucSetCategory(event,'length')">📏 Length</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'weight')">⚖️ Weight</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'temp')">🌡️ Temp</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'area')">📐 Area</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'volume')">🧪 Volume</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'speed')">💨 Speed</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'force')">⚡ Force</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'pressure')">🔵 Pressure</span>
+          <span class="uc-tab" onclick="ucSetCategory(event,'energy')">⚡ Energy</span>
+        </div>
+        <div class="uc-row">
+          <input class="uc-val" id="uc-from-val" type="number" value="1" oninput="ucConvert()" placeholder="Value" />
+          <div class="uc-arrow">→</div>
+          <div id="uc-result-val" class="uc-val" style="background:var(--accent2-soft);border-color:#bfdbfe;color:var(--accent2);font-weight:700;cursor:default" readonly></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <select class="uc-select" id="uc-from-unit" onchange="ucConvert()"></select>
+          <select class="uc-select" id="uc-to-unit" onchange="ucConvert()"></select>
+        </div>
+        <button class="btn btn-secondary btn-sm" style="width:100%" onclick="ucSwap()">⇅ Swap Units</button>
+      </div>
+    </div>
+
+    <!-- ╔══ MATERIALS REFERENCE ══╗ -->
+    <div class="tool-card" style="grid-column:1/-1">
+      <div class="tool-card-header">
+        <div class="tool-card-icon">🔩</div>
+        <div><div class="tool-card-title">Engineering Materials Reference</div><div class="tool-card-sub">Resistivity, conductivity, density, temp coefficient — Copper, Steel, Aluminium &amp; more</div></div>
+      </div>
+      <div class="tool-card-body" style="padding-top:10px">
+        <div class="uc-tabs" style="margin-bottom:16px">
+          <span class="uc-tab active" id="mat-tab-elec" onclick="matSetTab(event,'elec')">⚡ Electrical</span>
+          <span class="uc-tab" id="mat-tab-mech" onclick="matSetTab(event,'mech')">🔩 Mechanical</span>
+          <span class="uc-tab" id="mat-tab-therm" onclick="matSetTab(event,'therm')">🌡️ Thermal</span>
+        </div>
+        <!-- Electrical panel -->
+        <div id="mat-panel-elec">
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:12px">
+              <thead>
+                <tr style="background:#f0f4ff">
+                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Material</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Resistivity ρ (Ω·m) @20°C</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Conductivity σ (S/m)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Temp Coeff α (/°C)</th>
+                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border)">Note</th>
+                </tr>
+              </thead>
+              <tbody id="mat-elec-tbody"></tbody>
+            </table>
+          </div>
+          <!-- Resistance calculator -->
+          <div style="margin-top:16px;background:#f0f4ff;border-radius:10px;padding:14px 16px">
+            <div class="dc-label" style="margin-bottom:10px">⚡ Resistance Calculator: R = ρ × L / A</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:10px">
+              <div><label style="font-size:11px;color:var(--text-muted)">Material</label>
+                <select class="uc-select" id="rcalc-mat" onchange="rcalcCompute()"></select>
+              </div>
+              <div><label style="font-size:11px;color:var(--text-muted)">Length (m)</label>
+                <input class="pct-inp" id="rcalc-L" type="number" value="1" min="0" step="any" oninput="rcalcCompute()" placeholder="m" />
+              </div>
+              <div><label style="font-size:11px;color:var(--text-muted)">Cross-section (mm²)</label>
+                <input class="pct-inp" id="rcalc-A" type="number" value="1" min="0" step="any" oninput="rcalcCompute()" placeholder="mm²" />
+              </div>
+              <div><label style="font-size:11px;color:var(--text-muted)">Temp (°C)</label>
+                <input class="pct-inp" id="rcalc-T" type="number" value="20" step="any" oninput="rcalcCompute()" placeholder="°C" />
+              </div>
+            </div>
+            <div id="rcalc-result" class="dc-result" style="display:none"></div>
+          </div>
+        </div>
+        <!-- Mechanical panel -->
+        <div id="mat-panel-mech" style="display:none">
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:12px">
+              <thead>
+                <tr style="background:#fff7ed">
+                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Material</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Density (kg/m³)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Young's Modulus (GPa)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Yield Strength (MPa)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Tensile Strength (MPa)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Poisson's Ratio</th>
+                </tr>
+              </thead>
+              <tbody id="mat-mech-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Thermal panel -->
+        <div id="mat-panel-therm" style="display:none">
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:12px">
+              <thead>
+                <tr style="background:#f0fdf4">
+                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Material</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Thermal Cond. (W/m·K)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Specific Heat (J/kg·K)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Thermal Exp. (µm/m·°C)</th>
+                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Melt Point (°C)</th>
+                </tr>
+              </thead>
+              <tbody id="mat-therm-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ╔══ DATE CALCULATOR ══╗ -->
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-card-icon">📅</div>
+        <div><div class="tool-card-title">Date & Duration Calculator</div><div class="tool-card-sub">Days between dates, working days, add/subtract days</div></div>
+      </div>
+      <div class="tool-card-body">
+        <!-- Working Day Selector -->
+        <div class="dc-section">
+          <div class="dc-label" style="margin-bottom:8px">⚙️ Working Days Setup</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap" id="dc-weekday-checks">
+            <label class="dc-day-pill" id="dc-day-0"><input type="checkbox" value="0" onchange="dcSaveWorkdays()"> Sun</label>
+            <label class="dc-day-pill" id="dc-day-1"><input type="checkbox" value="1" checked onchange="dcSaveWorkdays()"> Mon</label>
+            <label class="dc-day-pill" id="dc-day-2"><input type="checkbox" value="2" checked onchange="dcSaveWorkdays()"> Tue</label>
+            <label class="dc-day-pill" id="dc-day-3"><input type="checkbox" value="3" checked onchange="dcSaveWorkdays()"> Wed</label>
+            <label class="dc-day-pill" id="dc-day-4"><input type="checkbox" value="4" checked onchange="dcSaveWorkdays()"> Thu</label>
+            <label class="dc-day-pill" id="dc-day-5"><input type="checkbox" value="5" onchange="dcSaveWorkdays()"> Fri</label>
+            <label class="dc-day-pill" id="dc-day-6"><input type="checkbox" value="6" onchange="dcSaveWorkdays()"> Sat</label>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:5px" id="dc-workdays-summary"></div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
+        <!-- Days Between -->
+        <div class="dc-section">
+          <div class="dc-label">Days Between Two Dates</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div><label style="font-size:11px;color:var(--text-muted)">From</label>
+              <input type="date" id="dc-from" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcDiff()" />
+            </div>
+            <div><label style="font-size:11px;color:var(--text-muted)">To</label>
+              <input type="date" id="dc-to" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcDiff()" />
+            </div>
+          </div>
+          <div class="dc-result" id="dc-diff-result" style="display:none"></div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
+        <!-- Add/Subtract -->
+        <div class="dc-section">
+          <div class="dc-label">Add / Subtract Working Days</div>
+          <div style="display:grid;grid-template-columns:1fr 80px 80px;gap:8px;align-items:end">
+            <div><label style="font-size:11px;color:var(--text-muted)">Start Date</label>
+              <input type="date" id="dc-start" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcAdd()" />
+            </div>
+            <div><label style="font-size:11px;color:var(--text-muted)">± Work Days</label>
+              <input type="number" id="dc-days" style="width:100%;font-family:'DM Mono',monospace;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" placeholder="30" oninput="dcCalcAdd()" />
+            </div>
+            <button class="btn btn-blue btn-sm" onclick="dcCalcAdd()" style="height:38px">Calc</button>
+          </div>
+          <div class="dc-result" id="dc-add-result" style="display:none"></div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
+        <!-- Age -->
+        <div class="dc-section">
+          <div class="dc-label">Age / Time Elapsed</div>
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div style="flex:1"><label style="font-size:11px;color:var(--text-muted)">Birth / Start Date</label>
+              <input type="date" id="dc-birth" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcAge()" />
+            </div>
+            <button class="btn btn-blue btn-sm" onclick="dcCalcAge()" style="height:38px">Today</button>
+          </div>
+          <div class="dc-result" id="dc-age-result" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ╔══ PERCENTAGE CALCULATOR ══╗ -->
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-card-icon">%</div>
+        <div><div class="tool-card-title">Percentage Calculator</div><div class="tool-card-sub">What is X% of Y? Increase/decrease, back-calculate</div></div>
+      </div>
+      <div class="tool-card-body" style="display:flex;flex-direction:column;gap:14px;">
+        <!-- What is X% of Y -->
+        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+          <div class="dc-label" style="margin-bottom:8px">What is X% of Y?</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <input class="pct-inp" id="pct1-x" type="number" placeholder="X (%)" oninput="pctCalc1()" />
+            <input class="pct-inp" id="pct1-y" type="number" placeholder="Y (base)" oninput="pctCalc1()" />
+          </div>
+          <div class="pct-result" id="pct1-r" style="display:none"></div>
+        </div>
+        <!-- X is what % of Y -->
+        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+          <div class="dc-label" style="margin-bottom:8px">X is what % of Y?</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <input class="pct-inp" id="pct2-x" type="number" placeholder="X (part)" oninput="pctCalc2()" />
+            <input class="pct-inp" id="pct2-y" type="number" placeholder="Y (whole)" oninput="pctCalc2()" />
+          </div>
+          <div class="pct-result" id="pct2-r" style="display:none"></div>
+        </div>
+        <!-- % change -->
+        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+          <div class="dc-label" style="margin-bottom:8px">% Change (from → to)</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <input class="pct-inp" id="pct3-from" type="number" placeholder="From" oninput="pctCalc3()" />
+            <input class="pct-inp" id="pct3-to" type="number" placeholder="To" oninput="pctCalc3()" />
+          </div>
+          <div class="pct-result" id="pct3-r" style="display:none"></div>
+        </div>
+        <!-- add/remove X% from value -->
+        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+          <div class="dc-label" style="margin-bottom:8px">Add / Remove X% from value</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <input class="pct-inp" id="pct4-val" type="number" placeholder="Value" oninput="pctCalc4()" />
+            <input class="pct-inp" id="pct4-pct" type="number" placeholder="% amount" oninput="pctCalc4()" />
+          </div>
+          <div class="pct-result" id="pct4-r" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tools-grid -->
+</div><!-- /tools-wrap -->
+</div><!-- END TOOLS TAB -->
+
 <!-- ══ SAMPLE LOT MODAL ══ -->
 <div class="modal-overlay" id="sl-modal" onclick="slCloseOverlay(event)">
   <div class="modal" style="max-width:680px">
@@ -1032,7 +1413,14 @@
 
       <div class="form-row">
         <div class="form-group"><label>PIC (Person in Charge)</label><input type="text" id="pf-pic" placeholder="Name" /></div>
-        <div class="form-group"><label>Project on 3DEXP</label><input type="text" id="pf-project3DEXP" placeholder="3DEXPERIENCE project reference" /></div>
+        <div class="form-group">
+          <label>Project on 3DEXP</label>
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+            <button type="button" id="pf-3dexp-type-text" class="btn btn-sm btn-secondary" style="font-size:11px;padding:3px 10px" onclick="setPF3DEXPType('text')">📝 Text</button>
+            <button type="button" id="pf-3dexp-type-link" class="btn btn-sm btn-secondary" style="font-size:11px;padding:3px 10px" onclick="setPF3DEXPType('link')">🔗 Link</button>
+          </div>
+          <input type="text" id="pf-project3DEXP" placeholder="3DEXPERIENCE project reference" />
+        </div>
       </div>
 
       <div class="form-row">
@@ -1077,11 +1465,11 @@ const PROJECT_PHASES=['CP','T0','T1','T2','PR','PP','MP'];
 function od(d){const dt=new Date();dt.setDate(dt.getDate()+d);return dt.toISOString().slice(0,10);}
 
 const SAMPLE_PROJECTS=[
-  {id:1,name:'Stand Fan Development',startDate:'2025-01-15',endDate:'2025-06-30',objectives:'Develop new energy-efficient stand fan model with smart features',kpis:'Cost reduction 15%, Energy efficiency +20%, Market launch Q2',pic:'Ahmed Hassan',project3DEXP:'SF-2025-001',stage:'Execution',type:'New Development',platform:'Hardware',priority:'High'},
-  {id:2,name:'AC Compressor Localization',startDate:'2025-02-01',endDate:'2025-08-31',objectives:'Localize compressor production to reduce import costs',kpis:'Local content 70%, Cost saving $2M annually',pic:'Sarah Mohamed',project3DEXP:'AC-COMP-2025',stage:'Planning',type:'Localization',platform:'Manufacturing',priority:'High'},
-  {id:3,name:'Washing Machine UI Redesign',startDate:'2024-12-01',endDate:'2025-04-15',objectives:'Modernize control panel and add mobile app integration',kpis:'User satisfaction +30%, App downloads 50K',pic:'Omar Ali',project3DEXP:'WM-UI-2024',stage:'Testing',type:'Process Improvement',platform:'Mobile/Hardware',priority:'Medium'},
-  {id:4,name:'Fridge Energy Optimization',startDate:'2025-01-10',endDate:'2025-07-20',objectives:'Improve energy rating from B to A++ through design optimization',kpis:'Energy consumption -25%, Certification A++',pic:'Layla Ibrahim',project3DEXP:'FRDG-ENR-2025',stage:'Execution',type:'VAVE',platform:'Hardware',priority:'High'},
-  {id:5,name:'Ceiling Fan Export Model',startDate:'2025-03-01',endDate:'2025-09-30',objectives:'Develop export-ready ceiling fan for GCC markets',kpis:'Export sales $5M, Market entry 3 countries',pic:'Mohamed Salah',project3DEXP:'CF-EXP-2025',stage:'Planning',type:'New Development',platform:'Hardware',priority:'Medium'},
+  {id:1,name:'Stand Fan Development',startDate:'2025-01-15',endDate:'2025-06-30',objectives:'Develop new energy-efficient stand fan model with smart features',kpis:'Cost reduction 15%, Energy efficiency +20%, Market launch Q2',pic:'Ahmed Hassan',project3DEXP:'SF-2025-001',project3DEXPType:'text',stage:'Execution',type:'New Development',platform:'Hardware',priority:'High'},
+  {id:2,name:'AC Compressor Localization',startDate:'2025-02-01',endDate:'2025-08-31',objectives:'Localize compressor production to reduce import costs',kpis:'Local content 70%, Cost saving $2M annually',pic:'Sarah Mohamed',project3DEXP:'AC-COMP-2025',project3DEXPType:'text',stage:'Planning',type:'Localization',platform:'Manufacturing',priority:'High'},
+  {id:3,name:'Washing Machine UI Redesign',startDate:'2024-12-01',endDate:'2025-04-15',objectives:'Modernize control panel and add mobile app integration',kpis:'User satisfaction +30%, App downloads 50K',pic:'Omar Ali',project3DEXP:'WM-UI-2024',project3DEXPType:'text',stage:'Testing',type:'Process Improvement',platform:'Mobile/Hardware',priority:'Medium'},
+  {id:4,name:'Fridge Energy Optimization',startDate:'2025-01-10',endDate:'2025-07-20',objectives:'Improve energy rating from B to A++ through design optimization',kpis:'Energy consumption -25%, Certification A++',pic:'Layla Ibrahim',project3DEXP:'FRDG-ENR-2025',project3DEXPType:'text',stage:'Execution',type:'VAVE',platform:'Hardware',priority:'High'},
+  {id:5,name:'Ceiling Fan Export Model',startDate:'2025-03-01',endDate:'2025-09-30',objectives:'Develop export-ready ceiling fan for GCC markets',kpis:'Export sales $5M, Market entry 3 countries',pic:'Mohamed Salah',project3DEXP:'CF-EXP-2025',project3DEXPType:'text',stage:'Planning',type:'New Development',platform:'Hardware',priority:'Medium'},
 ];
 
 const SAMPLE=[
@@ -1227,7 +1615,7 @@ function renderTable(){
       <td>${t.dueDate?`<span class="due-date ${isOv?'due-overdue':isSoon?'due-soon':''}">${isOv?'⚠ ':''}${fmtDate(t.dueDate)}</span>`:'<span style="color:var(--text-light)">—</span>'}</td>
       <td><div style="display:flex;align-items:center;gap:7px"><div class="progress-bar"><div class="progress-fill" style="width:${prog}%"></div></div><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);min-width:28px">${prog}%</span></div></td>
       <td>${depChips(t)}</td>
-      <td><input class="inline-edit" type="text" value="${e(t.task3DEXP||'')}" placeholder="—" onblur="updateTaskField(${t.id},'task3DEXP',this.value)" /></td>
+      <td>${t.task3DEXP ? (t.task3DEXP.match(/^https?:\/\//i) ? `<a href="${e(t.task3DEXP)}" target="_blank" rel="noopener noreferrer" class="dexp-link" title="${e(t.task3DEXP)}">${e(t.task3DEXP)}</a>` : `<a href="${e(t.task3DEXP)}" target="_blank" rel="noopener noreferrer" class="dexp-link" title="${e(t.task3DEXP)}">${e(t.task3DEXP)}</a>`) : '<span style="color:var(--text-light)">—</span>'}</td>
       <td><select class="inline-edit" onchange="updateTaskField(${t.id},'projectType',this.value)"><option value="">—</option>${PROJECT_TYPES.map(pt=>`<option${(t.projectType||'')=== pt?' selected':''}>${e(pt)}</option>`).join('')}</select></td>
       <td><select class="inline-edit" onchange="updateTaskField(${t.id},'product',this.value)"><option value="">—</option>${PRODUCTS.map(p=>`<option${(t.product||'')=== p?' selected':''}>${e(p)}</option>`).join('')}</select></td>
       <td><select class="inline-edit" onchange="updateTaskField(${t.id},'projectPhase',this.value)"><option value="">—</option>${PROJECT_PHASES.map(ph=>`<option${(t.projectPhase||'')=== ph?' selected':''}>${e(ph)}</option>`).join('')}</select></td>
@@ -1812,6 +2200,7 @@ function switchMainTab(tab){
   if(tab==='statistics')renderStatistics();
   if(tab==='workinghours'){whLoadData();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
   if(tab==='samples'){slLoadData();slRender();}
+  if(tab==='tools'){toolsInit();}
 }
 
 function openProjectModal(id=null){
@@ -1825,11 +2214,28 @@ function openProjectModal(id=null){
   document.getElementById('pf-kpis').value=p?.kpis||'';
   document.getElementById('pf-pic').value=p?.pic||'';
   document.getElementById('pf-project3DEXP').value=p?.project3DEXP||'';
+  setPF3DEXPType(p?.project3DEXPType||'text');
   document.getElementById('pf-stage').value=p?.stage||'Planning';
   document.getElementById('pf-type').value=p?.type||'';
   document.getElementById('pf-platform').value=p?.platform||'';
   document.getElementById('pf-priority').value=p?.priority||'Medium';
   document.getElementById('project-modal').classList.add('open');
+}
+
+function setPF3DEXPType(type){
+  const btnText=document.getElementById('pf-3dexp-type-text');
+  const btnLink=document.getElementById('pf-3dexp-type-link');
+  const inp=document.getElementById('pf-project3DEXP');
+  if(!btnText||!btnLink)return;
+  if(type==='link'){
+    btnLink.classList.remove('btn-secondary');btnLink.classList.add('btn-blue');
+    btnText.classList.remove('btn-blue');btnText.classList.add('btn-secondary');
+    inp.placeholder='https://3dexperience.com/…';
+  } else {
+    btnText.classList.remove('btn-secondary');btnText.classList.add('btn-blue');
+    btnLink.classList.remove('btn-blue');btnLink.classList.add('btn-secondary');
+    inp.placeholder='3DEXPERIENCE project reference';
+  }
 }
 
 function saveProject(){
@@ -1844,6 +2250,7 @@ function saveProject(){
     kpis:document.getElementById('pf-kpis').value,
     pic:document.getElementById('pf-pic').value,
     project3DEXP:document.getElementById('pf-project3DEXP').value,
+    project3DEXPType:document.getElementById('pf-3dexp-type-link')?.classList.contains('btn-blue')?'link':'text',
     stage:document.getElementById('pf-stage').value,
     type:document.getElementById('pf-type').value,
     platform:document.getElementById('pf-platform').value,
@@ -1929,7 +2336,7 @@ function renderProjectsTable(){
       <td style="max-width:150px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${e(p.objectives)}">${e(p.objectives)||'—'}</td>
       <td style="max-width:150px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${e(p.kpis)}">${e(p.kpis)||'—'}</td>
       <td>${e(p.pic)||'—'}</td>
-      <td>${e(p.project3DEXP)||'—'}</td>
+      <td>${p.project3DEXPType==='link'&&p.project3DEXP ? `<a href="${e(p.project3DEXP)}" target="_blank" rel="noopener noreferrer" class="dexp-link" title="${e(p.project3DEXP)}">${e(p.project3DEXP)}</a>` : e(p.project3DEXP)||'—'}</td>
       <td><span class="tag ${stageTags[p.stage]||'tag-todo'}">${e(p.stage)}</span></td>
       <td>${e(p.type)||'—'}</td>
       <td>${e(p.platform)||'—'}</td>
@@ -3012,7 +3419,7 @@ function slRenderCards(lots) {
     const phText = PHASE_TEXT[phase]||'#475569';
     const teams = lot.teams||[];
     const receivedCount = teams.filter(t=>t.received).length;
-    const teamChips = teams.map(t=>`<span class="sl-team-chip ${t.received?'received':''}" title="${t.received?'Received '+t.receiveDate:t.name}">${t.received?'✓ ':''} ${e(t.name)}</span>`).join('');
+    const teamChips = teams.map(t=>`<span class="sl-team-chip ${t.received?'received':''}" title="${t.received?'Received '+t.receiveDate:t.name}">${t.received?'✓ ':''} ${e(t.name)}${t.qtyDelivered?` <strong style="font-family:'DM Mono',monospace;font-size:9px">(${t.qtyDelivered})</strong>`:''}</span>`).join('');
 
     return `<div class="sl-card" onclick="slOpenModal(${lot.id})">
       <div class="sl-card-header">
@@ -3072,7 +3479,7 @@ function slRenderTable(lots) {
       <td style="font-family:'DM Mono',monospace">${lot.price?Number(lot.price).toLocaleString()+' EGP':'—'}</td>
       <td>${e(lot.purpose||'—')}</td>
       <td style="max-width:160px">
-        <div style="display:flex;flex-wrap:wrap;gap:3px">${teams.map(t=>`<span class="sl-team-chip ${t.received?'received':''}" style="font-size:9px">${t.received?'✓ ':''} ${e(t.name)}</span>`).join('')||'—'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px">${teams.map(t=>`<span class="sl-team-chip ${t.received?'received':''}" style="font-size:9px">${t.received?'✓ ':''} ${e(t.name)}${t.qtyDelivered?` (${t.qtyDelivered})`:''}</span>`).join('')||'—'}</div>
       </td>
       <td>${slStatusBadge(lot)}</td>
       <td>
@@ -3144,8 +3551,12 @@ function slRenderReceiptList() {
     <div class="sl-receipt-row">
       <div style="width:22px;height:22px;border-radius:50%;background:${strColor(t.name)};color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${t.name.slice(0,2).toUpperCase()}</div>
       <div class="sl-receipt-team">${e(t.name)}</div>
-      <div class="sl-receipt-date-wrap">
-        <label>Received:</label>
+      <div class="sl-receipt-date-wrap" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <label style="font-size:11px;font-weight:600;color:var(--text-muted);white-space:nowrap">Qty:</label>
+        <input type="number" min="0" step="1" value="${t.qtyDelivered||''}" placeholder="—"
+          onchange="slSetTeamQty(${i},this.value)"
+          style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:6px;padding:4px 8px;background:var(--bg);color:var(--text);outline:none;width:70px" />
+        <label style="font-size:11px;font-weight:600;color:var(--text-muted);white-space:nowrap">Received:</label>
         <input type="date" value="${t.receiveDate||''}" onchange="slSetReceiveDate(${i},this.value)"
           style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:6px;padding:4px 8px;background:var(--bg);color:var(--text);outline:none;width:145px" />
       </div>
@@ -3162,7 +3573,7 @@ function slAddTeam() {
   if (slTempTeams.find(t=>t.name.toLowerCase()===name.toLowerCase())) {
     inp.style.borderColor='var(--accent)'; setTimeout(()=>inp.style.borderColor='',1000); return;
   }
-  slTempTeams.push({name, received:false, receiveDate:''});
+  slTempTeams.push({name, received:false, receiveDate:'', qtyDelivered:''});
   inp.value = '';
   slRenderReceiptList();
 }
@@ -3171,6 +3582,9 @@ function slToggleReceived(i, checked) {
   slTempTeams[i].received = checked;
   if (checked && !slTempTeams[i].receiveDate) slTempTeams[i].receiveDate = new Date().toISOString().slice(0,10);
   slRenderReceiptList();
+}
+function slSetTeamQty(i, val) {
+  slTempTeams[i].qtyDelivered = val ? parseInt(val) : '';
 }
 function slSetReceiveDate(i, val) {
   slTempTeams[i].receiveDate = val;
@@ -3233,10 +3647,11 @@ function slExport() {
   const fmt = s => { if(!s)return''; const[y,m,d]=s.split('-'); return`${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`; };
 
   // Summary sheet
-  const rows = [['Lot Number','Project','Phase','Qty','Production Date','Delivery Date','Price (EGP)','Purpose','Notes','Status','Teams (Requested)','Teams (Received)','Received Dates']];
+  const rows = [['Lot Number','Project','Phase','Qty','Production Date','Delivery Date','Price (EGP)','Purpose','Notes','Status','Teams (Requested)','Teams (Received)','Qty Delivered (per Team)','Received Dates']];
   sampleLots.forEach(lot => {
     const teams = lot.teams||[];
     const recvTeams = teams.filter(t=>t.received).map(t=>t.name).join(', ');
+    const qtyDelivered = teams.filter(t=>t.received&&t.qtyDelivered).map(t=>`${t.name}: ${t.qtyDelivered}`).join('; ');
     const recvDates = teams.filter(t=>t.received&&t.receiveDate).map(t=>`${t.name}: ${fmt(t.receiveDate)}`).join('; ');
     rows.push([
       lot.lotNumber||'', lot.project||'', lot.phase||'',
@@ -3246,29 +3661,30 @@ function slExport() {
       lot.purpose||'', lot.notes||'',
       slGetStatus(lot).charAt(0).toUpperCase()+slGetStatus(lot).slice(1),
       teams.map(t=>t.name).join(', '),
-      recvTeams, recvDates
+      recvTeams, qtyDelivered, recvDates
     ]);
   });
 
   const ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:14},{wch:28},{wch:8},{wch:7},{wch:15},{wch:15},{wch:14},{wch:16},{wch:30},{wch:12},{wch:25},{wch:25},{wch:35}];
+  ws['!cols'] = [{wch:14},{wch:28},{wch:8},{wch:7},{wch:15},{wch:15},{wch:14},{wch:16},{wch:30},{wch:12},{wch:25},{wch:25},{wch:28},{wch:35}];
   XLSX.utils.book_append_sheet(wb, ws, 'Sample Lots');
 
   // Per-project sheet
   const projNames = [...new Set(sampleLots.map(l=>l.project).filter(Boolean))];
   projNames.forEach(pName => {
     const pLots = sampleLots.filter(l=>l.project===pName);
-    const pRows = [['Lot #','Phase','Qty','Prod. Date','Delivery','Price','Purpose','Status','Teams']];
+    const pRows = [['Lot #','Phase','Qty','Prod. Date','Delivery','Price','Purpose','Status','Teams','Qty Delivered']];
     pLots.forEach(lot => {
       pRows.push([
         lot.lotNumber||'', lot.phase||'', lot.qty?parseInt(lot.qty):'',
         fmt(lot.dateProd)||'', fmt(lot.dateDelivery)||'',
         lot.price?parseFloat(lot.price):'', lot.purpose||'',
-        slGetStatus(lot), (lot.teams||[]).map(t=>`${t.name}${t.received?' ✓':''}`).join(', ')
+        slGetStatus(lot), (lot.teams||[]).map(t=>`${t.name}${t.received?' ✓':''}`).join(', '),
+        (lot.teams||[]).filter(t=>t.qtyDelivered).map(t=>`${t.name}: ${t.qtyDelivered}`).join('; ')
       ]);
     });
     const pws = XLSX.utils.aoa_to_sheet(pRows);
-    pws['!cols'] = [{wch:14},{wch:8},{wch:7},{wch:14},{wch:14},{wch:12},{wch:16},{wch:12},{wch:35}];
+    pws['!cols'] = [{wch:14},{wch:8},{wch:7},{wch:14},{wch:14},{wch:12},{wch:16},{wch:12},{wch:35},{wch:28}];
     const sheetName = pName.slice(0,31).replace(/[\\/?*[\]]/g,'');
     XLSX.utils.book_append_sheet(wb, pws, sheetName);
   });
@@ -3294,8 +3710,371 @@ document.addEventListener('keydown',ev=>{
   if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal','sl-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
 });
 
+// ══════════ TOOLS ══════════
+const DC_WD_KEY = 'team_tasks_workdays';
+let toolsReady = false;
+function toolsInit() {
+  if (!toolsReady) {
+    toolsReady = true;
+    dcLoadWorkdays();
+    ucInitCategory();
+    matRenderAll();
+    rcalcBuildMaterials();
+    // set today in date calc
+    const today = new Date().toISOString().slice(0, 10);
+    ['dc-from','dc-to','dc-start','dc-birth'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = today;
+    });
+    document.getElementById('dc-days').value = '10';
+    dcCalcAge();
+    dcUpdateSummary();
+  }
+}
+
+// ── Scientific Calculator ──
+let calcExpr = '';
+let calcHistory = [];
+function calcFn(v) {
+  const mapIn = { '÷': '/', '×': '*', '−': '-', 'π': 'Math.PI', 'e': 'Math.E' };
+  calcExpr += mapIn[v] !== undefined ? mapIn[v] : v;
+  document.getElementById('calc-expr').textContent = calcExpr;
+  try {
+    const prev = calcEval(calcExpr);
+    if (prev !== null && isFinite(prev)) document.getElementById('calc-result').textContent = +prev.toFixed(10).toString();
+  } catch {}
+}
+function calcClear() {
+  calcExpr = '';
+  document.getElementById('calc-expr').textContent = '';
+  document.getElementById('calc-result').textContent = '0';
+}
+function calcDel() {
+  calcExpr = calcExpr.slice(0, -1);
+  document.getElementById('calc-expr').textContent = calcExpr;
+}
+function calcEval(expr) {
+  let ev = expr
+    .replace(/Math\.PI/g, Math.PI).replace(/Math\.E/g, Math.E)
+    .replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(')
+    .replace(/asin\(/g,'Math.asin(').replace(/acos\(/g,'Math.acos(').replace(/atan\(/g,'Math.atan(')
+    .replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(')
+    .replace(/sqrt\(/g,'Math.sqrt(').replace(/cbrt\(/g,'Math.cbrt(')
+    .replace(/abs\(/g,'Math.abs(').replace(/floor\(/g,'Math.floor(').replace(/ceil\(/g,'Math.ceil(')
+    .replace(/\^/g,'**').replace(/!(\d+)?/g,(m,n)=>m);
+  ev = ev.replace(/(\d+(?:\.\d+)?)\s*!/g,(_,n)=>{
+    const num=parseFloat(n);
+    if(!Number.isInteger(num)||num<0||num>170)return NaN;
+    let f=1;for(let i=2;i<=num;i++)f*=i;return f;
+  });
+  return Function('"use strict"; return ('+ev+')')();
+}
+function calcEquals() {
+  if (!calcExpr) return;
+  try {
+    const result = calcEval(calcExpr);
+    const display = isFinite(result) ? +result.toFixed(10).toString() : 'Error';
+    const histEntry = calcExpr.replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e')+' = '+display;
+    document.getElementById('calc-expr').textContent = histEntry;
+    document.getElementById('calc-result').textContent = display;
+    calcHistory.unshift(histEntry);
+    if (calcHistory.length > 15) calcHistory.pop();
+    calcRenderHistory();
+    calcExpr = display === 'Error' ? '' : display;
+  } catch {
+    document.getElementById('calc-result').textContent = 'Error';
+    calcExpr = '';
+  }
+}
+function calcRenderHistory() {
+  const el = document.getElementById('calc-history');
+  if (!calcHistory.length) { el.innerHTML='<div style="font-size:11px;color:var(--text-light);padding:4px">No history yet</div>'; return; }
+  el.innerHTML = calcHistory.map((h,i)=>`<div class="calc-hist-item" onclick="calcUseHistory(${i})">${e(h)}</div>`).join('');
+}
+function calcUseHistory(i) {
+  const parts = calcHistory[i].split(' = ');
+  const val = parts[parts.length-1];
+  calcExpr = val;
+  document.getElementById('calc-expr').textContent = calcHistory[i];
+  document.getElementById('calc-result').textContent = val;
+}
+function calcClearHistory() { calcHistory = []; calcRenderHistory(); }
+document.addEventListener('keydown', ev => {
+  const toolsActive = document.getElementById('tools-tab')?.classList.contains('active');
+  if (!toolsActive) return;
+  const key = ev.key;
+  if (key>='0'&&key<='9') calcFn(key);
+  else if (key==='.') calcFn('.');
+  else if (key==='+') calcFn('+');
+  else if (key==='-') calcFn('−');
+  else if (key==='*') calcFn('×');
+  else if (key==='/'){ev.preventDefault();calcFn('÷');}
+  else if (key==='Enter'||key==='=') calcEquals();
+  else if (key==='Backspace') calcDel();
+  else if (key==='Escape'&&document.activeElement.tagName!=='INPUT') calcClear();
+  else if (key==='(') calcFn('(');
+  else if (key===')') calcFn(')');
+  else if (key==='^') calcFn('^');
+});
+
+// ── Unit Converter ──
+const UC_CATEGORIES = {
+  length:   { units:['mm','cm','m','km','inch','foot','yard','mile','nautical mile'], toBase:{mm:0.001,cm:0.01,m:1,km:1000,inch:0.0254,foot:0.3048,yard:0.9144,mile:1609.344,'nautical mile':1852} },
+  weight:   { units:['mg','g','kg','tonne','oz','lb','stone'], toBase:{mg:1e-6,g:0.001,kg:1,tonne:1000,oz:0.0283495,lb:0.453592,stone:6.35029} },
+  temp:     { units:['°C','°F','K'], toBase:null },
+  area:     { units:['mm²','cm²','m²','km²','in²','ft²','acre','hectare'], toBase:{'mm²':1e-6,'cm²':1e-4,'m²':1,'km²':1e6,'in²':6.4516e-4,'ft²':0.092903,'acre':4046.86,'hectare':10000} },
+  volume:   { units:['ml','cl','dl','L','m³','tsp','tbsp','fl oz','cup','pint','gallon'], toBase:{ml:1e-3,cl:1e-2,dl:1e-1,L:1,'m³':1000,tsp:0.00492892,tbsp:0.0147868,'fl oz':0.0295735,cup:0.236588,pint:0.473176,gallon:3.78541} },
+  speed:    { units:['m/s','km/h','mph','knot','ft/s'], toBase:{'m/s':1,'km/h':1/3.6,mph:0.44704,knot:0.514444,'ft/s':0.3048} },
+  force:    { units:['N','kN','MN','lbf','kgf','dyn','ton-force'], toBase:{N:1,kN:1e3,MN:1e6,lbf:4.44822,kgf:9.80665,dyn:1e-5,'ton-force':9806.65} },
+  pressure: { units:['Pa','kPa','MPa','bar','mbar','atm','psi','mmHg','inHg'], toBase:{Pa:1,kPa:1e3,MPa:1e6,bar:1e5,mbar:100,atm:101325,psi:6894.76,mmHg:133.322,inHg:3386.39} },
+  energy:   { units:['J','kJ','MJ','kWh','cal','kcal','BTU','ft·lbf','eV'], toBase:{J:1,kJ:1e3,MJ:1e6,kWh:3.6e6,cal:4.184,kcal:4184,BTU:1055.06,'ft·lbf':1.35582,eV:1.60218e-19} }
+};
+let ucCurrentCat = 'length';
+function ucInitCategory() { ucSetCategoryByName('length'); }
+function ucSetCategory(ev, cat) {
+  ucCurrentCat = cat;
+  document.querySelectorAll('#uc-tabs .uc-tab').forEach(t => t.classList.remove('active'));
+  if (ev && ev.target) ev.target.classList.add('active');
+  const units = UC_CATEGORIES[cat].units;
+  const fromSel = document.getElementById('uc-from-unit');
+  const toSel = document.getElementById('uc-to-unit');
+  fromSel.innerHTML = units.map((u,i)=>`<option value="${u}"${i===0?' selected':''}>${u}</option>`).join('');
+  toSel.innerHTML = units.map((u,i)=>`<option value="${u}"${i===1?' selected':''}>${u}</option>`).join('');
+  ucConvert();
+}
+function ucSetCategoryByName(cat) {
+  ucCurrentCat = cat;
+  const tabs = document.querySelectorAll('#uc-tabs .uc-tab');
+  const catOrder = ['length','weight','temp','area','volume','speed','force','pressure','energy'];
+  tabs.forEach((t,i) => t.classList.toggle('active', catOrder[i]===cat));
+  const units = UC_CATEGORIES[cat].units;
+  document.getElementById('uc-from-unit').innerHTML = units.map((u,i)=>`<option value="${u}"${i===0?' selected':''}>${u}</option>`).join('');
+  document.getElementById('uc-to-unit').innerHTML = units.map((u,i)=>`<option value="${u}"${i===1?' selected':''}>${u}</option>`).join('');
+  ucConvert();
+}
+function ucConvert() {
+  const val = parseFloat(document.getElementById('uc-from-val').value);
+  const from = document.getElementById('uc-from-unit').value;
+  const to = document.getElementById('uc-to-unit').value;
+  const resEl = document.getElementById('uc-result-val');
+  if (isNaN(val)) { resEl.value=''; return; }
+  let result;
+  if (ucCurrentCat==='temp') result = ucConvertTemp(val,from,to);
+  else { const fac=UC_CATEGORIES[ucCurrentCat].toBase; result=(val*fac[from])/fac[to]; }
+  resEl.value = +result.toFixed(8);
+}
+function ucConvertTemp(val,from,to) {
+  let c;
+  if(from==='°C')c=val; else if(from==='°F')c=(val-32)*5/9; else c=val-273.15;
+  if(to==='°C')return c; if(to==='°F')return c*9/5+32; return c+273.15;
+}
+function ucSwap() {
+  const fromSel=document.getElementById('uc-from-unit'),toSel=document.getElementById('uc-to-unit');
+  const fromVal=document.getElementById('uc-from-val'),resEl=document.getElementById('uc-result-val');
+  const tmpU=fromSel.value; fromSel.value=toSel.value; toSel.value=tmpU;
+  fromVal.value=resEl.value||fromVal.value; ucConvert();
+}
+
+// ── Working Days ──
+let dcWorkdays = [1,2,3,4]; // 0=Sun...6=Sat
+function dcLoadWorkdays() {
+  try { const s=JSON.parse(localStorage.getItem(DC_WD_KEY)); if(Array.isArray(s))dcWorkdays=s; } catch {}
+  dcWorkdays.forEach(d => {
+    const cb = document.querySelector(`#dc-day-${d} input`);
+    if (cb) cb.checked = true;
+  });
+  // uncheck non-workdays
+  for(let i=0;i<7;i++){
+    const cb=document.querySelector(`#dc-day-${i} input`);
+    if(cb)cb.checked=dcWorkdays.includes(i);
+  }
+  dcUpdateSummary();
+}
+function dcSaveWorkdays() {
+  dcWorkdays=[];
+  for(let i=0;i<7;i++){
+    const cb=document.querySelector(`#dc-day-${i} input`);
+    if(cb&&cb.checked)dcWorkdays.push(i);
+  }
+  localStorage.setItem(DC_WD_KEY,JSON.stringify(dcWorkdays));
+  dcUpdateSummary();
+  dcCalcDiff(); dcCalcAdd();
+}
+function dcUpdateSummary() {
+  const names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const el=document.getElementById('dc-workdays-summary');
+  if(!el)return;
+  el.textContent = dcWorkdays.length
+    ? `✅ ${dcWorkdays.length} working day(s): ${dcWorkdays.map(d=>names[d]).join(', ')}`
+    : '⚠️ No working days selected';
+}
+function dcCountWorkdays(a, b) {
+  if(!dcWorkdays.length) return 0;
+  let count=0, d=new Date(a<b?a:b), end=new Date(a<b?b:a);
+  d.setDate(d.getDate()+1); // exclusive start
+  while(d<=end){if(dcWorkdays.includes(d.getDay()))count++;d.setDate(d.getDate()+1);}
+  return (a<=b?1:-1)*count;
+}
+function dcCalcDiff() {
+  const a=document.getElementById('dc-from').value, b=document.getElementById('dc-to').value;
+  const el=document.getElementById('dc-diff-result');
+  if(!a||!b){el.style.display='none';return;}
+  const da=new Date(a),db=new Date(b);
+  const totalDiff=Math.round((db-da)/86400000);
+  const wdDiff=dcCountWorkdays(da,db);
+  const abs=Math.abs(totalDiff),sign=totalDiff<0?'−':'+';
+  const wks=Math.floor(abs/7),days=abs%7;
+  el.style.display='';
+  el.innerHTML=`<div>${sign}${abs} calendar days (${wks}w ${days}d)</div><div style="margin-top:4px;font-size:13px;color:var(--accent2);font-weight:700">📅 ${Math.abs(wdDiff)} working day${Math.abs(wdDiff)!==1?'s':''} (${dcWorkdays.length} work days/wk)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">${totalDiff<0?'B is earlier':totalDiff===0?'Same date':'B is later'}</div>`;
+}
+function dcCalcAdd() {
+  const start=document.getElementById('dc-start').value;
+  const wdCount=parseInt(document.getElementById('dc-days').value);
+  const el=document.getElementById('dc-add-result');
+  if(!start||isNaN(wdCount)){el.style.display='none';return;}
+  if(!dcWorkdays.length){el.style.display='';el.textContent='⚠️ No working days selected';return;}
+  const d=new Date(start); let remaining=Math.abs(wdCount); const dir=wdCount>=0?1:-1;
+  while(remaining>0){d.setDate(d.getDate()+dir);if(dcWorkdays.includes(d.getDay()))remaining--;}
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.style.display='';
+  el.innerHTML=`<div>Result: <strong>${d.getDate()} ${mn[d.getMonth()]} ${d.getFullYear()}</strong> (${d.toISOString().slice(0,10)})</div><div style="font-size:11px;color:var(--text-muted);margin-top:3px">${Math.abs(wdCount)} working day${Math.abs(wdCount)!==1?'s':''} ${wdCount>=0?'after':'before'} ${start}</div>`;
+}
+function dcCalcAge() {
+  const birth=document.getElementById('dc-birth').value;
+  const el=document.getElementById('dc-age-result');
+  if(!birth){el.style.display='none';return;}
+  const db=new Date(birth),now=new Date();
+  if(db>now){el.style.display='';el.textContent='Date is in the future';return;}
+  let years=now.getFullYear()-db.getFullYear(),months=now.getMonth()-db.getMonth(),days=now.getDate()-db.getDate();
+  if(days<0){months--;days+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
+  if(months<0){years--;months+=12;}
+  const totalDays=Math.round((now-db)/86400000);
+  el.style.display='';
+  el.textContent=`${years}y ${months}m ${days}d  ·  ${totalDays.toLocaleString()} total days`;
+}
+
+// ── Percentage Calculator ──
+function pctCalc1(){const x=parseFloat(document.getElementById('pct1-x').value),y=parseFloat(document.getElementById('pct1-y').value),el=document.getElementById('pct1-r');if(isNaN(x)||isNaN(y)){el.style.display='none';return;}el.style.display='';el.textContent=`${x}% of ${y} = ${+(x*y/100).toFixed(8)}`;}
+function pctCalc2(){const x=parseFloat(document.getElementById('pct2-x').value),y=parseFloat(document.getElementById('pct2-y').value),el=document.getElementById('pct2-r');if(isNaN(x)||isNaN(y)||y===0){el.style.display='none';return;}el.style.display='';el.textContent=`${x} is ${+(x/y*100).toFixed(4)}% of ${y}`;}
+function pctCalc3(){const from=parseFloat(document.getElementById('pct3-from').value),to=parseFloat(document.getElementById('pct3-to').value),el=document.getElementById('pct3-r');if(isNaN(from)||isNaN(to)||from===0){el.style.display='none';return;}const chg=(to-from)/Math.abs(from)*100;el.style.display='';el.style.background=chg>=0?'#d1fae5':'#fee2e2';el.style.color=chg>=0?'#065f46':'#991b1b';el.textContent=`${chg>=0?'▲ +':'▼ '}${+chg.toFixed(4)}% (${chg>=0?'increase':'decrease'})`;}
+function pctCalc4(){const val=parseFloat(document.getElementById('pct4-val').value),pct=parseFloat(document.getElementById('pct4-pct').value),el=document.getElementById('pct4-r');if(isNaN(val)||isNaN(pct)){el.style.display='none';return;}el.style.display='';el.textContent=`+${pct}% → ${+(val+val*pct/100).toFixed(8)}   |   −${pct}% → ${+(val-val*pct/100).toFixed(8)}`;}
+
+// ── Engineering Materials Reference ──
+const MAT_ELEC = [
+  {name:'Copper',sub:'Pure, annealed',rho:1.68e-8,alpha:0.00393,note:'Best conductor — wire, coil'},
+  {name:'Silver',sub:'Pure',rho:1.59e-8,alpha:0.0038,note:'Highest conductivity'},
+  {name:'Gold',sub:'Pure',rho:2.44e-8,alpha:0.0034,note:'Corrosion-resistant contacts'},
+  {name:'Aluminium',sub:'Pure (1100)',rho:2.82e-8,alpha:0.00429,note:'Overhead lines, heat sinks'},
+  {name:'Brass (Cu70Zn30)',sub:'',rho:6.4e-8,alpha:0.0015,note:'Connectors, terminals'},
+  {name:'Iron (pure)',sub:'',rho:1.0e-7,alpha:0.005,note:'Reference metal'},
+  {name:'Steel (carbon)',sub:'',rho:1.43e-7,alpha:0.003,note:'Structural, magnetic core'},
+  {name:'Stainless Steel 316',sub:'',rho:7.4e-7,alpha:0.00094,note:'Corrosion-resistant'},
+  {name:'Tungsten',sub:'Pure',rho:5.6e-8,alpha:0.0045,note:'Filaments, high-temp'},
+  {name:'Nickel',sub:'Pure',rho:6.99e-8,alpha:0.006,note:'Alloys, batteries'},
+  {name:'Nichrome (Ni80Cr20)',sub:'Resistance alloy',rho:1.1e-6,alpha:0.0004,note:'Heating elements'},
+  {name:'Titanium',sub:'Grade 2',rho:4.2e-7,alpha:0.0038,note:'Aerospace, implants'},
+  {name:'Zinc',sub:'Pure',rho:5.9e-8,alpha:0.0037,note:'Galvanizing, alloys'},
+  {name:'Carbon (graphite)',sub:'',rho:3.5e-5,alpha:-0.0005,note:'Electrodes, lubricant'},
+  {name:'Silicon (intrinsic)',sub:'',rho:640,alpha:null,note:'Semiconductor'},
+];
+const MAT_MECH = [
+  {name:'Copper (pure)',density:8940,E:117,yield:70,tensile:220,poisson:0.34},
+  {name:'Aluminium 6061-T6',density:2700,E:69,yield:276,tensile:310,poisson:0.33},
+  {name:'Mild Steel (1020)',density:7870,E:200,yield:210,tensile:380,poisson:0.29},
+  {name:'Stainless 304',density:8000,E:193,yield:215,tensile:505,poisson:0.29},
+  {name:'Stainless 316',density:7990,E:193,yield:205,tensile:515,poisson:0.29},
+  {name:'Cast Iron (grey)',density:7150,E:100,yield:null,tensile:200,poisson:0.26},
+  {name:'Brass (Cu70Zn30)',density:8500,E:100,yield:95,tensile:340,poisson:0.34},
+  {name:'Titanium Grade 5',density:4430,E:114,yield:880,tensile:950,poisson:0.34},
+  {name:'Nickel (pure)',density:8908,E:200,yield:148,tensile:462,poisson:0.31},
+  {name:'Tungsten',density:19300,E:411,yield:550,tensile:980,poisson:0.28},
+  {name:'Polypropylene (PP)',density:910,E:1.5,yield:30,tensile:35,poisson:0.42},
+  {name:'ABS',density:1050,E:2.3,yield:40,tensile:43,poisson:0.40},
+  {name:'Nylon 66',density:1140,E:2.7,yield:55,tensile:80,poisson:0.39},
+];
+const MAT_THERM = [
+  {name:'Copper (pure)',k:401,cp:385,alpha:17.0,melt:1085},
+  {name:'Silver (pure)',k:429,cp:235,alpha:18.9,melt:962},
+  {name:'Gold (pure)',k:317,cp:129,alpha:14.2,melt:1064},
+  {name:'Aluminium (pure)',k:237,cp:900,alpha:23.1,melt:660},
+  {name:'Aluminium 6061',k:167,cp:896,alpha:23.6,melt:652},
+  {name:'Mild Steel',k:50,cp:490,alpha:11.7,melt:1425},
+  {name:'Stainless 304',k:16.2,cp:500,alpha:17.2,melt:1400},
+  {name:'Stainless 316',k:13.4,cp:500,alpha:15.9,melt:1380},
+  {name:'Cast Iron',k:52,cp:490,alpha:10.8,melt:1200},
+  {name:'Brass',k:120,cp:380,alpha:18.7,melt:900},
+  {name:'Titanium (pure)',k:21.9,cp:520,alpha:8.6,melt:1668},
+  {name:'Nickel (pure)',k:90.7,cp:444,alpha:13.4,melt:1455},
+  {name:'Tungsten',k:173,cp:132,alpha:4.5,melt:3422},
+  {name:'Polypropylene',k:0.12,cp:1900,alpha:100,melt:165},
+  {name:'ABS',k:0.17,cp:1400,alpha:70,melt:105},
+];
+function matRenderAll() {
+  // Electrical
+  const eTbody = document.getElementById('mat-elec-tbody');
+  if (eTbody) eTbody.innerHTML = MAT_ELEC.map((m,i)=>{
+    const sig = m.rho ? (1/m.rho).toExponential(3) : '—';
+    return `<tr class="mat-row" style="${i%2===0?'background:var(--surface)':'background:#fafaf8'}">
+      <td class="mat-td"><div class="mat-mat-name">${e(m.name)}</div>${m.sub?`<div class="mat-sub">${e(m.sub)}</div>`:''}</td>
+      <td class="mat-td mat-td-num"><span style="font-family:'DM Mono',monospace;font-size:11px">${m.rho ? m.rho.toExponential(2) : '—'}</span></td>
+      <td class="mat-td mat-td-num"><span style="font-family:'DM Mono',monospace;font-size:11px">${sig}</span></td>
+      <td class="mat-td mat-td-num"><span style="font-family:'DM Mono',monospace;font-size:11px">${m.alpha!==null ? m.alpha : 'semi'}</span></td>
+      <td class="mat-td" style="font-size:11px;color:var(--text-muted)">${e(m.note||'')}</td>
+    </tr>`;
+  }).join('');
+  // Mechanical
+  const mTbody = document.getElementById('mat-mech-tbody');
+  if (mTbody) mTbody.innerHTML = MAT_MECH.map((m,i)=>`<tr class="mat-row" style="${i%2===0?'background:var(--surface)':'background:#fafaf8'}">
+    <td class="mat-td"><div class="mat-mat-name">${e(m.name)}</div></td>
+    <td class="mat-td mat-td-num">${m.density.toLocaleString()}</td>
+    <td class="mat-td mat-td-num">${m.E}</td>
+    <td class="mat-td mat-td-num">${m.yield!==null?m.yield:'—'}</td>
+    <td class="mat-td mat-td-num">${m.tensile}</td>
+    <td class="mat-td mat-td-num">${m.poisson}</td>
+  </tr>`).join('');
+  // Thermal
+  const tTbody = document.getElementById('mat-therm-tbody');
+  if (tTbody) tTbody.innerHTML = MAT_THERM.map((m,i)=>`<tr class="mat-row" style="${i%2===0?'background:var(--surface)':'background:#fafaf8'}">
+    <td class="mat-td"><div class="mat-mat-name">${e(m.name)}</div></td>
+    <td class="mat-td mat-td-num">${m.k}</td>
+    <td class="mat-td mat-td-num">${m.cp}</td>
+    <td class="mat-td mat-td-num">${m.alpha}</td>
+    <td class="mat-td mat-td-num">${m.melt}</td>
+  </tr>`).join('');
+}
+function matSetTab(ev, tab) {
+  ['elec','mech','therm'].forEach(t => {
+    document.getElementById('mat-panel-'+t).style.display = t===tab?'':'none';
+  });
+  document.querySelectorAll('.tool-card:last-child .uc-tab').forEach(t=>t.classList.remove('active'));
+  if(ev&&ev.target)ev.target.classList.add('active');
+}
+function rcalcBuildMaterials() {
+  const sel = document.getElementById('rcalc-mat');
+  if (!sel) return;
+  sel.innerHTML = MAT_ELEC.filter(m=>m.rho&&m.alpha!==null&&m.alpha!=='semi').map(m=>`<option value="${m.rho}|${m.alpha}">${m.name}</option>`).join('');
+  rcalcCompute();
+}
+function rcalcCompute() {
+  const sel = document.getElementById('rcalc-mat');
+  const L = parseFloat(document.getElementById('rcalc-L').value);
+  const A = parseFloat(document.getElementById('rcalc-A').value); // mm²
+  const T = parseFloat(document.getElementById('rcalc-T').value);
+  const el = document.getElementById('rcalc-result');
+  if (!sel||isNaN(L)||isNaN(A)||A<=0||isNaN(T)){el.style.display='none';return;}
+  const [rho0,alpha]=sel.value.split('|').map(Number);
+  const rhoT = rho0*(1+alpha*(T-20));
+  const Amm2 = A*1e-6; // convert mm² to m²
+  const R = rhoT*L/Amm2;
+  const matName = sel.options[sel.selectedIndex].text;
+  el.style.display='';
+  el.innerHTML=`<strong>${matName}</strong> · L=${L}m · A=${A}mm² · T=${T}°C<br/>
+    ρ(T) = ${rhoT.toExponential(4)} Ω·m<br/>
+    <span style="font-size:16px;color:var(--accent2)">R = ${R < 1 ? R.toExponential(4) : +R.toFixed(6)} Ω</span>
+    <span style="font-size:11px;color:var(--text-muted);margin-left:8px">(${(R*1000).toFixed(4)} mΩ)</span>`;
+}
+
+
 // ══════════ INIT ══════════
 loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();
 </script>
-</body>
-</html>
