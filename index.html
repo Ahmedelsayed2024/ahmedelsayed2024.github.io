@@ -541,6 +541,7 @@
     <button class="btn btn-secondary btn-sm" onclick="showLastWeekModified()">📝 Last Week Modified</button>
     <button class="btn btn-secondary btn-sm" onclick="syncToGitHub()">☁️ Sync to GitHub</button>
     <button class="btn btn-secondary btn-sm" onclick="loadFromGitHub()">📥 Load from GitHub</button>
+    <button class="btn btn-secondary btn-sm" onclick="importFromFile()">📁 Import File</button>
     <button class="btn btn-ghost btn-sm" onclick="openGitHubSettings()">⚙️</button>
     <button class="btn btn-primary" onclick="openModal()">+ New Task</button>
     <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Clear filters</button>
@@ -5229,19 +5230,29 @@ async function loadFromGitHub() {
     };
     localStorage.setItem('task-manager-pre-import-backup', JSON.stringify(backup));
     
-    // Import data
+    // Import data with compatibility for different formats
     if (importData.tasks) tasks = importData.tasks;
     if (importData.projects) projects = importData.projects;
     if (importData.sampleLots) sampleLots = importData.sampleLots;
-    if (importData.vfItems) vfItems = importData.vfItems;
+    if (importData.vfItems) vfItems = importData.vfItems || [];
     if (importData.whWorkdays) whWorkdays = importData.whWorkdays;
-    if (importData.customColumns) customColumns = importData.customColumns;
+    if (importData.workingHours) whWorkdays = importData.workingHours; // Old format compatibility
     
-    // Update next IDs
-    nextId = Math.max(0, ...tasks.map(t=>t.id)) + 1;
-    nextProjectId = Math.max(0, ...projects.map(p=>p.id)) + 1;
-    nextLotId = Math.max(0, ...sampleLots.map(l=>l.id)) + 1;
-    vfNextId = Math.max(0, ...vfItems.map(i=>i.id)) + 1;
+    // Handle custom columns - support both customColumns and customCols
+    if (importData.customColumns) customColumns = importData.customColumns;
+    else if (importData.customCols) customColumns = importData.customCols;
+    else customColumns = [];
+    
+    // Update next IDs safely
+    nextId = tasks.length > 0 ? Math.max(...tasks.map(t=>t.id)) + 1 : 1;
+    nextProjectId = projects.length > 0 ? Math.max(...projects.map(p=>p.id)) + 1 : 1;
+    nextLotId = sampleLots.length > 0 ? Math.max(...sampleLots.map(l=>l.id)) + 1 : 1;
+    vfNextId = vfItems.length > 0 ? Math.max(...vfItems.map(i=>i.id)) + 1 : 1;
+    
+    // Handle nextLotId from imported data
+    if (importData.nextLotId && importData.nextLotId > nextLotId) {
+      nextLotId = importData.nextLotId;
+    }
     
     // Save to localStorage
     saveAll();
@@ -5267,6 +5278,88 @@ function enableAutoSync() {
       syncToGitHub().catch(err => console.log('Auto-sync skipped:', err));
     }
   }, 5 * 60 * 1000); // 5 minutes
+}
+
+// Manual import from JSON file (for uploaded files)
+function importFromFile() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const importData = JSON.parse(event.target.result);
+        
+        // Confirm with user
+        const confirmMsg = `Import data from ${importData.exportDate ? new Date(importData.exportDate).toLocaleString() : 'file'}?\n\n` +
+          `This will REPLACE all current data:\n` +
+          `- ${importData.tasks?.length || 0} tasks\n` +
+          `- ${importData.projects?.length || 0} projects\n` +
+          `- ${importData.sampleLots?.length || 0} sample lots\n` +
+          `- ${importData.vfItems?.length || 0} verification items\n\n` +
+          `⚠️ Current data will be backed up but REPLACED.`;
+        
+        if (!confirm(confirmMsg)) return;
+        
+        // Backup current data
+        const backup = {
+          tasks: tasks || [],
+          projects: projects || [],
+          sampleLots: sampleLots || [],
+          vfItems: vfItems || [],
+          whWorkdays: whWorkdays || [],
+          customColumns: customColumns || [],
+          backupDate: new Date().toISOString()
+        };
+        localStorage.setItem('task-manager-pre-import-backup', JSON.stringify(backup));
+        
+        // Import data with compatibility for different formats
+        if (importData.tasks) tasks = importData.tasks;
+        if (importData.projects) projects = importData.projects;
+        if (importData.sampleLots) sampleLots = importData.sampleLots;
+        if (importData.vfItems) vfItems = importData.vfItems || [];
+        if (importData.whWorkdays) whWorkdays = importData.whWorkdays;
+        if (importData.workingHours) whWorkdays = importData.workingHours; // Old format
+        
+        // Handle custom columns - support both formats
+        if (importData.customColumns) customColumns = importData.customColumns;
+        else if (importData.customCols) customColumns = importData.customCols;
+        else customColumns = [];
+        
+        // Update next IDs safely
+        nextId = tasks.length > 0 ? Math.max(...tasks.map(t=>t.id)) + 1 : 1;
+        nextProjectId = projects.length > 0 ? Math.max(...projects.map(p=>p.id)) + 1 : 1;
+        nextLotId = sampleLots.length > 0 ? Math.max(...sampleLots.map(l=>l.id)) + 1 : 1;
+        vfNextId = (vfItems && vfItems.length > 0) ? Math.max(...vfItems.map(i=>i.id)) + 1 : 1;
+        
+        // Handle nextLotId from imported data
+        if (importData.nextLotId && importData.nextLotId > nextLotId) {
+          nextLotId = importData.nextLotId;
+        }
+        
+        // Save to localStorage
+        saveAll();
+        slSaveData();
+        vfSaveData();
+        if (typeof whSaveData === 'function') whSaveData();
+        
+        alert('✅ Import successful!\n\nAll data has been imported. Your previous data was backed up.');
+        location.reload();
+        
+      } catch (error) {
+        alert('❌ Import failed: ' + error.message + '\n\nPlease check that the JSON file is valid.');
+        console.error('Import error:', error);
+      }
+    };
+    reader.readAsText(file);
+  };
+  
+  input.click();
 }
 
 // ══════════ INIT ══════════
