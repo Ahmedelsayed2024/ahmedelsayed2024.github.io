@@ -649,7 +649,22 @@
 <div id="workinghours-tab" class="tab-content">
   <div class="wh-wrap">
     <h2 style="font-size:20px;font-weight:600;margin-bottom:4px">⏱ Working Hours</h2>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Log hours per task by day. Only <strong>In Progress</strong> tasks are shown.</p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Log hours per task by day. Only <strong>In Progress</strong> tasks are shown.</p>
+
+    <!-- ⚙️ Working Days Selector -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:700;color:var(--text-muted);white-space:nowrap">⚙️ Working Days:</span>
+      <div style="display:flex;gap:5px;flex-wrap:wrap" id="wh-weekday-checks">
+        <label class="dc-day-pill" id="wh-day-0"><input type="checkbox" value="0" onchange="whSaveWorkdays()"> Sun</label>
+        <label class="dc-day-pill" id="wh-day-1"><input type="checkbox" value="1" onchange="whSaveWorkdays()"> Mon</label>
+        <label class="dc-day-pill" id="wh-day-2"><input type="checkbox" value="2" onchange="whSaveWorkdays()"> Tue</label>
+        <label class="dc-day-pill" id="wh-day-3"><input type="checkbox" value="3" onchange="whSaveWorkdays()"> Wed</label>
+        <label class="dc-day-pill" id="wh-day-4"><input type="checkbox" value="4" onchange="whSaveWorkdays()"> Thu</label>
+        <label class="dc-day-pill" id="wh-day-5"><input type="checkbox" value="5" onchange="whSaveWorkdays()"> Fri</label>
+        <label class="dc-day-pill" id="wh-day-6"><input type="checkbox" value="6" onchange="whSaveWorkdays()"> Sat</label>
+      </div>
+      <span style="font-size:11px;color:var(--text-muted)" id="wh-workdays-summary"></span>
+    </div>
 
     <!-- Inner tabs -->
     <div class="wh-inner-tabs">
@@ -2385,7 +2400,7 @@ function switchMainTab(tab){
   if(tab==='projects')renderProjectsTable();
   if(tab==='tasks'){renderTable();updateFilterDropdowns();}
   if(tab==='statistics')renderStatistics();
-  if(tab==='workinghours'){whLoadData();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
+  if(tab==='workinghours'){whLoadData();whLoadWorkdays();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
   if(tab==='samples'){slLoadData();slRender();}
   if(tab==='tools'){toolsInit();}
 }
@@ -2740,9 +2755,11 @@ function renderStatistics(){
 
 // ══════════ WORKING HOURS ══════════
 const WHK = 'team_tasks_working_hours'; // localStorage key
+const WH_WD_KEY = 'team_tasks_wh_workdays';
 let whHours = {}; // { 'YYYY-Www': { taskId: { 'YYYY-MM-DD': hours } } }
 let whSubmitted = {}; // { 'YYYY-Www': true/false }
 let whCurrentWeekOffset = 0; // 0 = current week, -1 = last week, etc.
+let whWorkdays = [0,1,2,3,4]; // default Sun–Thu (Egyptian work week)
 let whSelectedWeek = null; // for submit panel
 
 function whLoadData() {
@@ -2752,6 +2769,37 @@ function whLoadData() {
 function whSaveData() {
   localStorage.setItem(WHK + '_hours', JSON.stringify(whHours));
   localStorage.setItem(WHK + '_submitted', JSON.stringify(whSubmitted));
+}
+
+function whLoadWorkdays() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(WH_WD_KEY));
+    if (Array.isArray(saved) && saved.length) whWorkdays = saved;
+  } catch {}
+  // Apply checkboxes
+  for (let i = 0; i < 7; i++) {
+    const cb = document.querySelector(`#wh-day-${i} input`);
+    if (cb) cb.checked = whWorkdays.includes(i);
+  }
+  whUpdateWorkdaysSummary();
+}
+function whSaveWorkdays() {
+  whWorkdays = [];
+  for (let i = 0; i < 7; i++) {
+    const cb = document.querySelector(`#wh-day-${i} input`);
+    if (cb && cb.checked) whWorkdays.push(i);
+  }
+  localStorage.setItem(WH_WD_KEY, JSON.stringify(whWorkdays));
+  whUpdateWorkdaysSummary();
+  renderWHEntryPanel();
+}
+function whUpdateWorkdaysSummary() {
+  const names = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const el = document.getElementById('wh-workdays-summary');
+  if (!el) return;
+  el.textContent = whWorkdays.length
+    ? `✅ ${whWorkdays.length} day(s): ${whWorkdays.map(d => names[d]).join(', ')}`
+    : '⚠️ No days selected';
 }
 
 // Get Monday of week offset from today
@@ -2806,31 +2854,36 @@ function switchWHTab(tab) {
 }
 
 function renderWHEntryPanel() {
-  const days = whGetWeekDates(whCurrentWeekOffset);
-  const weekKey = whGetWeekKey(days);
+  const allDays = whGetWeekDates(whCurrentWeekOffset);
+  // Show ALL 7 days but visually mark non-working ones
+  const weekKey = whGetWeekKey(allDays);
   const today = whFmtISO(new Date());
   const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-  // Label
+  // Label - use first/last WORKING day for range display if possible
+  const workDays = allDays.filter(d => whWorkdays.includes(d.getDay()));
+  const labelFirst = workDays.length ? workDays[0] : allDays[0];
+  const labelLast = workDays.length ? workDays[workDays.length-1] : allDays[6];
   document.getElementById('wh-week-label').textContent =
-    `Week ${weekKey.split('-W')[1]} · ${whFmtDay(days[0])} – ${whFmtDay(days[6])} ${days[6].getFullYear()}`;
+    `Week ${weekKey.split('-W')[1]} · ${whFmtDay(labelFirst)} – ${whFmtDay(labelLast)} ${labelLast.getFullYear()}`;
   document.getElementById('wh-week-sub').textContent =
     whCurrentWeekOffset === 0 ? 'Current Week' : whCurrentWeekOffset === -1 ? 'Last Week' : whCurrentWeekOffset < 0 ? `${Math.abs(whCurrentWeekOffset)} weeks ago` : `${whCurrentWeekOffset} week(s) ahead`;
 
-  // Build day headers
+  // Build day headers — show all 7, dim non-working
   const headRow = document.getElementById('wh-head-row');
-  // Remove old day headers (keep first 3 fixed cols + last total col)
   headRow.querySelectorAll('.wh-dh').forEach(th => th.remove());
   const totalTh = headRow.querySelector('.total-col');
-  days.forEach(d => {
+  allDays.forEach(d => {
     const iso = whFmtISO(d);
-    const isWknd = d.getDay() === 0 || d.getDay() === 6;
+    const isWorkDay = whWorkdays.includes(d.getDay());
     const isTdy = iso === today;
     const th = document.createElement('th');
-    th.className = 'day-col wh-dh' + (isWknd ? ' wh-weekend' : '');
+    th.className = 'day-col wh-dh' + (!isWorkDay ? ' wh-weekend' : '');
+    if (!isWorkDay) th.style.cssText = 'opacity:0.35;background:#f5f5f0;';
     th.innerHTML = `<div class="wh-day-header ${isTdy ? 'wh-day-today' : ''}">
       <span class="wh-day-name">${dayNames[d.getDay()]}</span>
       <span class="wh-day-date">${d.getDate()}</span>
+      ${!isWorkDay ? '<span style="font-size:9px;display:block;color:#999;margin-top:1px">off</span>' : ''}
     </div>`;
     headRow.insertBefore(th, totalTh);
   });
@@ -2854,12 +2907,16 @@ function renderWHEntryPanel() {
     const project = projects.find(p => p.name === t.project);
     const exp3 = t.task3DEXP || (project ? project.project3DEXP : '') || '—';
 
-    const dayCells = days.map(d => {
+    const dayCells = allDays.map(d => {
       const iso = whFmtISO(d);
-      const isWknd = d.getDay() === 0 || d.getDay() === 6;
+      const isWorkDay = whWorkdays.includes(d.getDay());
       const val = taskData[iso] || '';
       if (val) rowTotal += parseFloat(val) || 0;
-      return `<td class="day-td${isWknd ? ' wh-weekend' : ''}">
+      if (!isWorkDay) {
+        // Off day — read-only dim cell, still stores if user typed before
+        return `<td class="day-td wh-weekend" style="opacity:0.3;background:#f5f5f0;pointer-events:none;text-align:center;font-size:11px;color:#aaa">—</td>`;
+      }
+      return `<td class="day-td">
         <input class="wh-hours-input" type="number" min="0" max="24" step="0.5"
           value="${val}" placeholder="—"
           data-task="${t.id}" data-date="${iso}"
@@ -2882,15 +2939,18 @@ function renderWHEntryPanel() {
   }).join('');
 
   // Total row
-  const totalDayCells = days.map(d => {
+  const totalDayCells = allDays.map(d => {
     const iso = whFmtISO(d);
-    const isWknd = d.getDay() === 0 || d.getDay() === 6;
+    const isWorkDay = whWorkdays.includes(d.getDay());
+    if (!isWorkDay) {
+      return `<td class="day-td wh-weekend" style="opacity:0.3;background:#f5f5f0"></td>`;
+    }
     let daySum = 0;
     inProgressTasks.forEach(t => {
       const v = (weekData[t.id] || {})[iso];
       if (v) daySum += parseFloat(v) || 0;
     });
-    return `<td class="day-td${isWknd ? ' wh-weekend' : ''}" style="font-family:'DM Mono',monospace;font-weight:700;color:var(--text);font-size:13px">${daySum ? daySum + 'h' : '—'}</td>`;
+    return `<td class="day-td" style="font-family:'DM Mono',monospace;font-weight:700;color:var(--text);font-size:13px">${daySum ? daySum + 'h' : '—'}</td>`;
   }).join('');
 
   tbody.innerHTML += `<tr class="wh-total-row">
@@ -4264,4 +4324,6 @@ function rcalcCompute() {
 
 // ══════════ INIT ══════════
 loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();
+// Defer workday init until DOM is ready for checkbox queries
+setTimeout(()=>{ whLoadWorkdays(); }, 0);
 </script>
