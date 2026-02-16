@@ -539,6 +539,9 @@
   </div>
   <div class="toolbar-right">
     <button class="btn btn-secondary btn-sm" onclick="showLastWeekModified()">📝 Last Week Modified</button>
+    <button class="btn btn-secondary btn-sm" onclick="syncToGitHub()">☁️ Sync to GitHub</button>
+    <button class="btn btn-secondary btn-sm" onclick="loadFromGitHub()">📥 Load from GitHub</button>
+    <button class="btn btn-ghost btn-sm" onclick="openGitHubSettings()">⚙️</button>
     <button class="btn btn-primary" onclick="openModal()">+ New Task</button>
     <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Clear filters</button>
   </div>
@@ -1337,6 +1340,11 @@
           <label>Lot Number *</label>
           <input type="text" id="sl-f-lotNumber" placeholder="e.g. LOT-001" />
         </div>
+        <div class="form-group full" style="grid-column:1/-1">
+          <label>🏷️ Label Prefix (for Export)</label>
+          <input type="text" id="sl-f-labelPrefix" placeholder="e.g. Motor-X1-Sample or leave blank for auto" style="width:100%;font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none" />
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px">This will generate labels: Prefix-001, Prefix-002, ... Prefix-[Qty] with production date</div>
+        </div>
         <div class="form-group">
           <label>👥 Requesting Team</label>
           <select id="sl-f-requesting-team">
@@ -1404,6 +1412,56 @@
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('sl-modal')">Cancel</button>
       <button class="btn btn-primary" onclick="slSaveLot()">Save Lot</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GITHUB SETTINGS MODAL ══ -->
+<div class="modal-overlay" id="github-settings-modal" onclick="if(event.target.id==='github-settings-modal')closeModal('github-settings-modal')">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h2>⚙️ GitHub Sync Settings</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('github-settings-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px;color:#1e40af">
+        <strong>📌 How to set up GitHub sync:</strong><br>
+        1. Create a Personal Access Token at <a href="https://github.com/settings/tokens" target="_blank" style="color:#2563eb">github.com/settings/tokens</a><br>
+        2. Select scope: <code>repo</code> (full control of private repositories)<br>
+        3. Copy your token and paste it below<br>
+        4. Enter your GitHub username and repository name
+      </div>
+      
+      <div class="form-group" style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:6px;font-weight:600">GitHub Username</label>
+        <input type="text" id="gh-username" placeholder="e.g. yourusername" style="width:100%;font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none" />
+      </div>
+      
+      <div class="form-group" style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:6px;font-weight:600">Repository Name</label>
+        <input type="text" id="gh-repo" placeholder="e.g. task-manager-data" style="width:100%;font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none" />
+      </div>
+      
+      <div class="form-group" style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:6px;font-weight:600">Personal Access Token</label>
+        <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="width:100%;font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none" />
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Your token is stored locally in your browser only</div>
+      </div>
+      
+      <div class="form-group" style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:6px;font-weight:600">Data File Path (optional)</label>
+        <input type="text" id="gh-filepath" placeholder="data/task-manager-backup.json" value="task-manager-backup.json" style="width:100%;font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none" />
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Path where data will be saved in your repo</div>
+      </div>
+      
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn btn-secondary btn-sm" onclick="testGitHubConnection()">🔍 Test Connection</button>
+        <button class="btn btn-secondary btn-sm" onclick="clearGitHubSettings()">🗑 Clear Settings</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('github-settings-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveGitHubSettings()">💾 Save Settings</button>
     </div>
   </div>
 </div>
@@ -3986,6 +4044,7 @@ function slOpenModal(id=null) {
   document.getElementById('sl-f-project').value = lot?.project||'';
   document.getElementById('sl-f-phase').value = lot?.phase||'';
   document.getElementById('sl-f-lotNumber').value = lot?.lotNumber||'';
+  document.getElementById('sl-f-labelPrefix').value = lot?.labelPrefix||'';
   document.getElementById('sl-f-requesting-team').value = lot?.requestingTeam||'';
   document.getElementById('sl-f-pic').value = lot?.pic||'';
   document.getElementById('sl-f-qty').value = lot?.qty||'';
@@ -4074,6 +4133,7 @@ function slSaveLot() {
   const lot = {
     id: editingLotId || nextLotId++,
     project, phase, lotNumber,
+    labelPrefix: document.getElementById('sl-f-labelPrefix').value.trim(),
     requestingTeam: document.getElementById('sl-f-requesting-team').value,
     pic: document.getElementById('sl-f-pic').value.trim(),
     qty: document.getElementById('sl-f-qty').value,
@@ -4128,58 +4188,87 @@ function slExport() {
   const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const fmt = s => { if(!s)return''; const[y,m,d]=s.split('-'); return`${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`; };
 
-  // Summary sheet
-  const rows = [['Sample Name','Lot Number','Project','Phase','Requesting Team','PIC','Qty','Production Date','Delivery Date','Price (EGP)','Purpose','Notes','Status','Teams (Requested)','Teams (Received)','Qty Delivered (per Team)','Received Dates']];
-  sampleLots.forEach((lot, index) => {
+  // ═══ SAMPLE LABELS SHEET (Individual samples with barcodes) ═══
+  const labelRows = [['Sample Label', 'Barcode Text', 'Production Date', 'Lot Number', 'Project', 'Phase']];
+  
+  sampleLots.forEach(lot => {
+    const qty = parseInt(lot.qty) || 1;
+    const prefix = lot.labelPrefix || `${lot.project || 'SAMPLE'}-${lot.phase || 'XX'}`;
+    const prodDate = fmt(lot.dateProd) || '';
+    
+    // Create individual label for each sample (1 to qty)
+    for (let i = 1; i <= qty; i++) {
+      const sampleNum = String(i).padStart(3, '0');
+      const label = `${prefix}-${sampleNum}`;
+      const barcodeText = `${prefix}${sampleNum}${lot.dateProd ? lot.dateProd.replace(/-/g, '') : ''}`;
+      
+      labelRows.push([
+        label,
+        barcodeText,
+        prodDate,
+        lot.lotNumber || '',
+        lot.project || '',
+        lot.phase || ''
+      ]);
+    }
+  });
+  
+  const wsLabels = XLSX.utils.aoa_to_sheet(labelRows);
+  wsLabels['!cols'] = [{wch:30},{wch:25},{wch:15},{wch:14},{wch:20},{wch:8}];
+  
+  // Style header
+  for(let c=0; c<6; c++){
+    const addr=XLSX.utils.encode_cell({r:0,c});
+    if(wsLabels[addr]) wsLabels[addr].s={
+      font:{bold:true,color:{rgb:'FFFFFF'},sz:12},
+      fill:{fgColor:{rgb:'2563EB'}},
+      alignment:{horizontal:'center',vertical:'center'}
+    };
+  }
+  wsLabels['!rows']=[{hpt:22}];
+  XLSX.utils.book_append_sheet(wb, wsLabels, 'Sample Labels');
+
+  // ═══ LOT SUMMARY SHEET ═══
+  const summaryRows = [['Lot Number','Project','Phase','Label Prefix','Requesting Team','PIC','Qty','Production Date','Delivery Date','Price (EGP)','Purpose','Notes','Status','Teams (Requested)','Teams (Received)']];
+  sampleLots.forEach((lot) => {
     const teams = lot.teams||[];
     const recvTeams = teams.filter(t=>t.received).map(t=>t.name).join(', ');
-    const qtyDelivered = teams.filter(t=>t.received&&t.qtyDelivered).map(t=>`${t.name}: ${t.qtyDelivered}`).join('; ');
-    const recvDates = teams.filter(t=>t.received&&t.receiveDate).map(t=>`${t.name}: ${fmt(t.receiveDate)}`).join('; ');
     
-    // Generate automatic sample name: project - phase - production date - sample number
-    const sampleNumber = String(index + 1).padStart(3, '0');
-    const prodDateFormatted = lot.dateProd ? lot.dateProd.replace(/-/g, '') : 'NODATE';
-    const sampleName = `${lot.project || 'NOPROJECT'} - ${lot.phase || 'NOPHASE'} - ${prodDateFormatted} - ${sampleNumber}`;
-    
-    rows.push([
-      sampleName,
-      lot.lotNumber||'', lot.project||'', lot.phase||'',
-      lot.requestingTeam||'', lot.pic||'',
+    summaryRows.push([
+      lot.lotNumber||'',
+      lot.project||'',
+      lot.phase||'',
+      lot.labelPrefix||'',
+      lot.requestingTeam||'',
+      lot.pic||'',
       lot.qty?parseInt(lot.qty):'',
-      fmt(lot.dateProd)||'', fmt(lot.dateDelivery)||'',
+      fmt(lot.dateProd)||'',
+      fmt(lot.dateDelivery)||'',
       lot.price?parseFloat(lot.price):'',
-      lot.purpose||'', lot.notes||'',
+      lot.purpose||'',
+      lot.notes||'',
       slGetStatus(lot).charAt(0).toUpperCase()+slGetStatus(lot).slice(1),
       teams.map(t=>t.name).join(', '),
-      recvTeams, qtyDelivered, recvDates
+      recvTeams
     ]);
   });
 
-  const ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:35},{wch:14},{wch:28},{wch:8},{wch:18},{wch:16},{wch:7},{wch:15},{wch:15},{wch:14},{wch:16},{wch:30},{wch:12},{wch:25},{wch:25},{wch:28},{wch:35}];
-  XLSX.utils.book_append_sheet(wb, ws, 'Sample Lots');
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+  wsSummary['!cols'] = [{wch:14},{wch:20},{wch:8},{wch:20},{wch:18},{wch:16},{wch:7},{wch:15},{wch:15},{wch:14},{wch:16},{wch:30},{wch:12},{wch:25},{wch:25}];
+  
+  // Style header
+  for(let c=0; c<summaryRows[0].length; c++){
+    const addr=XLSX.utils.encode_cell({r:0,c});
+    if(wsSummary[addr]) wsSummary[addr].s={
+      font:{bold:true,color:{rgb:'FFFFFF'},sz:12},
+      fill:{fgColor:{rgb:'059669'}},
+      alignment:{horizontal:'center',vertical:'center'}
+    };
+  }
+  wsSummary['!rows']=[{hpt:22}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Lot Summary');
 
-  // Per-project sheet
-  const projNames = [...new Set(sampleLots.map(l=>l.project).filter(Boolean))];
-  projNames.forEach(pName => {
-    const pLots = sampleLots.filter(l=>l.project===pName);
-    const pRows = [['Lot #','Phase','Qty','Prod. Date','Delivery','Price','Purpose','Status','Teams','Qty Delivered']];
-    pLots.forEach(lot => {
-      pRows.push([
-        lot.lotNumber||'', lot.phase||'', lot.qty?parseInt(lot.qty):'',
-        fmt(lot.dateProd)||'', fmt(lot.dateDelivery)||'',
-        lot.price?parseFloat(lot.price):'', lot.purpose||'',
-        slGetStatus(lot), (lot.teams||[]).map(t=>`${t.name}${t.received?' ✓':''}`).join(', '),
-        (lot.teams||[]).filter(t=>t.qtyDelivered).map(t=>`${t.name}: ${t.qtyDelivered}`).join('; ')
-      ]);
-    });
-    const pws = XLSX.utils.aoa_to_sheet(pRows);
-    pws['!cols'] = [{wch:14},{wch:8},{wch:7},{wch:14},{wch:14},{wch:12},{wch:16},{wch:12},{wch:35},{wch:28}];
-    const sheetName = pName.slice(0,31).replace(/[\\/?*[\]]/g,'');
-    XLSX.utils.book_append_sheet(wb, pws, sheetName);
-  });
-
-  XLSX.writeFile(wb, `samples-followup-${new Date().toISOString().slice(0,10)}.xlsx`);
+  XLSX.writeFile(wb, `sample-labels-${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
 // ══════════ UTILS ══════════
@@ -4921,7 +5010,267 @@ function vfExport() {
   XLSX.writeFile(wb,`verification-${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
+// ══════════ GITHUB API INTEGRATION ══════════
+let githubConfig = {
+  username: '',
+  repo: '',
+  token: '',
+  filepath: 'task-manager-backup.json'
+};
+
+function loadGitHubConfig() {
+  const saved = localStorage.getItem('github-config');
+  if (saved) {
+    githubConfig = JSON.parse(saved);
+  }
+}
+
+function saveGitHubSettings() {
+  githubConfig.username = document.getElementById('gh-username').value.trim();
+  githubConfig.repo = document.getElementById('gh-repo').value.trim();
+  githubConfig.token = document.getElementById('gh-token').value.trim();
+  githubConfig.filepath = document.getElementById('gh-filepath').value.trim() || 'task-manager-backup.json';
+  
+  if (!githubConfig.username || !githubConfig.repo || !githubConfig.token) {
+    alert('⚠️ Please fill in all required fields (Username, Repository, and Token)');
+    return;
+  }
+  
+  localStorage.setItem('github-config', JSON.stringify(githubConfig));
+  closeModal('github-settings-modal');
+  alert('✅ GitHub settings saved successfully!');
+}
+
+function openGitHubSettings() {
+  loadGitHubConfig();
+  document.getElementById('gh-username').value = githubConfig.username || '';
+  document.getElementById('gh-repo').value = githubConfig.repo || '';
+  document.getElementById('gh-token').value = githubConfig.token || '';
+  document.getElementById('gh-filepath').value = githubConfig.filepath || 'task-manager-backup.json';
+  document.getElementById('github-settings-modal').classList.add('open');
+}
+
+function clearGitHubSettings() {
+  if (!confirm('Clear all GitHub settings?')) return;
+  localStorage.removeItem('github-config');
+  githubConfig = { username: '', repo: '', token: '', filepath: 'task-manager-backup.json' };
+  document.getElementById('gh-username').value = '';
+  document.getElementById('gh-repo').value = '';
+  document.getElementById('gh-token').value = '';
+  document.getElementById('gh-filepath').value = 'task-manager-backup.json';
+  alert('✅ GitHub settings cleared');
+}
+
+async function testGitHubConnection() {
+  loadGitHubConfig();
+  
+  const username = document.getElementById('gh-username').value.trim();
+  const repo = document.getElementById('gh-repo').value.trim();
+  const token = document.getElementById('gh-token').value.trim();
+  
+  if (!username || !repo || !token) {
+    alert('⚠️ Please fill in Username, Repository, and Token first');
+    return;
+  }
+  
+  try {
+    const response = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    
+    if (response.ok) {
+      const repoData = await response.json();
+      alert(`✅ Connection successful!\n\nRepository: ${repoData.full_name}\nVisibility: ${repoData.private ? 'Private' : 'Public'}`);
+    } else if (response.status === 404) {
+      alert('❌ Repository not found. Please check:\n- Username is correct\n- Repository name is correct\n- Repository exists');
+    } else if (response.status === 401) {
+      alert('❌ Authentication failed. Please check:\n- Token is valid\n- Token has "repo" scope permissions');
+    } else {
+      alert(`❌ Connection failed: ${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    alert('❌ Connection error: ' + error.message);
+  }
+}
+
+async function syncToGitHub() {
+  loadGitHubConfig();
+  
+  if (!githubConfig.username || !githubConfig.repo || !githubConfig.token) {
+    if (confirm('GitHub not configured. Would you like to set it up now?')) {
+      openGitHubSettings();
+    }
+    return;
+  }
+  
+  try {
+    // Collect all data
+    const exportData = {
+      version: '1.0',
+      exportDate: new Date().toISOString(),
+      tasks: tasks,
+      projects: projects,
+      sampleLots: sampleLots,
+      vfItems: vfItems,
+      whWorkdays: whWorkdays || [],
+      customColumns: customColumns || []
+    };
+    
+    const jsonContent = JSON.stringify(exportData, null, 2);
+    const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
+    
+    // Check if file exists to get SHA
+    let sha = null;
+    const checkResponse = await fetch(
+      `https://api.github.com/repos/${githubConfig.username}/${githubConfig.repo}/contents/${githubConfig.filepath}`,
+      {
+        headers: {
+          'Authorization': `token ${githubConfig.token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }
+    );
+    
+    if (checkResponse.ok) {
+      const fileData = await checkResponse.json();
+      sha = fileData.sha;
+    }
+    
+    // Create or update file
+    const commitMessage = `Update task manager data - ${new Date().toLocaleString()}`;
+    const response = await fetch(
+      `https://api.github.com/repos/${githubConfig.username}/${githubConfig.repo}/contents/${githubConfig.filepath}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${githubConfig.token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: commitMessage,
+          content: encodedContent,
+          sha: sha
+        })
+      }
+    );
+    
+    if (response.ok) {
+      const result = await response.json();
+      alert(`✅ Data synced to GitHub successfully!\n\nCommit: ${result.commit.sha.substring(0, 7)}\nFile: ${githubConfig.filepath}`);
+    } else {
+      const error = await response.json();
+      alert(`❌ Sync failed: ${error.message || response.statusText}`);
+    }
+  } catch (error) {
+    alert('❌ Sync error: ' + error.message);
+    console.error('GitHub sync error:', error);
+  }
+}
+
+async function loadFromGitHub() {
+  loadGitHubConfig();
+  
+  if (!githubConfig.username || !githubConfig.repo || !githubConfig.token) {
+    if (confirm('GitHub not configured. Would you like to set it up now?')) {
+      openGitHubSettings();
+    }
+    return;
+  }
+  
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${githubConfig.username}/${githubConfig.repo}/contents/${githubConfig.filepath}`,
+      {
+        headers: {
+          'Authorization': `token ${githubConfig.token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }
+    );
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        alert('❌ Data file not found in GitHub.\n\nPlease sync your data first using "☁️ Sync to GitHub"');
+      } else {
+        alert(`❌ Load failed: ${response.statusText}`);
+      }
+      return;
+    }
+    
+    const fileData = await response.json();
+    const content = decodeURIComponent(escape(atob(fileData.content)));
+    const importData = JSON.parse(content);
+    
+    // Confirm with user
+    const confirmMsg = `Load data from GitHub?\n\n` +
+      `Last updated: ${importData.exportDate ? new Date(importData.exportDate).toLocaleString() : 'unknown'}\n\n` +
+      `This will REPLACE all current data:\n` +
+      `- ${importData.tasks?.length || 0} tasks\n` +
+      `- ${importData.projects?.length || 0} projects\n` +
+      `- ${importData.sampleLots?.length || 0} sample lots\n` +
+      `- ${importData.vfItems?.length || 0} verification items\n\n` +
+      `⚠️ Current data will be backed up but REPLACED.`;
+    
+    if (!confirm(confirmMsg)) return;
+    
+    // Backup current data
+    const backup = {
+      tasks: tasks,
+      projects: projects,
+      sampleLots: sampleLots,
+      vfItems: vfItems,
+      whWorkdays: whWorkdays || [],
+      customColumns: customColumns || [],
+      backupDate: new Date().toISOString()
+    };
+    localStorage.setItem('task-manager-pre-import-backup', JSON.stringify(backup));
+    
+    // Import data
+    if (importData.tasks) tasks = importData.tasks;
+    if (importData.projects) projects = importData.projects;
+    if (importData.sampleLots) sampleLots = importData.sampleLots;
+    if (importData.vfItems) vfItems = importData.vfItems;
+    if (importData.whWorkdays) whWorkdays = importData.whWorkdays;
+    if (importData.customColumns) customColumns = importData.customColumns;
+    
+    // Update next IDs
+    nextId = Math.max(0, ...tasks.map(t=>t.id)) + 1;
+    nextProjectId = Math.max(0, ...projects.map(p=>p.id)) + 1;
+    nextLotId = Math.max(0, ...sampleLots.map(l=>l.id)) + 1;
+    vfNextId = Math.max(0, ...vfItems.map(i=>i.id)) + 1;
+    
+    // Save to localStorage
+    saveAll();
+    slSaveData();
+    vfSaveData();
+    whSaveData();
+    
+    alert('✅ Data loaded from GitHub successfully!\n\nYour previous data was backed up.');
+    location.reload(); // Reload to ensure everything is fresh
+    
+  } catch (error) {
+    alert('❌ Load error: ' + error.message);
+    console.error('GitHub load error:', error);
+  }
+}
+
+// Auto-sync to GitHub every 5 minutes (optional - can be disabled)
+let autoSyncEnabled = false;
+function enableAutoSync() {
+  autoSyncEnabled = true;
+  setInterval(() => {
+    if (autoSyncEnabled && githubConfig.username && githubConfig.repo && githubConfig.token) {
+      syncToGitHub().catch(err => console.log('Auto-sync skipped:', err));
+    }
+  }, 5 * 60 * 1000); // 5 minutes
+}
+
 // ══════════ INIT ══════════
+loadGitHubConfig(); // Load GitHub config on startup
 loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();
 setTimeout(()=>{ whLoadWorkdays(); vfLoadData(); vfUpdateTabBadge(); }, 0);
 </script>
