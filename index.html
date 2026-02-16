@@ -455,6 +455,7 @@
     <button class="btn btn-secondary btn-sm" onclick="openCFModal()">🎨 Formatting</button>
     <button class="btn btn-secondary btn-sm" onclick="openAddColModal()">＋ Column</button>
     <button class="btn btn-secondary btn-sm" onclick="exportJSON()">⬇ Export JSON</button>
+    <button class="btn btn-secondary btn-sm" onclick="exportAllExcel()" title="Export everything to a multi-sheet Excel file">📊 Export Excel</button>
     <button class="btn btn-secondary btn-sm" onclick="importJSON()">⬆ Import JSON</button>
     <input type="file" id="json-input" accept=".json" style="display:none" onchange="handleJSONImport(event)" />
     <button class="btn btn-primary" onclick="openModal()">+ Add Task</button>
@@ -1960,6 +1961,192 @@ function exportJSON(){
   a.download='team-tasks-'+new Date().toISOString().slice(0,10)+'.json';
   a.click();
   URL.revokeObjectURL(a.href);
+}
+
+// ── Export All as Excel ──
+function exportAllExcel() {
+  if (typeof XLSX === 'undefined') { alert('Export library not loaded.'); return; }
+
+  const wb = XLSX.utils.book_new();
+  const today = new Date().toISOString().slice(0, 10);
+  const boardTitle = document.getElementById('board-title').textContent || 'Team Board';
+
+  // ── helper: auto-width columns ──
+  function autoWidth(ws, data) {
+    const colWidths = [];
+    data.forEach(row => {
+      row.forEach((cell, i) => {
+        const len = cell == null ? 8 : String(cell).length;
+        colWidths[i] = Math.max(colWidths[i] || 8, Math.min(len + 2, 50));
+      });
+    });
+    ws['!cols'] = colWidths.map(w => ({ wch: w }));
+  }
+
+  // ── helper: style header row ──
+  function styleHeader(ws, ncols) {
+    for (let c = 0; c < ncols; c++) {
+      const addr = XLSX.utils.encode_cell({ r: 0, c });
+      if (!ws[addr]) continue;
+      ws[addr].s = {
+        font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
+        fill: { fgColor: { rgb: '3B5BDB' } },
+        alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+        border: { bottom: { style: 'thin', color: { rgb: 'FFFFFF' } } }
+      };
+    }
+    ws['!rows'] = [{ hpt: 22 }];
+  }
+
+  // ══ Sheet 1: Summary ══
+  const summaryData = [
+    ['Team Task Board — Full Export'],
+    ['Generated', today],
+    ['Board Title', boardTitle],
+    [''],
+    ['Module', 'Count'],
+    ['Tasks', tasks.length],
+    ['Projects', projects.length],
+    ['Sample Lots', sampleLots.length],
+    ['Working Hours Records', Object.keys(whHours).length],
+    [''],
+    ['Tasks by Status'],
+    ...['To Do','In Progress','In Review','Done','Blocked'].map(s => [s, tasks.filter(t => t.status === s).length]),
+    [''],
+    ['Tasks by Priority'],
+    ...['High','Medium','Low'].map(p => [p, tasks.filter(t => t.priority === p).length]),
+    [''],
+    ['Projects by Stage'],
+    ...['Planning','Execution','Testing','Deployment','Maintenance'].map(s => [s, projects.filter(p => p.stage === s).length]),
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{ wch: 28 }, { wch: 18 }];
+  XLSX.utils.book_append_sheet(wb, wsSummary, '📋 Summary');
+
+  // ══ Sheet 2: Tasks ══
+  const taskCols = ['#','Title','Project','Assignee','Status','Priority','Due Date','Progress %','Depends On','Task on 3DEXP','Project Type','Product','Project Phase'];
+  const customColHeaders = customCols.map(c => c.label);
+  const allTaskHeaders = [...taskCols, ...customColHeaders, 'Created', 'Last Modified', 'Notes'];
+
+  const taskRows = [allTaskHeaders, ...tasks.map(t => [
+    t.id, t.title, t.project||'', t.assignee||'', t.status||'', t.priority||'',
+    t.dueDate||'', t.progress||0, (t.dependsOn||[]).join(', '), t.task3DEXP||'',
+    t.projectType||'', t.product||'', t.projectPhase||'',
+    ...customCols.map(c => t[c.key]||''),
+    t.createdAt ? new Date(t.createdAt).toLocaleDateString() : '',
+    t.lastModified ? new Date(t.lastModified).toLocaleDateString() : '',
+    t.notes||''
+  ])];
+  const wsTasks = XLSX.utils.aoa_to_sheet(taskRows);
+  autoWidth(wsTasks, taskRows);
+  styleHeader(wsTasks, allTaskHeaders.length);
+  // Colour-code status cells (col E = index 4)
+  tasks.forEach((t, i) => {
+    const addr = XLSX.utils.encode_cell({ r: i + 1, c: 4 });
+    if (!wsTasks[addr]) return;
+    const colours = { 'Done':'D1FAE5','In Progress':'DBEAFE','Blocked':'FEE2E2','In Review':'FEF3C7','To Do':'F3F4F6' };
+    if (colours[t.status]) wsTasks[addr].s = { fill: { fgColor: { rgb: colours[t.status] } } };
+  });
+  XLSX.utils.book_append_sheet(wb, wsTasks, '✅ Tasks');
+
+  // ══ Sheet 3: Projects ══
+  const projHeaders = ['#','Name','Code','Stage','Priority','Start Date','End Date','Budget','3DEXP','Owner','Description','Tasks Count','Done Tasks'];
+  const projRows = [projHeaders, ...projects.map((p, i) => {
+    const linked = tasks.filter(t => t.project === p.name);
+    return [
+      i+1, p.name||'', p.code||'', p.stage||'', p.priority||'',
+      p.startDate||'', p.endDate||'', p.budget||'',
+      p.project3DEXP||'', p.owner||'', p.description||'',
+      linked.length, linked.filter(t => t.status==='Done').length
+    ];
+  })];
+  const wsProjects = XLSX.utils.aoa_to_sheet(projRows);
+  autoWidth(wsProjects, projRows);
+  styleHeader(wsProjects, projHeaders.length);
+  XLSX.utils.book_append_sheet(wb, wsProjects, '📁 Projects');
+
+  // ══ Sheet 4: Working Hours ══
+  const whHeaders = ['Employee','Week','Mon','Tue','Wed','Thu','Fri','Sat','Sun','Total Hours','Status'];
+  const whRows = [whHeaders];
+  const allKeys = Object.keys(whHours);
+  allKeys.forEach(key => {
+    const [emp, week] = key.split('||');
+    const hrs = whHours[key] || {};
+    const days = ['mon','tue','wed','thu','fri','sat','sun'];
+    const dayVals = days.map(d => parseFloat(hrs[d]||0)||0);
+    const total = dayVals.reduce((s,v)=>s+v,0);
+    const submitted = whSubmitted && whSubmitted[key];
+    whRows.push([emp||'', week||'', ...dayVals, total, submitted ? 'Submitted' : 'Draft']);
+  });
+  const wsWH = XLSX.utils.aoa_to_sheet(whRows);
+  autoWidth(wsWH, whRows);
+  styleHeader(wsWH, whHeaders.length);
+  // Bold total column
+  for (let r = 1; r < whRows.length; r++) {
+    const addr = XLSX.utils.encode_cell({ r, c: 9 });
+    if (wsWH[addr]) wsWH[addr].s = { font: { bold: true }, numFmt: '0.0' };
+  }
+  XLSX.utils.book_append_sheet(wb, wsWH, '⏱ Working Hours');
+
+  // ══ Sheet 5: Sample Lots ══
+  const slHeaders = ['Lot #','Project','Phase','Qty','Prod. Date','Delivery Date','Price','Purpose','Status','Request Teams','Qty per Team'];
+  const slRows = [slHeaders, ...sampleLots.map(s => {
+    const teamStr = (s.teams||[]).map(t => t.name + (t.received?' ✓':'')).join(', ');
+    const qtyStr = (s.teams||[]).map(t => t.name + ': ' + (t.qtyDelivered||'—')).join(', ');
+    const overdue = s.dateDelivery && new Date(s.dateDelivery) < new Date() && !((s.teams||[]).every(t=>t.received));
+    const status = (s.teams||[]).length===0 ? 'Pending' : (s.teams||[]).every(t=>t.received) ? 'Delivered' : overdue ? 'Overdue' : 'Partial';
+    return [
+      s.lotNumber||'', s.project||'', s.phase||'', s.qty||'',
+      s.dateProd||'', s.dateDelivery||'', s.price||'',
+      s.purpose||'', status, teamStr, qtyStr
+    ];
+  })];
+  const wsSL = XLSX.utils.aoa_to_sheet(slRows);
+  autoWidth(wsSL, slRows);
+  styleHeader(wsSL, slHeaders.length);
+  XLSX.utils.book_append_sheet(wb, wsSL, '🧪 Sample Lots');
+
+  // ══ Sheet 6: Tasks by Assignee ══
+  const assignees = [...new Set(tasks.map(t => t.assignee).filter(Boolean))].sort();
+  const byAssigneeHeaders = ['Assignee','Total Tasks','To Do','In Progress','In Review','Done','Blocked','Avg Progress %','High Priority','Overdue'];
+  const byAssigneeRows = [byAssigneeHeaders, ...assignees.map(a => {
+    const myTasks = tasks.filter(t => t.assignee === a);
+    const overdue = myTasks.filter(t => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'Done').length;
+    const avgProg = myTasks.length ? Math.round(myTasks.reduce((s,t)=>s+(t.progress||0),0)/myTasks.length) : 0;
+    return [
+      a, myTasks.length,
+      myTasks.filter(t=>t.status==='To Do').length,
+      myTasks.filter(t=>t.status==='In Progress').length,
+      myTasks.filter(t=>t.status==='In Review').length,
+      myTasks.filter(t=>t.status==='Done').length,
+      myTasks.filter(t=>t.status==='Blocked').length,
+      avgProg + '%',
+      myTasks.filter(t=>t.priority==='High').length,
+      overdue
+    ];
+  })];
+  const wsBA = XLSX.utils.aoa_to_sheet(byAssigneeRows);
+  autoWidth(wsBA, byAssigneeRows);
+  styleHeader(wsBA, byAssigneeHeaders.length);
+  XLSX.utils.book_append_sheet(wb, wsBA, '👥 By Assignee');
+
+  // ══ Sheet 7: Tasks by Project ══
+  const projNames = [...new Set(tasks.map(t=>t.project).filter(Boolean))].sort();
+  const byProjHeaders = ['Project','Total Tasks','Done','In Progress','To Do','Blocked','Completion %'];
+  const byProjRows = [byProjHeaders, ...projNames.map(pn => {
+    const myT = tasks.filter(t => t.project === pn);
+    const done = myT.filter(t=>t.status==='Done').length;
+    return [pn, myT.length, done, myT.filter(t=>t.status==='In Progress').length,
+      myT.filter(t=>t.status==='To Do').length, myT.filter(t=>t.status==='Blocked').length,
+      myT.length ? Math.round(done/myT.length*100)+'%' : '0%'];
+  })];
+  const wsBP = XLSX.utils.aoa_to_sheet(byProjRows);
+  autoWidth(wsBP, byProjRows);
+  styleHeader(wsBP, byProjHeaders.length);
+  XLSX.utils.book_append_sheet(wb, wsBP, '📊 By Project');
+
+  // ══ Write File ══
+  XLSX.writeFile(wb, `team-board-full-export-${today}.xlsx`);
 }
 
 function importJSON(){
