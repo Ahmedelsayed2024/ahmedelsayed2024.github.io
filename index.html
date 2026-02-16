@@ -433,6 +433,47 @@
   .mat-row:nth-child(even) td{background:#fafaf8;}
   .mat-mat-name{font-weight:600;font-size:13px;}
   .mat-sub{font-size:10px;color:var(--text-muted);}
+
+  /* ── Verification Tab ── */
+  .vf-wrap{padding:24px 28px 60px;}
+  .vf-inner-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;}
+  .vf-inner-tab{padding:8px 18px;font-size:13px;font-weight:600;border:1.5px solid var(--border-strong);border-radius:8px;cursor:pointer;background:var(--surface);color:var(--text-muted);transition:all .15s;}
+  .vf-inner-tab.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+  .vf-panel{display:none;} .vf-panel.active{display:block;}
+  .vf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;}
+  .vf-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .15s;}
+  .vf-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);}
+  .vf-card-header{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+  .vf-card-body{padding:12px 16px;display:flex;flex-direction:column;gap:7px;}
+  .vf-card-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fafaf8;}
+  .vf-type-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;}
+  .vf-type-safety{background:#fee2e2;color:#991b1b;}
+  .vf-type-performance{background:#dbeafe;color:#1e40af;}
+  .vf-type-motoraging{background:#fef3c7;color:#92400e;}
+  .vf-type-inproduct{background:#dcfce7;color:#166534;}
+  .vf-status-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;}
+  .vf-s-planned{background:#f1f5f9;color:#475569;}
+  .vf-s-ongoing{background:#dbeafe;color:#1e40af;}
+  .vf-s-done{background:#dcfce7;color:#166534;}
+  .vf-s-blocked{background:#fee2e2;color:#991b1b;}
+  .vf-s-cancelled{background:#f3f4f6;color:#9ca3af;}
+  .vf-row{display:flex;align-items:baseline;gap:6px;font-size:12px;}
+  .vf-label{color:var(--text-muted);font-size:11px;min-width:90px;flex-shrink:0;}
+  .vf-val{color:var(--text);font-weight:500;}
+  .vf-reminder{background:#fef3c7;border:1px solid #fde68a;border-radius:6px;padding:5px 10px;font-size:11px;color:#92400e;}
+  .vf-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .vf-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;gap:8px;}
+  .vf-stat-val{font-size:20px;font-weight:700;font-family:'DM Mono',monospace;color:var(--accent2);}
+  .vf-stat-label{font-size:10px;color:var(--text-muted);font-weight:500;}
+  .vf-bearer-motor{color:#f97316;font-weight:700;}
+  .vf-bearer-others{color:#8b5cf6;font-weight:700;}
+  .vf-overdue{border-left:3px solid #ef4444;}
+  .vf-reminder-badge{background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;}
+  /* sl cost bearer toggle */
+  .cost-bearer-toggle{display:flex;gap:6px;}
+  .cost-bearer-btn{padding:7px 18px;font-size:12px;font-weight:700;border:1.5px solid var(--border-strong);border-radius:8px;cursor:pointer;background:var(--bg);color:var(--text-muted);transition:all .12s;}
+  .cost-bearer-btn.active-motor{background:#fff7ed;color:#c2410c;border-color:#fb923c;}
+  .cost-bearer-btn.active-others{background:#f5f3ff;color:#6d28d9;border-color:#a78bfa;}
 </style>
 </head>
 <body>
@@ -469,6 +510,7 @@
   <button class="tab" onclick="switchMainTab('statistics')">📊 Statistics</button>
   <button class="tab" onclick="switchMainTab('workinghours')">⏱ Working Hours</button>
   <button class="tab" onclick="switchMainTab('samples')">🧪 Samples</button>
+  <button class="tab" id="tab-verification" onclick="switchMainTab('verification')">🔬 Verification</button>
   <button class="tab" onclick="switchMainTab('tools')">🛠 Tools</button>
 </div>
 
@@ -1120,6 +1162,153 @@
 </div><!-- /tools-wrap -->
 </div><!-- END TOOLS TAB -->
 
+<!-- ══ VERIFICATION TAB ══ -->
+<div id="verification-tab" class="tab-content">
+<div class="vf-wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+    <div>
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:3px">🔬 Verification Follow-Up</h2>
+      <p style="font-size:13px;color:var(--text-muted)">Auto-generated from sample lots. Track Safety, Performance, Motor Aging &amp; In-Product tests.</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="vfClearFilters()">✕ Clear Filters</button>
+      <button class="btn btn-secondary btn-sm" onclick="vfExport()">⬇ Export Excel</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="vf-stats" id="vf-stats"></div>
+
+  <!-- Filters -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <div class="search-wrap" style="flex:1;min-width:180px">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="vf-search" placeholder="Search by lot, project, PIC…" oninput="vfRender()" style="width:100%" />
+    </div>
+    <select id="vf-filter-type" onchange="vfRender()" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:8px;padding:7px 10px;background:var(--bg);color:var(--text);outline:none">
+      <option value="">All Types</option>
+      <option value="Safety">🛡 Safety</option>
+      <option value="Performance">⚡ Performance</option>
+      <option value="Motor Aging">⚙️ Motor Aging</option>
+      <option value="In-Product">📦 In-Product</option>
+    </select>
+    <select id="vf-filter-status" onchange="vfRender()" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:8px;padding:7px 10px;background:var(--bg);color:var(--text);outline:none">
+      <option value="">All Statuses</option>
+      <option value="Planned">Planned</option>
+      <option value="Ongoing">Ongoing</option>
+      <option value="Done">Done</option>
+      <option value="Blocked">Blocked</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+    <select id="vf-filter-bearer" onchange="vfRender()" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:8px;padding:7px 10px;background:var(--bg);color:var(--text);outline:none">
+      <option value="">All Bearers</option>
+      <option value="Motor">⚙️ Motor</option>
+      <option value="Others">📦 Others</option>
+    </select>
+    <select id="vf-filter-lot" onchange="vfRender()" style="font-family:inherit;font-size:12px;border:1px solid var(--border-strong);border-radius:8px;padding:7px 10px;background:var(--bg);color:var(--text);outline:none;min-width:140px">
+      <option value="">All Lots</option>
+    </select>
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;white-space:nowrap">
+      <input type="checkbox" id="vf-filter-overdue" onchange="vfRender()" style="accent-color:var(--accent)"> ⚠ Overdue only
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;white-space:nowrap">
+      <input type="checkbox" id="vf-filter-reminder" onchange="vfRender()" style="accent-color:var(--accent)"> 🔔 Reminders only
+    </label>
+  </div>
+
+  <!-- Inner type tabs -->
+  <div class="vf-inner-tabs" id="vf-inner-tabs">
+    <button class="vf-inner-tab active" onclick="vfSetTypeTab(event,'all')">All Tests</button>
+    <button class="vf-inner-tab" onclick="vfSetTypeTab(event,'Safety')">🛡 Safety</button>
+    <button class="vf-inner-tab" onclick="vfSetTypeTab(event,'Performance')">⚡ Performance</button>
+    <button class="vf-inner-tab" onclick="vfSetTypeTab(event,'Motor Aging')">⚙️ Motor Aging</button>
+    <button class="vf-inner-tab" onclick="vfSetTypeTab(event,'In-Product')">📦 In-Product</button>
+  </div>
+
+  <!-- Card grid -->
+  <div class="vf-grid" id="vf-grid"></div>
+</div>
+</div><!-- END VERIFICATION TAB -->
+
+<!-- ══ VERIFICATION EDIT MODAL ══ -->
+<div class="modal-overlay" id="vf-modal" onclick="vfCloseOverlay(event)">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header">
+      <h2 id="vf-modal-title">Edit Verification Item</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('vf-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--accent2-soft);border:1px solid #bfdbfe;border-radius:8px;padding:8px 14px;margin-bottom:14px;font-size:12px;color:var(--accent2)">
+        🔗 Linked to: <strong id="vf-f-lot-display">—</strong>
+        &nbsp;|&nbsp; Type: <strong id="vf-f-type-display">—</strong>
+        &nbsp;|&nbsp; Item #<strong id="vf-f-item-display">—</strong>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label>Status</label>
+          <select id="vf-f-status" style="width:100%">
+            <option>Planned</option><option>Ongoing</option><option>Done</option><option>Blocked</option><option>Cancelled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>PIC (Person in Charge)</label>
+          <input type="text" id="vf-f-pic" placeholder="Name or team" style="width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Start Date</label>
+          <input type="date" id="vf-f-start" style="width:100%" />
+        </div>
+        <div class="form-group">
+          <label>End Date</label>
+          <input type="date" id="vf-f-end" style="width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Cost (EGP)</label>
+          <input type="number" id="vf-f-cost" min="0" step="0.01" placeholder="0.00" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%" />
+        </div>
+        <div class="form-group">
+          <label>📦 Quantity</label>
+          <input type="number" id="vf-f-qty" min="1" placeholder="1" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Cost Bearer</label>
+          <div class="cost-bearer-toggle">
+            <button type="button" class="cost-bearer-btn active-motor" id="vf-bearer-motor" onclick="vfSetBearer('Motor')">⚙️ Motor</button>
+            <button type="button" class="cost-bearer-btn" id="vf-bearer-others" onclick="vfSetBearer('Others')">📦 Others</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>🔔 Reminder Date</label>
+          <input type="date" id="vf-f-reminder" style="width:100%" />
+        </div>
+        <div class="form-group">
+          <label>🔗 Depends On</label>
+          <select id="vf-f-depends-on" style="width:100%">
+            <option value="">— No Dependency —</option>
+          </select>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px">This test cannot start until the selected test is completed</div>
+        </div>
+        <div class="form-group">
+          <label>Sample Received</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+            <input type="checkbox" id="vf-f-sampleReceived" style="accent-color:var(--accent2);width:16px;height:16px" />
+            <label for="vf-f-sampleReceived" style="font-size:12px;font-weight:normal">Sample received from verification</label>
+          </div>
+        </div>
+        <div class="form-group full" style="grid-column:1/-1">
+          <label>Notes / Findings</label>
+          <textarea id="vf-f-notes" placeholder="Test results, observations, action items…" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;resize:vertical;min-height:70px;width:100%"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="vfDeleteItem()" style="margin-right:auto">🗑 Delete</button>
+      <button class="btn btn-secondary" onclick="closeModal('vf-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="vfSaveItem()">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ SAMPLE LOT MODAL ══ -->
 <div class="modal-overlay" id="sl-modal" onclick="slCloseOverlay(event)">
   <div class="modal" style="max-width:680px">
@@ -1149,6 +1338,18 @@
           <input type="text" id="sl-f-lotNumber" placeholder="e.g. LOT-001" />
         </div>
         <div class="form-group">
+          <label>👥 Requesting Team</label>
+          <select id="sl-f-requesting-team">
+            <option value="">— Select Team —</option>
+            <option value="Verification Team">Verification Team</option>
+            <option value="Product Team">Product Team</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>👤 PIC (Person in Charge)</label>
+          <input type="text" id="sl-f-pic" placeholder="Enter name" />
+        </div>
+        <div class="form-group">
           <label>Quantity</label>
           <input type="number" id="sl-f-qty" min="1" placeholder="e.g. 5" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%" />
         </div>
@@ -1163,6 +1364,13 @@
         <div class="form-group">
           <label>Price (EGP)</label>
           <input type="number" id="sl-f-price" min="0" step="0.01" placeholder="0.00" style="font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%" />
+        </div>
+        <div class="form-group">
+          <label>Cost Bearer</label>
+          <div class="cost-bearer-toggle" id="sl-f-bearer-wrap">
+            <button type="button" class="cost-bearer-btn active-motor" id="sl-bearer-motor" onclick="slSetBearer('Motor')">⚙️ Motor</button>
+            <button type="button" class="cost-bearer-btn" id="sl-bearer-others" onclick="slSetBearer('Others')">📦 Others</button>
+          </div>
         </div>
         <div class="form-group">
           <label>Purpose</label>
@@ -2402,6 +2610,7 @@ function switchMainTab(tab){
   if(tab==='statistics')renderStatistics();
   if(tab==='workinghours'){whLoadData();whLoadWorkdays();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
   if(tab==='samples'){slLoadData();slRender();}
+  if(tab==='verification'){vfRender();}
   if(tab==='tools'){toolsInit();}
 }
 
@@ -3625,11 +3834,16 @@ function slUpdateStats() {
   const delivered = sampleLots.filter(l=>slGetStatus(l)==='delivered').length;
   const overdue = sampleLots.filter(l=>slGetStatus(l)==='overdue').length;
   const pending = sampleLots.filter(l=>['pending','partial'].includes(slGetStatus(l))).length;
+  const motorCost = sampleLots.filter(l=>l.costBearer==='Motor'||!l.costBearer).reduce((s,l)=>s+(parseFloat(l.price)||0),0);
+  const othersCost = sampleLots.filter(l=>l.costBearer==='Others').reduce((s,l)=>s+(parseFloat(l.price)||0),0);
+  const fmt = n => n>=1000 ? (n/1000).toFixed(1)+'K' : n.toFixed(0);
   document.getElementById('sl-stats').innerHTML = `
     <div class="sl-stat"><span class="sl-stat-icon">🧪</span><div><div class="sl-stat-val">${total}</div><div class="sl-stat-label">Total Lots</div></div></div>
     <div class="sl-stat"><span class="sl-stat-icon">✅</span><div><div class="sl-stat-val" style="color:#10b981">${delivered}</div><div class="sl-stat-label">Delivered</div></div></div>
     <div class="sl-stat"><span class="sl-stat-icon">🕐</span><div><div class="sl-stat-val" style="color:#f59e0b">${pending}</div><div class="sl-stat-label">In Progress</div></div></div>
     <div class="sl-stat"><span class="sl-stat-icon">⚠</span><div><div class="sl-stat-val" style="color:#ef4444">${overdue}</div><div class="sl-stat-label">Overdue</div></div></div>
+    <div class="sl-stat"><span class="sl-stat-icon">⚙️</span><div><div class="sl-stat-val" style="color:#f97316">${fmt(motorCost)} EGP</div><div class="sl-stat-label">Motor Cost</div></div></div>
+    <div class="sl-stat"><span class="sl-stat-icon">📦</span><div><div class="sl-stat-val" style="color:#8b5cf6">${fmt(othersCost)} EGP</div><div class="sl-stat-label">Others Cost</div></div></div>
   `;
 }
 
@@ -3772,6 +3986,8 @@ function slOpenModal(id=null) {
   document.getElementById('sl-f-project').value = lot?.project||'';
   document.getElementById('sl-f-phase').value = lot?.phase||'';
   document.getElementById('sl-f-lotNumber').value = lot?.lotNumber||'';
+  document.getElementById('sl-f-requesting-team').value = lot?.requestingTeam||'';
+  document.getElementById('sl-f-pic').value = lot?.pic||'';
   document.getElementById('sl-f-qty').value = lot?.qty||'';
   document.getElementById('sl-f-dateProd').value = lot?.dateProd||'';
   document.getElementById('sl-f-dateDelivery').value = lot?.dateDelivery||'';
@@ -3779,6 +3995,7 @@ function slOpenModal(id=null) {
   document.getElementById('sl-f-purpose').value = lot?.purpose||'';
   document.getElementById('sl-f-notes').value = lot?.notes||'';
   document.getElementById('sl-new-team-input').value = '';
+  slSetBearer(lot?.costBearer||'Motor');
 
   // Clone teams to temp
   slTempTeams = (lot?.teams||[]).map(t=>({...t}));
@@ -3786,6 +4003,13 @@ function slOpenModal(id=null) {
 
   document.getElementById('sl-modal').classList.add('open');
   setTimeout(()=>document.getElementById('sl-f-project').focus(), 100);
+}
+
+let slTempBearer = 'Motor';
+function slSetBearer(val) {
+  slTempBearer = val;
+  document.getElementById('sl-bearer-motor').className = 'cost-bearer-btn' + (val==='Motor'?' active-motor':'');
+  document.getElementById('sl-bearer-others').className = 'cost-bearer-btn' + (val==='Others'?' active-others':'');
 }
 
 function slRenderReceiptList() {
@@ -3846,13 +4070,17 @@ function slSaveLot() {
   if (!project) { alert('Please select a project.'); return; }
   if (!lotNumber) { alert('Please enter a lot number.'); return; }
 
+  const isNew = !editingLotId;
   const lot = {
     id: editingLotId || nextLotId++,
     project, phase, lotNumber,
+    requestingTeam: document.getElementById('sl-f-requesting-team').value,
+    pic: document.getElementById('sl-f-pic').value.trim(),
     qty: document.getElementById('sl-f-qty').value,
     dateProd: document.getElementById('sl-f-dateProd').value,
     dateDelivery: document.getElementById('sl-f-dateDelivery').value,
     price: document.getElementById('sl-f-price').value,
+    costBearer: slTempBearer || 'Motor',
     purpose: document.getElementById('sl-f-purpose').value,
     notes: document.getElementById('sl-f-notes').value.trim(),
     teams: [...slTempTeams],
@@ -3865,10 +4093,17 @@ function slSaveLot() {
     if (idx!==-1) sampleLots[idx] = lot;
   } else {
     sampleLots.push(lot);
+    // Auto-create verification items ONLY if Verification Team is selected
+    if (lot.requestingTeam === 'Verification Team') {
+      vfAutoCreate(lot);
+    }
   }
   slSaveData();
+  vfSaveData();
   closeModal('sl-modal');
   slRender();
+  // Update verification tab badge
+  vfUpdateTabBadge();
 }
 
 function slDeleteLot(id) {
@@ -3894,14 +4129,22 @@ function slExport() {
   const fmt = s => { if(!s)return''; const[y,m,d]=s.split('-'); return`${parseInt(d)} ${mn[parseInt(m)-1]} ${y}`; };
 
   // Summary sheet
-  const rows = [['Lot Number','Project','Phase','Qty','Production Date','Delivery Date','Price (EGP)','Purpose','Notes','Status','Teams (Requested)','Teams (Received)','Qty Delivered (per Team)','Received Dates']];
-  sampleLots.forEach(lot => {
+  const rows = [['Sample Name','Lot Number','Project','Phase','Requesting Team','PIC','Qty','Production Date','Delivery Date','Price (EGP)','Purpose','Notes','Status','Teams (Requested)','Teams (Received)','Qty Delivered (per Team)','Received Dates']];
+  sampleLots.forEach((lot, index) => {
     const teams = lot.teams||[];
     const recvTeams = teams.filter(t=>t.received).map(t=>t.name).join(', ');
     const qtyDelivered = teams.filter(t=>t.received&&t.qtyDelivered).map(t=>`${t.name}: ${t.qtyDelivered}`).join('; ');
     const recvDates = teams.filter(t=>t.received&&t.receiveDate).map(t=>`${t.name}: ${fmt(t.receiveDate)}`).join('; ');
+    
+    // Generate automatic sample name: project - phase - production date - sample number
+    const sampleNumber = String(index + 1).padStart(3, '0');
+    const prodDateFormatted = lot.dateProd ? lot.dateProd.replace(/-/g, '') : 'NODATE';
+    const sampleName = `${lot.project || 'NOPROJECT'} - ${lot.phase || 'NOPHASE'} - ${prodDateFormatted} - ${sampleNumber}`;
+    
     rows.push([
+      sampleName,
       lot.lotNumber||'', lot.project||'', lot.phase||'',
+      lot.requestingTeam||'', lot.pic||'',
       lot.qty?parseInt(lot.qty):'',
       fmt(lot.dateProd)||'', fmt(lot.dateDelivery)||'',
       lot.price?parseFloat(lot.price):'',
@@ -3913,7 +4156,7 @@ function slExport() {
   });
 
   const ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:14},{wch:28},{wch:8},{wch:7},{wch:15},{wch:15},{wch:14},{wch:16},{wch:30},{wch:12},{wch:25},{wch:25},{wch:28},{wch:35}];
+  ws['!cols'] = [{wch:35},{wch:14},{wch:28},{wch:8},{wch:18},{wch:16},{wch:7},{wch:15},{wch:15},{wch:14},{wch:16},{wch:30},{wch:12},{wch:25},{wch:25},{wch:28},{wch:35}];
   XLSX.utils.book_append_sheet(wb, ws, 'Sample Lots');
 
   // Per-project sheet
@@ -3954,7 +4197,7 @@ function closeOverlay(e,id){if(e.target===document.getElementById(id))closeModal
 
 document.addEventListener('keydown',ev=>{
   if(ev.key==='n'&&!ev.ctrlKey&&!ev.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&document.activeElement.contentEditable!=='true')openModal();
-  if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal','sl-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
+  if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal','sl-modal','vf-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
 });
 
 // ══════════ TOOLS ══════════
@@ -4322,8 +4565,363 @@ function rcalcCompute() {
 }
 
 
+// ══════════ VERIFICATION ══════════
+const VFK = 'team_tasks_verification';
+let vfItems = []; // Array of verification items
+let vfNextId = 1;
+let vfEditingId = null;
+let vfTempBearer = 'Motor';
+let vfTypeTabFilter = 'all';
+
+const VF_TYPES = ['Safety','Performance','Motor Aging','In-Product'];
+const VF_TYPE_ICONS = {Safety:'🛡',Performance:'⚡','Motor Aging':'⚙️','In-Product':'📦'};
+const VF_TYPE_CLASS = {Safety:'vf-type-safety',Performance:'vf-type-performance','Motor Aging':'vf-type-motoraging','In-Product':'vf-type-inproduct'};
+const VF_STATUS_CLASS = {Planned:'vf-s-planned',Ongoing:'vf-s-ongoing',Done:'vf-s-done',Blocked:'vf-s-blocked',Cancelled:'vf-s-cancelled'};
+const VF_STATUS_ICON = {Planned:'🕐',Ongoing:'🔄',Done:'✅',Blocked:'🚫',Cancelled:'❌'};
+
+function vfLoadData() {
+  try {
+    const raw = localStorage.getItem(VFK);
+    if (raw) { const d=JSON.parse(raw); vfItems=d.items||[]; vfNextId=d.nextId||(vfItems.length?Math.max(...vfItems.map(i=>i.id))+1:1); }
+    else { vfItems=[]; vfNextId=1; }
+  } catch { vfItems=[]; vfNextId=1; }
+}
+function vfSaveData() {
+  localStorage.setItem(VFK, JSON.stringify({items:vfItems,nextId:vfNextId}));
+}
+
+// Auto-create 3 verification items per type for a new lot
+function vfAutoCreate(lot) {
+  vfLoadData();
+  VF_TYPES.forEach(type => {
+    // Check if this type already exists for this lot
+    const existingItem = vfItems.find(i => i.lotId === lot.id && i.type === type);
+    
+    // Only create if it doesn't already exist
+    if (!existingItem) {
+      vfItems.push({
+        id: vfNextId++,
+        lotId: lot.id,
+        lotNumber: lot.lotNumber,
+        project: lot.project,
+        phase: lot.phase,
+        type,
+        itemNum: 1, // Only create item #1 for each type
+        status: 'Planned',
+        pic: lot.pic || '', // Use the PIC from the sample lot
+        startDate: '',
+        endDate: '',
+        cost: '',
+        qty: lot.qty || '', // Use the qty from the sample lot
+        costBearer: lot.costBearer || 'Motor',
+        reminderDate: '',
+        sampleReceived: false,
+        notes: '',
+        createdAt: Date.now()
+      });
+    }
+  });
+  vfSaveData();
+}
+
+function vfUpdateTabBadge() {
+  vfLoadData();
+  const today = new Date().toISOString().slice(0,10);
+  const overdue = vfItems.filter(i=>i.status!=='Done'&&i.status!=='Cancelled'&&i.endDate&&i.endDate<today).length;
+  const reminders = vfItems.filter(i=>i.reminderDate&&i.reminderDate<=today&&i.status!=='Done'&&i.status!=='Cancelled').length;
+  const badge = overdue+reminders;
+  const tab = document.getElementById('tab-verification');
+  if (!tab) return;
+  tab.textContent = '🔬 Verification' + (badge>0 ? ` 🔴${badge}` : '');
+}
+
+function vfGetFiltered() {
+  vfLoadData();
+  const q = (document.getElementById('vf-search')?.value||'').toLowerCase();
+  const fType = document.getElementById('vf-filter-type')?.value||'';
+  const fStatus = document.getElementById('vf-filter-status')?.value||'';
+  const fBearer = document.getElementById('vf-filter-bearer')?.value||'';
+  const fLot = document.getElementById('vf-filter-lot')?.value||'';
+  const fOverdue = document.getElementById('vf-filter-overdue')?.checked;
+  const fReminder = document.getElementById('vf-filter-reminder')?.checked;
+  const today = new Date().toISOString().slice(0,10);
+  let items = vfItems;
+  if (vfTypeTabFilter!=='all') items = items.filter(i=>i.type===vfTypeTabFilter);
+  return items.filter(i=>{
+    if (fType && i.type!==fType) return false;
+    if (fStatus && i.status!==fStatus) return false;
+    if (fBearer && i.costBearer!==fBearer) return false;
+    if (fLot && String(i.lotId)!==String(fLot)) return false;
+    if (fOverdue && !(i.endDate&&i.endDate<today&&i.status!=='Done'&&i.status!=='Cancelled')) return false;
+    if (fReminder && !(i.reminderDate&&i.reminderDate<=today&&i.status!=='Done'&&i.status!=='Cancelled')) return false;
+    if (q && ![i.lotNumber,i.project,i.type,i.pic,i.notes,i.status].join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+function vfRender() {
+  vfLoadData();
+  vfUpdateStats();
+  vfUpdateLotFilter();
+  const items = vfGetFiltered();
+  vfRenderGrid(items);
+  vfUpdateTabBadge();
+}
+
+function vfUpdateStats() {
+  const today = new Date().toISOString().slice(0,10);
+  const all = vfItems;
+  const done = all.filter(i=>i.status==='Done').length;
+  const ongoing = all.filter(i=>i.status==='Ongoing').length;
+  const overdue = all.filter(i=>i.endDate&&i.endDate<today&&i.status!=='Done'&&i.status!=='Cancelled').length;
+  const reminders = all.filter(i=>i.reminderDate&&i.reminderDate<=today&&i.status!=='Done'&&i.status!=='Cancelled').length;
+  const motorCost = all.reduce((s,i)=>(i.costBearer==='Motor'||!i.costBearer)?s+(parseFloat(i.cost)||0):s, 0);
+  const othersCost = all.reduce((s,i)=>i.costBearer==='Others'?s+(parseFloat(i.cost)||0):s, 0);
+  const fmt = n => n>=1000?(n/1000).toFixed(1)+'K':n.toFixed(0);
+  const el = document.getElementById('vf-stats');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="vf-stat"><span style="font-size:20px">🔬</span><div><div class="vf-stat-val">${all.length}</div><div class="vf-stat-label">Total Items</div></div></div>
+    <div class="vf-stat"><span style="font-size:20px">✅</span><div><div class="vf-stat-val" style="color:#10b981">${done}</div><div class="vf-stat-label">Done</div></div></div>
+    <div class="vf-stat"><span style="font-size:20px">🔄</span><div><div class="vf-stat-val" style="color:#3b82f6">${ongoing}</div><div class="vf-stat-label">Ongoing</div></div></div>
+    <div class="vf-stat"><span style="font-size:20px">⚠️</span><div><div class="vf-stat-val" style="color:#ef4444">${overdue}</div><div class="vf-stat-label">Overdue</div></div></div>
+    <div class="vf-stat"><span style="font-size:20px">🔔</span><div><div class="vf-stat-val" style="color:#f59e0b">${reminders}</div><div class="vf-stat-label">Reminders Due</div></div></div>
+    <div class="vf-stat"><span style="font-size:20px">⚙️</span><div><div class="vf-stat-val vf-bearer-motor">${fmt(motorCost)} EGP</div><div class="vf-stat-label">Motor Cost</div></div></div>
+    <div class="vf-stat"><span style="font-size:20px">📦</span><div><div class="vf-stat-val vf-bearer-others">${fmt(othersCost)} EGP</div><div class="vf-stat-label">Others Cost</div></div></div>
+  `;
+}
+
+function vfUpdateLotFilter() {
+  const sel = document.getElementById('vf-filter-lot');
+  if (!sel) return;
+  const cur = sel.value;
+  const lots = [...new Map(vfItems.map(i=>[i.lotId,{id:i.lotId,num:i.lotNumber}])).values()];
+  sel.innerHTML = `<option value="">All Lots</option>`+lots.map(l=>`<option value="${l.id}">${e(l.num)}</option>`).join('');
+  sel.value = cur;
+}
+
+function vfSetTypeTab(ev, type) {
+  vfTypeTabFilter = type;
+  document.querySelectorAll('.vf-inner-tab').forEach(t=>t.classList.remove('active'));
+  if(ev&&ev.target)ev.target.classList.add('active');
+  vfRender();
+}
+function vfClearFilters() {
+  ['vf-search','vf-filter-type','vf-filter-status','vf-filter-bearer','vf-filter-lot'].forEach(id=>{
+    const el=document.getElementById(id); if(el)el.value='';
+  });
+  ['vf-filter-overdue','vf-filter-reminder'].forEach(id=>{
+    const el=document.getElementById(id); if(el)el.checked=false;
+  });
+  vfTypeTabFilter='all';
+  document.querySelectorAll('.vf-inner-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  vfRender();
+}
+
+function vfRenderGrid(items) {
+  const grid = document.getElementById('vf-grid');
+  if (!grid) return;
+  const today = new Date().toISOString().slice(0,10);
+  if (!items.length) {
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:40px;margin-bottom:12px">🔬</div><div style="font-size:14px">No verification items found. Create a sample lot to auto-generate items.</div></div>`;
+    return;
+  }
+  grid.innerHTML = items.map(i=>{
+    const isOverdue = i.endDate&&i.endDate<today&&i.status!=='Done'&&i.status!=='Cancelled';
+    const isReminderDue = i.reminderDate&&i.reminderDate<=today&&i.status!=='Done'&&i.status!=='Cancelled';
+    const bearerColor = i.costBearer==='Motor'?'#f97316':'#8b5cf6';
+    const bearerIcon = i.costBearer==='Motor'?'⚙️':'📦';
+    
+    // Get dependency info
+    let dependsOnHtml = '';
+    if (i.dependsOn) {
+      const depItem = vfItems.find(d => d.id === parseInt(i.dependsOn));
+      if (depItem) {
+        const depStatusIcon = VF_STATUS_ICON[depItem.status] || '';
+        const depStatusClass = depItem.status === 'Done' ? 'color:#10b981' : 'color:#f59e0b';
+        dependsOnHtml = `<div class="vf-row"><span class="vf-label">🔗 Depends On</span><span class="vf-val"><span style="font-weight:600;${depStatusClass}">${depStatusIcon} ${depItem.type} #${depItem.itemNum}</span></span></div>`;
+      }
+    }
+    
+    return `<div class="vf-card${isOverdue?' vf-overdue':''}" onclick="vfOpenModal(${i.id})">
+      <div class="vf-card-header">
+        <div>
+          <span class="vf-type-badge ${VF_TYPE_CLASS[i.type]||'vf-s-planned'}">${VF_TYPE_ICONS[i.type]||'🔬'} ${i.type} #${i.itemNum}</span>
+        </div>
+        <div style="flex:1;margin-left:8px">
+          <div style="font-weight:700;font-size:13px">${e(i.lotNumber||'—')}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${e(i.project||'—')} · ${e(i.phase||'—')}</div>
+        </div>
+        <div style="display:flex;gap:4px;align-items:center">
+          ${i.dependsOn?'<span class="vf-reminder-badge" style="background:#e0e7ff;color:#3730a3" title="Has dependency">🔗</span>':''}
+          ${isReminderDue?'<span class="vf-reminder-badge" title="Reminder due">🔔</span>':''}
+          ${isOverdue?'<span class="vf-reminder-badge" title="Overdue">⚠️</span>':''}
+          <span class="vf-status-badge ${VF_STATUS_CLASS[i.status]||'vf-s-planned'}">${VF_STATUS_ICON[i.status]||''} ${i.status}</span>
+        </div>
+      </div>
+      <div class="vf-card-body">
+        ${dependsOnHtml}
+        ${i.pic?`<div class="vf-row"><span class="vf-label">👤 PIC</span><span class="vf-val">${e(i.pic)}</span></div>`:''}
+        <div class="vf-row"><span class="vf-label">📅 Start</span><span class="vf-val">${fmtDate(i.startDate)||'—'}</span></div>
+        <div class="vf-row"><span class="vf-label">🏁 End</span><span class="vf-val ${isOverdue?'due-overdue':''}">${fmtDate(i.endDate)||'—'}</span></div>
+        ${i.cost?`<div class="vf-row"><span class="vf-label">💰 Cost</span><span class="vf-val">${Number(i.cost).toLocaleString()} EGP <span style="font-size:10px;color:${bearerColor};font-weight:700">${bearerIcon} ${i.costBearer}</span></span></div>`:''}
+        ${i.sampleReceived?'<div class="vf-row"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px">📥 Sample Received</span></div>':''}
+        ${i.reminderDate?`<div class="vf-reminder">🔔 Reminder: ${fmtDate(i.reminderDate)}</div>`:''}
+        ${i.notes?`<div class="vf-row" style="align-items:flex-start"><span class="vf-label">📝 Notes</span><span class="vf-val" style="white-space:normal;font-size:11px;color:var(--text-muted)">${e(i.notes)}</span></div>`:''}
+      </div>
+      <div class="vf-card-footer">
+        <span style="font-size:10px;color:var(--text-muted)">Created ${fmtDate(new Date(i.createdAt).toISOString().slice(0,10))}</span>
+        <div style="display:flex;gap:6px" onclick="event.stopPropagation()">
+          <button class="btn btn-secondary btn-sm" onclick="vfOpenModal(${i.id})">✏ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="vfConfirmDelete(${i.id})">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function vfOpenModal(id) {
+  vfEditingId = id;
+  const item = vfItems.find(i=>i.id===id);
+  if (!item) return;
+  document.getElementById('vf-modal-title').textContent = `${VF_TYPE_ICONS[item.type]||'🔬'} ${item.type} — Item #${item.itemNum}`;
+  document.getElementById('vf-f-lot-display').textContent = item.lotNumber + ' — ' + item.project;
+  document.getElementById('vf-f-type-display').textContent = item.type;
+  document.getElementById('vf-f-item-display').textContent = item.itemNum;
+  document.getElementById('vf-f-status').value = item.status||'Planned';
+  document.getElementById('vf-f-pic').value = item.pic||'';
+  document.getElementById('vf-f-start').value = item.startDate||'';
+  document.getElementById('vf-f-end').value = item.endDate||'';
+  document.getElementById('vf-f-cost').value = item.cost||'';
+  document.getElementById('vf-f-qty').value = item.qty||'';
+  document.getElementById('vf-f-reminder').value = item.reminderDate||'';
+  document.getElementById('vf-f-sampleReceived').checked = !!item.sampleReceived;
+  document.getElementById('vf-f-notes').value = item.notes||'';
+  
+  // Populate dependency dropdown with other verification items from same lot
+  const dependsOnSelect = document.getElementById('vf-f-depends-on');
+  const otherItems = vfItems.filter(i => i.lotId === item.lotId && i.id !== item.id);
+  dependsOnSelect.innerHTML = `<option value="">— No Dependency —</option>` + 
+    otherItems.map(i => {
+      const endDateInfo = i.endDate ? ` → Ends: ${fmtDate(i.endDate)}` : ' (No end date set)';
+      const statusIcon = VF_STATUS_ICON[i.status] || '';
+      return `<option value="${i.id}">${VF_TYPE_ICONS[i.type]||'🔬'} ${i.type} #${i.itemNum} ${statusIcon}${endDateInfo}</option>`;
+    }).join('');
+  dependsOnSelect.value = item.dependsOn || '';
+  
+  // Add event listener for auto-adjusting start date based on dependency
+  dependsOnSelect.onchange = function() {
+    vfAutoAdjustStartDate();
+  };
+  
+  vfSetBearer(item.costBearer||'Motor');
+  document.getElementById('vf-modal').classList.add('open');
+}
+
+function vfAutoAdjustStartDate() {
+  const dependsOnId = document.getElementById('vf-f-depends-on').value;
+  if (!dependsOnId) return; // No dependency selected
+  
+  const depItem = vfItems.find(i => i.id === parseInt(dependsOnId));
+  if (depItem && depItem.endDate) {
+    // Auto-set start date to the end date of the dependent task
+    document.getElementById('vf-f-start').value = depItem.endDate;
+    
+    // Show a subtle notification
+    const startInput = document.getElementById('vf-f-start');
+    const originalBg = startInput.style.background;
+    startInput.style.background = '#dcfce7';
+    setTimeout(() => {
+      startInput.style.background = originalBg;
+    }, 1000);
+  }
+}
+function vfSetBearer(val) {
+  vfTempBearer = val;
+  document.getElementById('vf-bearer-motor').className = 'cost-bearer-btn'+(val==='Motor'?' active-motor':'');
+  document.getElementById('vf-bearer-others').className = 'cost-bearer-btn'+(val==='Others'?' active-others':'');
+}
+function vfSaveItem() {
+  const item = vfItems.find(i=>i.id===vfEditingId);
+  if (!item) return;
+  item.status = document.getElementById('vf-f-status').value;
+  item.pic = document.getElementById('vf-f-pic').value.trim();
+  item.startDate = document.getElementById('vf-f-start').value;
+  item.endDate = document.getElementById('vf-f-end').value;
+  item.cost = document.getElementById('vf-f-cost').value;
+  item.qty = document.getElementById('vf-f-qty').value;
+  item.costBearer = vfTempBearer;
+  item.reminderDate = document.getElementById('vf-f-reminder').value;
+  item.sampleReceived = document.getElementById('vf-f-sampleReceived').checked;
+  item.notes = document.getElementById('vf-f-notes').value.trim();
+  item.dependsOn = document.getElementById('vf-f-depends-on').value || null;
+  item.updatedAt = Date.now();
+  vfSaveData();
+  closeModal('vf-modal');
+  vfRender();
+}
+function vfDeleteItem() {
+  if (!confirm('Delete this verification item?')) return;
+  vfConfirmDelete(vfEditingId);
+  closeModal('vf-modal');
+}
+function vfConfirmDelete(id) {
+  const item = vfItems.find(i=>i.id===id);
+  if (!item) return;
+  if (!confirm(`Delete "${item.type} #${item.itemNum}" for lot ${item.lotNumber}?`)) return;
+  vfItems = vfItems.filter(i=>i.id!==id);
+  vfSaveData();
+  vfRender();
+}
+function vfCloseOverlay(ev) {
+  if (ev.target===document.getElementById('vf-modal')) closeModal('vf-modal');
+}
+
+// Export Verification to Excel
+function vfExport() {
+  if (typeof XLSX==='undefined'){alert('Export library not loaded.');return;}
+  const items = vfGetFiltered();
+  if (!items.length){alert('No verification items to export.');return;}
+  const wb = XLSX.utils.book_new();
+  const headers = ['Lot Number','Project','Phase','Type','Item #','Status','PIC','Depends On','Qty','Start Date','End Date','Cost (EGP)','Cost Bearer','Reminder Date','Sample Received','Notes'];
+  const rows = [headers, ...items.map(i=>{
+    let dependsOnText = '';
+    if (i.dependsOn) {
+      const depItem = vfItems.find(d => d.id === parseInt(i.dependsOn));
+      if (depItem) {
+        dependsOnText = `${depItem.type} #${depItem.itemNum} (${depItem.status})`;
+      }
+    }
+    return [
+      i.lotNumber||'',i.project||'',i.phase||'',i.type||'',i.itemNum||'',
+      i.status||'',i.pic||'',dependsOnText,i.qty?parseInt(i.qty):'',i.startDate||'',i.endDate||'',
+      i.cost?parseFloat(i.cost):'',i.costBearer||'',i.reminderDate||'',
+      i.sampleReceived?'Yes':'No',i.notes||''
+    ];
+  })];
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  const colW=[12,18,8,14,8,10,16,20,7,12,12,12,10,12,14,30];
+  ws['!cols']=colW.map(w=>({wch:w}));
+  // Style header
+  for(let c=0;c<headers.length;c++){
+    const addr=XLSX.utils.encode_cell({r:0,c});
+    if(ws[addr])ws[addr].s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'3B5BDB'}},alignment:{horizontal:'center'}};
+  }
+  ws['!rows']=[{hpt:20}];
+  XLSX.utils.book_append_sheet(wb,ws,'Verification');
+  // Summary by type
+  const summaryRows=[['Type','Total','Done','Ongoing','Planned','Blocked','Motor Cost','Others Cost']];
+  VF_TYPES.forEach(type=>{
+    const t=vfItems.filter(i=>i.type===type);
+    summaryRows.push([type,t.length,t.filter(i=>i.status==='Done').length,t.filter(i=>i.status==='Ongoing').length,t.filter(i=>i.status==='Planned').length,t.filter(i=>i.status==='Blocked').length,t.filter(i=>i.costBearer==='Motor').reduce((s,i)=>s+(parseFloat(i.cost)||0),0),t.filter(i=>i.costBearer==='Others').reduce((s,i)=>s+(parseFloat(i.cost)||0),0)]);
+  });
+  const wss=XLSX.utils.aoa_to_sheet(summaryRows);
+  wss['!cols']=[{wch:16},{wch:8},{wch:8},{wch:8},{wch:8},{wch:8},{wch:14},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,wss,'Summary by Type');
+  XLSX.writeFile(wb,`verification-${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
 // ══════════ INIT ══════════
 loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();
-// Defer workday init until DOM is ready for checkbox queries
-setTimeout(()=>{ whLoadWorkdays(); }, 0);
+setTimeout(()=>{ whLoadWorkdays(); vfLoadData(); vfUpdateTabBadge(); }, 0);
 </script>
