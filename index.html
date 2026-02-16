@@ -5117,7 +5117,7 @@ async function syncToGitHub() {
       sampleLots: sampleLots,
       vfItems: vfItems,
       whWorkdays: whWorkdays || [],
-      customColumns: customColumns || []
+      customCols: customCols || []
     };
     
     const jsonContent = JSON.stringify(exportData, null, 2);
@@ -5225,7 +5225,7 @@ async function loadFromGitHub() {
       sampleLots: sampleLots,
       vfItems: vfItems,
       whWorkdays: whWorkdays || [],
-      customColumns: customColumns || [],
+      customCols: customCols || [],
       backupDate: new Date().toISOString()
     };
     localStorage.setItem('task-manager-pre-import-backup', JSON.stringify(backup));
@@ -5239,9 +5239,9 @@ async function loadFromGitHub() {
     if (importData.workingHours) whWorkdays = importData.workingHours; // Old format compatibility
     
     // Handle custom columns - support both customColumns and customCols
-    if (importData.customColumns) customColumns = importData.customColumns;
-    else if (importData.customCols) customColumns = importData.customCols;
-    else customColumns = [];
+    if (importData.customCols) customCols = importData.customCols;
+    else if (importData.customColumns) customCols = importData.customColumns;
+    else customCols = [];
     
     // Update next IDs safely
     nextId = tasks.length > 0 ? Math.max(...tasks.map(t=>t.id)) + 1 : 1;
@@ -5313,7 +5313,7 @@ function importFromFile() {
           sampleLots: sampleLots || [],
           vfItems: vfItems || [],
           whWorkdays: whWorkdays || [],
-          customColumns: customColumns || [],
+          customCols: customCols || [],
           backupDate: new Date().toISOString()
         };
         localStorage.setItem('task-manager-pre-import-backup', JSON.stringify(backup));
@@ -5327,9 +5327,9 @@ function importFromFile() {
         if (importData.workingHours) whWorkdays = importData.workingHours; // Old format
         
         // Handle custom columns - support both formats
-        if (importData.customColumns) customColumns = importData.customColumns;
-        else if (importData.customCols) customColumns = importData.customCols;
-        else customColumns = [];
+        if (importData.customCols) customCols = importData.customCols;
+        else if (importData.customColumns) customCols = importData.customColumns;
+        else customCols = [];
         
         // Update next IDs safely
         nextId = tasks.length > 0 ? Math.max(...tasks.map(t=>t.id)) + 1 : 1;
