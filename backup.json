@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportDate": "2026-02-18T06:49:47.645Z",
+  "exportDate": "2026-02-24T06:00:26.054Z",
   "tasks": [
     {
       "id": 10,
@@ -8,9 +8,9 @@
       "desc": "",
       "project": "SHA TEAM",
       "assignee": "ahmed elsayed",
-      "status": "To Do",
+      "status": "Done",
       "priority": "Medium",
-      "dueDate": "2026-02-19",
+      "dueDate": "2026-02-23",
       "progress": 50,
       "notes": "",
       "deps": [],
@@ -18,7 +18,7 @@
       "projectType": "Others",
       "product": "STAND FAN",
       "projectPhase": "",
-      "lastModified": 1771243792831,
+      "lastModified": 1771827861603,
       "customData": {}
     },
     {
@@ -172,6 +172,44 @@
       "projectPhase": "CP",
       "lastModified": 1771397382717,
       "customData": {}
+    },
+    {
+      "id": 19,
+      "title": "Dynamometer Toolkit Dev",
+      "desc": "",
+      "project": "Self Development - TOOLS",
+      "assignee": "ahmed elsayed",
+      "status": "Done",
+      "priority": "Medium",
+      "dueDate": "2026-02-26",
+      "progress": 0,
+      "notes": "",
+      "deps": [],
+      "task3DEXP": "",
+      "projectType": "",
+      "product": "",
+      "projectPhase": "",
+      "lastModified": 1771831009806,
+      "customData": {}
+    },
+    {
+      "id": 21,
+      "title": "Orange3 - MOP",
+      "desc": "",
+      "project": "Self Development - TOOLS",
+      "assignee": "ahmed elsayed",
+      "status": "In Progress",
+      "priority": "Medium",
+      "dueDate": "2026-03-05",
+      "progress": 0,
+      "notes": "",
+      "deps": [],
+      "task3DEXP": "",
+      "projectType": "New Development",
+      "product": "OTHERS",
+      "projectPhase": "CP",
+      "lastModified": 1771831288132,
+      "customData": {}
     }
   ],
   "projects": [
@@ -258,6 +296,21 @@
       "type": "",
       "platform": "",
       "priority": "Medium"
+    },
+    {
+      "id": 16,
+      "name": "Self Development - TOOLS",
+      "startDate": "2026-01-18",
+      "endDate": "2026-12-30",
+      "objectives": "",
+      "kpis": "",
+      "pic": "AHMED ELSAYED",
+      "project3DEXP": "",
+      "project3DEXPType": "text",
+      "stage": "Planning",
+      "type": "",
+      "platform": "",
+      "priority": "High"
     }
   ],
   "sampleLots": [
