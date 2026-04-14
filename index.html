@@ -249,9 +249,50 @@
   a:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;border-radius:4px;}
   [tabindex]:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;}
 
+  /* ─ My Week Tab ─ */
+  .myweek-wrap{padding:0 28px 40px;}
+  .myweek-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+  .myweek-title{font-size:18px;font-weight:700;letter-spacing:-.3px;}
+  .myweek-range{font-size:13px;color:var(--text-muted);font-weight:500;background:var(--bg);padding:4px 12px;border-radius:100px;border:1px solid var(--border);}
+  .myweek-nav{display:flex;gap:6px;margin-left:auto;}
+  .myweek-nav-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);cursor:pointer;font-size:16px;transition:all .2s;}
+  .myweek-nav-btn:hover{border-color:var(--accent2);color:var(--accent2);background:var(--accent2-soft);}
+  .myweek-today-btn{padding:0 14px;width:auto;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;}
+  .myweek-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+  .myweek-toolbar .search-wrap input{width:200px;}
+  .myweek-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+  .myweek-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 20px;display:flex;align-items:center;gap:10px;}
+  .myweek-stat-icon{font-size:22px;}
+  .myweek-stat-val{font-size:22px;font-weight:700;font-family:'DM Mono',monospace;color:var(--accent2);}
+  .myweek-stat-label{font-size:11px;color:var(--text-muted);font-weight:500;}
+  .myweek-overdue-banner{background:#fee2e2;border:1px solid #fca5a5;border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+  .myweek-overdue-icon{font-size:24px;}
+  .myweek-overdue-title{font-size:14px;font-weight:700;color:#991b1b;}
+  .myweek-overdue-subtitle{font-size:12px;color:#b91c1c;}
+  .myweek-table-wrap{overflow-x:auto;}
+  .myweek-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .myweek-table thead th{background:#f7f5f2;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .myweek-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s,border-left .15s;border-left:3px solid transparent;}
+  .myweek-table tbody tr:last-child{border-bottom:none;}
+  .myweek-table tbody tr:hover{background:#f0eeea;border-left:3px solid var(--accent2);}
+  .myweek-table tbody tr.row-done{opacity:.55;}
+  .myweek-table tbody tr.row-done td{text-decoration:line-through;text-decoration-color:var(--border-strong);}
+  .myweek-table tbody tr.row-done .tag{color:inherit;}
+  .myweek-table tbody tr.row-today{background:#eff6ff !important;border-left:3px solid var(--accent2);}
+  .myweek-table tbody tr.row-overdue{background:#fef2f2 !important;border-left:3px solid #ef4444 !important;}
+  .myweek-table td{padding:10px 14px;vertical-align:middle;font-size:13px;}
+  .myweek-table td.mw-day{font-weight:600;font-size:12px;color:var(--text-muted);white-space:nowrap;min-width:90px;}
+  .myweek-table td.mw-day.today{color:var(--accent2);}
+  .myweek-no-tasks{text-align:center;padding:60px 20px;color:var(--text-muted);}
+  .myweek-no-tasks .icon{font-size:48px;margin-bottom:12px;opacity:.5;}
+  .myweek-no-tasks p{font-size:14px;margin-top:6px;}
+  .myweek-no-tasks .sub{font-size:12px;color:var(--text-light);margin-top:4px;}
+  @media(max-width:700px){
+    .myweek-wrap{padding:0 14px 40px;}
+  }
+
   /* ─ Kanban Board ─ */
-  .kanban-wrap{padding:0 28px 40px;display:none;}
-  .kanban-wrap.active{display:block;}
+  .kanban-wrap{padding:0 28px 40px;}
   .kanban-board{display:flex;gap:14px;overflow-x:auto;padding-bottom:16px;align-items:flex-start;}
   .kanban-column{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);min-width:250px;max-width:280px;flex:1;display:flex;flex-direction:column;max-height:calc(100vh - 280px);}
   .kanban-col-header{padding:14px 16px;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -278,12 +319,6 @@
   .kanban-col-inreview .kanban-col-header{border-bottom-color:#6366f1;}
   .kanban-col-done .kanban-col-header{border-bottom-color:#10b981;}
   .kanban-col-blocked .kanban-col-header{border-bottom-color:#ef4444;}
-
-  /* ─ View Toggle Buttons ─ */
-  .task-view-toggle{display:flex;gap:2px;background:var(--bg);border-radius:8px;padding:2px;border:1px solid var(--border);}
-  .task-view-btn{padding:5px 10px;border:none;background:transparent;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text-muted);transition:all .2s ease;font-family:inherit;display:flex;align-items:center;gap:4px;}
-  .task-view-btn.active{background:var(--surface);color:var(--accent2);box-shadow:var(--shadow-sm);font-weight:600;}
-  .task-view-btn:hover:not(.active){color:var(--text);}
 
   /* ─ Dark Mode Improvements ─ */
   .dark-mode{--bg:#1a1a1a;--surface:#242424;--border:#333;--border-strong:#444;--text:#e5e5e5;--text-muted:#999;--text-light:#666;--accent-soft:#2d1b1b;--accent2-soft:#1a2340;}
@@ -602,6 +637,7 @@
 <!-- ══ TABS ══ -->
 <div class="tabs">
   <button class="tab active" onclick="switchMainTab('tasks')">✓ Tasks</button>
+  <button class="tab" onclick="switchMainTab('myweek')">📅 My Week</button>
   <button class="tab" onclick="switchMainTab('projects')">📁 Projects</button>
   <button class="tab" onclick="switchMainTab('statistics')">📊 Statistics</button>
   <button class="tab" onclick="switchMainTab('workinghours')">⏱ Working Hours</button>
@@ -618,26 +654,22 @@
   <div class="toolbar-left">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="search" placeholder="Search tasks…" oninput="renderTable()" />
+      <input type="text" id="search" placeholder="Search tasks…" oninput="renderKanban()" />
     </div>
-    <select id="filter-status" onchange="renderTable()">
+    <select id="filter-status" onchange="renderKanban()">
       <option value="">All Statuses</option>
       <option>To Do</option><option>In Progress</option><option>In Review</option><option>Done</option><option>Blocked</option>
     </select>
-    <select id="filter-priority" onchange="renderTable()">
+    <select id="filter-priority" onchange="renderKanban()">
       <option value="">All Priorities</option>
       <option>High</option><option>Medium</option><option>Low</option>
     </select>
-    <select id="filter-assignee" onchange="renderTable()"><option value="">All Assignees</option></select>
-    <select id="filter-project" onchange="renderTable()"><option value="">All Projects</option></select>
-    <input type="date" id="filter-date-from" onchange="renderTable()" placeholder="From date" title="Due date from" />
-    <input type="date" id="filter-date-to" onchange="renderTable()" placeholder="To date" title="Due date to" />
+    <select id="filter-assignee" onchange="renderKanban()"><option value="">All Assignees</option></select>
+    <select id="filter-project" onchange="renderKanban()"><option value="">All Projects</option></select>
+    <input type="date" id="filter-date-from" onchange="renderKanban()" placeholder="From date" title="Due date from" />
+    <input type="date" id="filter-date-to" onchange="renderKanban()" placeholder="To date" title="Due date to" />
   </div>
   <div class="toolbar-right">
-    <div class="task-view-toggle">
-      <button class="task-view-btn active" id="view-table-btn" onclick="toggleView('table')" title="Table view">☰ Table</button>
-      <button class="task-view-btn" id="view-kanban-btn" onclick="toggleView('kanban')" title="Kanban view">⊞ Kanban</button>
-    </div>
     <button class="btn btn-secondary btn-sm" onclick="showLastWeekModified()">📝 Last Week Modified</button>
     <button class="btn btn-secondary btn-sm" onclick="syncToGitHub()">☁️ Sync to GitHub</button>
     <button class="btn btn-secondary btn-sm" onclick="loadFromGitHub()">📥 Load from GitHub</button>
@@ -656,38 +688,36 @@
   💡 <span><strong>Data Persistence:</strong> All edits auto-save to your <strong>browser's local storage</strong> on THIS device only. Data does NOT sync across devices. To share or backup: <strong>Export JSON</strong> → save to OneDrive/SharePoint → <strong>Import JSON</strong> on other devices (preserves all tasks, columns, formatting, and logo). Place <strong>ELARABY.LOGO</strong> file (4002×650px) in same folder for automatic logo loading.</span>
 </div>
 
-  <div class="table-wrap" id="table-view-wrap">
-  <table>
-    <thead>
-      <tr id="table-head-row">
-        <th onclick="sortBy('id')">#<span class="sort-icon" id="sort-id">↕</span></th>
-        <th onclick="sortBy('title')">Task<span class="sort-icon" id="sort-title">↕</span></th>
-        <th onclick="sortBy('project')">Project<span class="sort-icon" id="sort-project">↕</span></th>
-        <th onclick="sortBy('assignee')">Assignee<span class="sort-icon" id="sort-assignee">↕</span></th>
-        <th onclick="sortBy('status')">Status<span class="sort-icon" id="sort-status">↕</span></th>
-        <th onclick="sortBy('priority')">Priority<span class="sort-icon" id="sort-priority">↕</span></th>
-        <th onclick="sortBy('dueDate')">Due Date<span class="sort-icon" id="sort-dueDate">↕</span></th>
-        <th>Progress</th>
-        <th>Depends On</th>
-        <th onclick="sortBy('task3DEXP')">Task on 3DEXP<span class="sort-icon" id="sort-task3DEXP">↕</span></th>
-        <th onclick="sortBy('projectType')">Project Type<span class="sort-icon" id="sort-projectType">↕</span></th>
-        <th onclick="sortBy('product')">Product<span class="sort-icon" id="sort-product">↕</span></th>
-        <th onclick="sortBy('projectPhase')">Project Phase<span class="sort-icon" id="sort-projectPhase">↕</span></th>
-        <!-- custom cols go here, before + -->
-        <th class="add-col-th" onclick="openAddColModal()" title="Add column">＋</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="task-tbody"></tbody>
-  </table>
-</div>
-
 <!-- ══ KANBAN BOARD ══ -->
-<div class="kanban-wrap" id="kanban-view-wrap">
+<div class="kanban-wrap active" id="kanban-view-wrap">
   <div class="kanban-board" id="kanban-board"></div>
 </div>
 
 </div><!-- END TASKS TAB -->
+
+<!-- ══ MY WEEK TAB ══ -->
+<div id="myweek-tab" class="tab-content">
+  <div class="myweek-wrap">
+    <div class="myweek-header">
+      <span class="myweek-title">📅 My Week</span>
+      <span class="myweek-range" id="myweek-range"></span>
+      <div class="myweek-nav">
+        <button class="myweek-nav-btn" onclick="myweekNavigate(-1)" title="Previous week">◀</button>
+        <button class="myweek-nav-btn myweek-today-btn" onclick="myweekGoToday()" title="Go to current week">Today</button>
+        <button class="myweek-nav-btn" onclick="myweekNavigate(1)" title="Next week">▶</button>
+      </div>
+    </div>
+    <div class="myweek-toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="myweek-search" placeholder="Search this week…" oninput="myweekRender()" />
+      </div>
+      <select id="myweek-filter-assignee" onchange="myweekRender()"><option value="">All Assignees</option></select>
+    </div>
+    <div class="myweek-stats" id="myweek-stats"></div>
+    <div id="myweek-content"></div>
+  </div>
+</div>
 
 <!-- ══ PROJECTS TAB ══ -->
 <div id="projects-tab" class="tab-content">
@@ -1894,7 +1924,7 @@ function updateStats(){
   bar.innerHTML=`<span class="stat-pill ${!fS?'active':''}" onclick="setStatusFilter('')" style="font-weight:600"><span style="font-size:14px">📊</span><span class="count">${tasks.length}</span> Total</span>`
     +statuses.map(s=>`<span class="stat-pill ${fS===s?'active':''}" onclick="setStatusFilter('${s}')"><span class="dot" style="background:${STATUS_COLORS[s]}"></span><span style="font-size:12px;color:${statusIconColors[s]}">${statusIcons[s]}</span><span class="count">${counts[s]||0}</span> ${s}</span>`).join('');
 }
-function setStatusFilter(v){document.getElementById('filter-status').value=v;if(currentTaskView==='kanban'){renderKanban();}else{renderTable();}}
+function setStatusFilter(v){document.getElementById('filter-status').value=v;renderKanban();}
 function updateFilterDropdowns(){
   const assignees=[...new Set(tasks.map(t=>t.assignee).filter(Boolean))].sort();
   const projects=[...new Set(tasks.map(t=>t.project).filter(Boolean))].sort();
@@ -1913,11 +1943,11 @@ function updateSortIcons(){
     else{el.textContent='↕';th.classList.remove('sorted');}
   });
 }
-function sortBy(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}renderTable();}
+function sortBy(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}renderKanban();}
 function clearFilters(){
   document.getElementById('search').value='';
   ['filter-status','filter-priority','filter-assignee','filter-project','filter-date-from','filter-date-to'].forEach(id=>document.getElementById(id).value='');
-  renderTable();
+  renderKanban();
 }
 
 function showLastWeekModified(){
@@ -2006,9 +2036,9 @@ function saveTask(){
     lastModified:Date.now(),
     customData};
   if(editingId){const i=tasks.findIndex(t=>t.id===editingId);if(i!==-1)tasks[i]=task;}else tasks.push(task);
-  saveAll();closeModal('modal-overlay');renderTable();
+  saveAll();closeModal('modal-overlay');renderKanban();
 }
-function deleteTask(id){if(!confirm('Delete this task?'))return;tasks=tasks.filter(t=>t.id!==id);saveAll();renderTable();}
+function deleteTask(id){if(!confirm('Delete this task?'))return;tasks=tasks.filter(t=>t.id!==id);saveAll();renderKanban();}
 
 // ══════════ CUSTOM COLUMNS ══════════
 function selectColType(btn){
@@ -2034,11 +2064,11 @@ function addCustomColumn(){
   document.getElementById('new-col-name').style.borderColor='';
   const col={key:'col_'+Date.now(),name,type:selColType};
   if(selColType==='select')col.options=document.getElementById('new-col-options').value.split(',').map(s=>s.trim()).filter(Boolean);
-  customCols.push(col);saveCols();renderColsList();renderTable();document.getElementById('new-col-name').value='';
+  customCols.push(col);saveCols();renderColsList();renderKanban();document.getElementById('new-col-name').value='';
 }
 function removeCustomCol(key){
   if(!confirm('Remove this column? Data will be lost.'))return;
-  customCols=customCols.filter(c=>c.key!==key);saveCols();renderColsList();renderTable();
+  customCols=customCols.filter(c=>c.key!==key);saveCols();renderColsList();renderKanban();
 }
 
 // ══════════ CHARTS ══════════
@@ -2428,8 +2458,7 @@ function handleJSONImport(e){
         pdSaveData();
         
         // Re-render
-        renderTable();
-        renderProjectsTable();
+        renderKanban();
         updateProjectDropdown();
         
         let doneMsg=`✅ Successfully imported!\n• ${taskCount} tasks\n• ${projectCount} projects\n• ${customCols.length} custom columns\n• ${cfRules.length} formatting rules`;
@@ -2545,7 +2574,7 @@ function deleteCFRule(i){
 
 function applyCFRules(){
   saveCFRules();
-  renderTable();
+  renderKanban();
   closeModal('cf-modal');
 }
 
@@ -2600,7 +2629,8 @@ function switchMainTab(tab){
   event.target.classList.add('active');
   document.getElementById(tab+'-tab').classList.add('active');
   if(tab==='projects')renderProjectsTable();
-  if(tab==='tasks'){if(currentTaskView==='kanban'){renderKanban();}else{renderTable();}updateFilterDropdowns();}
+  if(tab==='tasks'){renderKanban();updateFilterDropdowns();}
+  if(tab==='myweek'){myweekRender();}
   if(tab==='statistics')renderStatistics();
   if(tab==='workinghours'){whLoadData();whLoadWorkdays();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
   if(tab==='samples'){slLoadData();slRender();}
@@ -5177,31 +5207,6 @@ function pdExportCSV() {
   }
 })();
 
-// ══════════ TASK VIEW TOGGLE (TABLE / KANBAN) ══════════
-let currentTaskView = 'table'; // 'table' or 'kanban'
-
-function toggleView(view) {
-  currentTaskView = view;
-  const tableWrap = document.getElementById('table-view-wrap');
-  const kanbanWrap = document.getElementById('kanban-view-wrap');
-  const tableBtn = document.getElementById('view-table-btn');
-  const kanbanBtn = document.getElementById('view-kanban-btn');
-
-  if (view === 'table') {
-    tableWrap.style.display = '';
-    kanbanWrap.classList.remove('active');
-    tableBtn.classList.add('active');
-    kanbanBtn.classList.remove('active');
-    renderTable();
-  } else {
-    tableWrap.style.display = 'none';
-    kanbanWrap.classList.add('active');
-    tableBtn.classList.remove('active');
-    kanbanBtn.classList.add('active');
-    renderKanban();
-  }
-}
-
 function renderKanban() {
   const filtered = getSorted(getFiltered());
   updateStats();
@@ -5258,8 +5263,115 @@ function renderKanban() {
   }).join('');
 }
 
+// ══════════ MY WEEK TAB ══════════
+let myweekOffset=0;
+const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DAY_NAMES_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function myweekGetRange(offset){
+  const now=new Date();const day=now.getDay();
+  const mon=new Date(now);mon.setDate(now.getDate()-((day+6)%7)+offset*7);
+  const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  return{mon,sun,monStr:mon.toISOString().slice(0,10),sunStr:sun.toISOString().slice(0,10)};
+}
+function myweekNavigate(dir){myweekOffset+=dir;myweekRender();}
+function myweekGoToday(){myweekOffset=0;myweekRender();}
+
+function myweekRender(){
+  const{mon,sun,monStr,sunStr}=myweekGetRange(myweekOffset);
+  const todayStr=new Date().toISOString().slice(0,10);
+  const isCurrentWeek=myweekOffset===0;
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('myweek-range').textContent=`${mon.getDate()} ${mn[mon.getMonth()]} - ${sun.getDate()} ${mn[sun.getMonth()]} ${sun.getFullYear()}`;
+
+  // Filter week tasks
+  const search=(document.getElementById('myweek-search').value||'').toLowerCase();
+  const fA=document.getElementById('myweek-filter-assignee').value;
+  const weekTasks=tasks.filter(t=>{
+    if(!t.dueDate)return false;
+    if(t.dueDate<monStr||t.dueDate>sunStr)return false;
+    if(search&&![t.title,t.desc,t.assignee,t.project].join(' ').toLowerCase().includes(search))return false;
+    if(fA&&t.assignee!==fA)return false;
+    return true;
+  });
+
+  // Update assignee dropdown
+  const weekAssignees=[...new Set(tasks.filter(t=>t.dueDate&&t.dueDate>=monStr&&t.dueDate<=sunStr).map(t=>t.assignee).filter(Boolean))].sort();
+  const dd=document.getElementById('myweek-filter-assignee');
+  const cv=dd.value;
+  dd.innerHTML=`<option value="">All Assignees</option>`+weekAssignees.map(a=>`<option value="${e(a)}">${e(a)}</option>`).join('');
+  dd.value=cv;
+
+  // Stats
+  const totalWeek=weekTasks.length;
+  const overdueCount=weekTasks.filter(t=>t.status!=='Done'&&t.dueDate<todayStr).length;
+  const doneCount=weekTasks.filter(t=>t.status==='Done').length;
+  const highPrio=weekTasks.filter(t=>t.priority==='High'&&t.status!=='Done').length;
+  document.getElementById('myweek-stats').innerHTML=`
+    <div class="myweek-stat"><span class="myweek-stat-icon">📋</span><div><div class="myweek-stat-val">${totalWeek}</div><div class="myweek-stat-label">Due This Week</div></div></div>
+    <div class="myweek-stat"><span class="myweek-stat-icon">✅</span><div><div class="myweek-stat-val" style="color:#059669">${doneCount}</div><div class="myweek-stat-label">Completed</div></div></div>
+    <div class="myweek-stat"><span class="myweek-stat-icon">⚠️</span><div><div class="myweek-stat-val" style="color:#dc2626">${overdueCount}</div><div class="myweek-stat-label">Overdue</div></div></div>
+    <div class="myweek-stat"><span class="myweek-stat-icon">🔥</span><div><div class="myweek-stat-val" style="color:#ea580c">${highPrio}</div><div class="myweek-stat-label">High Priority</div></div></div>`;
+
+  // Build sorted rows by day then priority
+  const sortedWeekTasks=[...weekTasks].sort((a,b)=>{
+    if(a.dueDate!==b.dueDate)return a.dueDate<b.dueDate?-1:1;
+    const po=['High','Medium','Low'];const pi=x=>po.indexOf(x.priority||'Medium');
+    if(pi(a)!==pi(b))return pi(a)-pi(b);
+    if(a.status==='Done'&&b.status!=='Done')return 1;
+    if(b.status==='Done'&&a.status!=='Done')return -1;
+    return(a.title||'').localeCompare(b.title||'');
+  });
+
+  let html='';
+
+  // Overdue banner (only if current week)
+  if(isCurrentWeek&&overdueCount>0){
+    html+=`<div class="myweek-overdue-banner"><span class="myweek-overdue-icon">🚨</span><div><div class="myweek-overdue-title">${overdueCount} overdue task${overdueCount>1?'s':''}</div><div class="myweek-overdue-subtitle">These tasks were due earlier this week and are not yet complete</div></div></div>`;
+  }
+
+  // Empty state
+  if(totalWeek===0){
+    html+=`<div class="myweek-no-tasks"><div class="icon">🎯</div><p>No tasks due this week!</p><p class="sub">${isCurrentWeek?'Enjoy your free time or plan ahead for next week.':'No tasks scheduled for this period.'}</p></div>`;
+    document.getElementById('myweek-content').innerHTML=html;
+    return;
+  }
+
+  // Table view
+  html+=`<div class="myweek-table-wrap"><table class="myweek-table"><thead><tr>
+    <th>Day</th><th>#</th><th>Task</th><th>Assignee</th><th>Status</th><th>Priority</th><th>Due Date</th><th>Progress</th><th>Actions</th>
+  </tr></thead><tbody>`;
+
+  sortedWeekTasks.forEach(t=>{
+    const isDone=t.status==='Done';
+    const isOv=t.dueDate<todayStr&&!isDone;
+    const isToday=t.dueDate===todayStr;
+    const init=t.assignee?t.assignee.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase():'?';
+    const ac=strColor(t.assignee||'');
+    const prog=Math.min(100,Math.max(0,parseInt(t.progress)||0));
+    const dayDate=new Date(t.dueDate+'T00:00:00');
+    const dayLabel=DAY_NAMES_SHORT[dayDate.getDay()]+' '+dayDate.getDate();
+    const rowClass=(isDone?'row-done':'')+(isToday?' row-today':'')+(isOv?' row-overdue':'');
+
+    html+=`<tr class="${rowClass}">
+      <td class="mw-day${isToday?' today':''}">${isToday?'📌 ':''}${dayLabel}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-light)">#${String(t.id).padStart(3,'0')}</td>
+      <td style="font-weight:500;max-width:250px"><span style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${e(t.title)}">${e(t.title)}</span>${t.desc?`<span style="display:block;font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e(t.desc)}</span>`:''}</td>
+      <td>${t.assignee?`<span class="assignee-chip"><span class="assignee-avatar" style="background:${ac}">${init}</span>${e(t.assignee)}</span>`:'<span style="color:var(--text-light)">—</span>'}</td>
+      <td><span class="tag ${SC[t.status]||'tag-todo'}">${e(t.status)}</span></td>
+      <td><span class="tag ${PC[t.priority]||'tag-medium'}">${e(t.priority)}</span></td>
+      <td>${t.dueDate?`<span class="due-date ${isOv?'due-overdue':''}" style="font-family:'DM Mono',monospace;font-size:12px">${isOv?'⚠ ':''}${fmtDate(t.dueDate)}</span>`:'—'}</td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="progress-bar"><div class="progress-fill" style="width:${prog}%"></div></div><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);min-width:28px">${prog}%</span></div></td>
+      <td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="openModal(${t.id})">✏</button><button class="btn btn-danger btn-sm" onclick="deleteTask(${t.id});myweekRender()">🗑</button></div></td>
+    </tr>`;
+  });
+
+  html+=`</tbody></table></div>`;
+  document.getElementById('myweek-content').innerHTML=html;
+}
+
 // ══════════ INIT ══════════
 loadGitHubConfig(); // Load GitHub config on startup
-loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();pdLoadData();
+loadAll();renderWeekBadge();renderKanban();updateFilterDropdowns();updateProjectDropdown();whLoadData();slLoadData();pdLoadData();
 setTimeout(()=>{ whLoadWorkdays(); vfLoadData(); vfUpdateTabBadge(); }, 0);
 </script>
