@@ -4,45 +4,61 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Team Task Board</title>
+<meta name="description" content="A comprehensive team task management board with project tracking, time logging, sample management, and team roster. Fully client-side, privacy-first." />
+<meta name="theme-color" content="#4e29be" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta property="og:title" content="Team Task Board" />
+<meta property="og:description" content="Team task management board with project tracking, time logging, and team roster. Fully client-side, privacy-first." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://repository-owner.github.io/repository-name/og-image.png" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg:#f4f2ee;--surface:#fff;--border:#e2ddd8;--border-strong:#c8c2ba;
-    --text:#1a1714;--text-muted:#7a736b;--text-light:#a89f96;
-    --accent:#c84b2f;--accent-soft:#fdf0ed;--accent2:#2563eb;--accent2-soft:#eff6ff;
+    --bg:#f5f3ef;--surface:#ffffff;--border:#e5e0da;--border-strong:#ccc6be;
+    --text:#1c1917;--text-muted:#78716c;--text-light:#a8a29e;
+    --accent:#dc4a2f;--accent-soft:#fdf0ed;--accent2:#2563eb;--accent2-soft:#eff6ff;
     --tag-todo:#e8e5e0;--tag-todo-text:#5a534c;--tag-inprogress:#fef3c7;--tag-inprogress-text:#92400e;
     --tag-review:#e0e7ff;--tag-review-text:#3730a3;--tag-done:#d1fae5;--tag-done-text:#065f46;
     --tag-blocked:#fee2e2;--tag-blocked-text:#991b1b;--tag-high:#fee2e2;--tag-high-text:#991b1b;
     --tag-medium:#fef3c7;--tag-medium-text:#92400e;--tag-low:#d1fae5;--tag-low-text:#065f46;
     --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
     --shadow-md:0 4px 20px rgba(0,0,0,.12);--radius:10px;
+    --radius-sm:6px;--radius-lg:14px;--radius-xl:20px;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow-lg:0 10px 40px rgba(0,0,0,.12);
   }
+  html{scroll-behavior:smooth;}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+  ::selection{background:var(--accent2);color:#fff;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);background-image:radial-gradient(circle at 20% 50%,rgba(37,99,235,.03) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(200,75,47,.03) 0%,transparent 50%),radial-gradient(circle at 50% 80%,rgba(16,185,129,.02) 0%,transparent 50%);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5;background-attachment:fixed;}
 
   /* ─ Header ─ */
-  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;gap:12px;}
+  .header{background:rgba(255,255,255,.88);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:70px;position:sticky;top:0;z-index:100;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);transition:box-shadow .3s ease;}
   .header-left{display:flex;align-items:center;gap:12px;flex-shrink:0;}
-  .logo-area{position:relative;width:200px;height:42px;border-radius:10px;overflow:hidden;flex-shrink:0;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .15s;}
+  .logo-area{position:relative;width:200px;height:42px;border-radius:var(--radius-lg);overflow:hidden;flex-shrink:0;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .2s,box-shadow .2s;}
+  .logo-area:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(37,99,235,.12);}
   .logo-area img{width:100%;height:100%;object-fit:contain;display:none;}
   .logo-area img.loaded{display:block;}
   .logo-default{font-size:14px;font-weight:600;color:var(--text-muted);pointer-events:none;}
   .header-title{display:flex;flex-direction:column;gap:2px;}
-  .header-title h1{font-size:15px;font-weight:600;letter-spacing:-.2px;line-height:1.2;outline:none;cursor:text;}
+  .header-title h1{font-size:16px;font-weight:600;letter-spacing:-.2px;line-height:1.2;outline:none;cursor:text;}
   .header-title h1:empty::before{content:'Team Task Board';color:var(--text-light);}
-  .week-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-weight:500;}
+  .week-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-weight:500;background:var(--bg);padding:2px 10px;border-radius:100px;border:1px solid var(--border);}
   .week-badge .wk-num{font-family:'DM Mono',monospace;font-weight:700;color:var(--accent2);}
   .week-badge .wk-sep{color:var(--border-strong);}
   .week-badge .wk-range{color:var(--text-light);}
-  .header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .header-divider{width:1px;height:24px;background:var(--border-strong);margin:0 4px;flex-shrink:0;}
 
   /* ─ Toolbar ─ */
+  .toolbar-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;margin:16px 28px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow-sm);}
   .toolbar{padding:16px 28px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .toolbar-left{display:flex;gap:10px;flex:1;flex-wrap:wrap;}
   .toolbar-right{display:flex;gap:8px;}
-  input[type=text],select{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius);padding:7px 12px;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s;}
+  input[type=text],select{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius);padding:7px 12px;background:var(--surface);color:var(--text);outline:none;transition:border-color .2s cubic-bezier(.4,0,.2,1);}
   input[type=text]:focus,select:focus{border-color:var(--accent2);}
-  input[type=date]{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius);padding:7px 12px;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s;width:150px;}
+  input[type=date]{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius);padding:7px 12px;background:var(--surface);color:var(--text);outline:none;transition:border-color .2s cubic-bezier(.4,0,.2,1);width:150px;}
   input[type=date]:focus{border-color:var(--accent2);}
   input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.6;}
   input[type=date]::-webkit-calendar-picker-indicator:hover{opacity:1;}
@@ -51,34 +67,36 @@
   .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-light);pointer-events:none;font-size:13px;}
 
   /* ─ Buttons ─ */
-  .btn{font-family:inherit;font-size:13px;font-weight:500;border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
-  .btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{background:#b03d24;}
+  .btn{font-family:inherit;font-size:13px;font-weight:500;border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+  .btn:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 1px 3px rgba(37,99,235,.15);}.btn-primary:hover{background:#b03d24;box-shadow:0 2px 8px rgba(220,74,47,.3);}
+  .btn-blue{background:var(--accent2);color:#fff;box-shadow:0 1px 3px rgba(37,99,235,.3);}.btn-blue:hover{background:#1d4ed8;}
   .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border-strong);}.btn-secondary:hover{background:var(--bg);}
-  .btn-blue{background:var(--accent2);color:#fff;}.btn-blue:hover{background:#1d4ed8;}
   .btn-ghost{background:transparent;color:var(--text-muted);padding:8px 10px;}.btn-ghost:hover{background:var(--border);color:var(--text);}
   .btn-danger{background:#fee2e2;color:#991b1b;}.btn-danger:hover{background:#fecaca;}
-  .btn-sm{padding:5px 10px;font-size:12px;}.btn-xs{padding:2px 7px;font-size:11px;border-radius:6px;}
+  .btn-sm{padding:5px 10px;font-size:12px;}.btn-sm:hover{transform:translateY(-1px);}.btn-xs{padding:2px 7px;font-size:11px;border-radius:6px;}
 
   /* ─ Stats bar ─ */
   .stats-bar{padding:14px 28px;display:flex;gap:10px;flex-wrap:wrap;}
-  .stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer;transition:all .15s;}
+  .stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);}
   .stat-pill:hover,.stat-pill.active{border-color:var(--accent);background:var(--accent-soft);}
   .stat-pill .dot{width:8px;height:8px;border-radius:50%;}
-  .stat-pill .count{font-weight:700;font-family:'DM Mono',monospace;}
+  .stat-pill .count{font-weight:700;font-family:'DM Mono',monospace;font-size:14px;}
 
   /* ─ Table ─ */
   .table-wrap{padding:0 28px 40px;overflow-x:auto;}
-  table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
-  thead th{background:#faf9f7;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;user-select:none;cursor:pointer;}
+  table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+  thead th{background:#f7f5f2;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;user-select:none;cursor:pointer;}
   thead th:hover{color:var(--text);}
   thead th .sort-icon{margin-left:4px;opacity:.4;}
   thead th.sorted .sort-icon{opacity:1;color:var(--accent);}
   thead th.col-custom{background:#f0f4ff;}
-  th.add-col-th{background:#faf9f7;color:var(--accent2);font-size:15px;cursor:pointer;}
+  th.add-col-th{background:#f7f5f2;color:var(--accent2);font-size:15px;cursor:pointer;}
   th.add-col-th:hover{background:var(--accent2-soft);}
-  tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+  tbody tr{border-bottom:1px solid var(--border);transition:background .15s, border-left .15s;border-left:3px solid transparent;}
+  tbody tr:nth-child(even){background:rgba(0,0,0,.015);}
   tbody tr:last-child{border-bottom:none;}
-  tbody tr:hover{background:#faf9f7;}
+  tbody tr:hover{background:#f0eeea;border-left:3px solid var(--accent2);}
   tbody tr.row-done{opacity:.55;}
   tbody tr.row-done td{text-decoration:line-through;text-decoration-color:var(--border-strong);}
   tbody tr.row-done .tag,.row-done .btn,.row-done .dep-chip{text-decoration:none;}
@@ -93,12 +111,12 @@
   tbody tr.cf-custom-1{background:#fef3c7!important;border-left:4px solid #f59e0b!important;}
   tbody tr.cf-custom-2{background:#dbeafe!important;border-left:4px solid #3b82f6!important;}
   tbody tr.cf-custom-3{background:#fae8ff!important;border-left:4px solid #c026d3!important;}
-  td{padding:11px 14px;vertical-align:middle;font-size:13px;}
+  td{padding:13px 16px;vertical-align:middle;font-size:13px;}
   td.task-name{font-weight:500;max-width:220px;}
   td.task-name .task-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
   td.task-name .task-desc{font-size:11px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;font-weight:400;}
   td.td-custom{max-width:150px;}
-  .inline-edit{font-family:inherit;font-size:12px;border:1px solid transparent;border-radius:6px;padding:3px 6px;width:100%;background:transparent;color:var(--text);outline:none;cursor:text;transition:all .15s;}
+  .inline-edit{font-family:inherit;font-size:12px;border:1px solid transparent;border-radius:6px;padding:3px 6px;width:100%;background:transparent;color:var(--text);outline:none;cursor:text;transition:all .2s cubic-bezier(.4,0,.2,1);}
   .inline-edit:hover{background:var(--bg);border-color:var(--border);}
   .inline-edit:focus{background:#fff;border-color:var(--accent2);}
   select.inline-edit{cursor:pointer;}
@@ -109,18 +127,18 @@
   .tag-review{background:var(--tag-review);color:var(--tag-review-text);}.tag-done{background:var(--tag-done);color:var(--tag-done-text);}
   .tag-blocked{background:var(--tag-blocked);color:var(--tag-blocked-text);}.tag-high{background:var(--tag-high);color:var(--tag-high-text);}
   .tag-medium{background:var(--tag-medium);color:var(--tag-medium-text);}.tag-low{background:var(--tag-low);color:var(--tag-low-text);}
-  .progress-bar{width:76px;height:5px;background:var(--border);border-radius:100px;overflow:hidden;}
+  .progress-bar{width:76px;height:7px;background:var(--border);border-radius:100px;overflow:hidden;}
   .progress-fill{height:100%;border-radius:100px;background:var(--accent2);transition:width .3s;}
   .due-date{font-family:'DM Mono',monospace;font-size:12px;}.due-overdue{color:var(--accent);font-weight:600;}.due-soon{color:#92400e;}
   .assignee-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px 3px 5px;font-size:12px;}
   .assignee-avatar{width:20px;height:20px;border-radius:50%;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .actions{display:flex;gap:4px;}
-  .no-results{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;}
-  .no-results .icon{font-size:32px;margin-bottom:10px;}
+  .no-results{text-align:center;padding:80px 20px;color:var(--text-muted);font-size:14px;}
+  .no-results .icon{font-size:48px;margin-bottom:16px;opacity:.6;}
 
   /* ─ Deps ─ */
   .dep-chips{display:flex;flex-wrap:wrap;gap:4px;}
-  .dep-chip{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap;border:1px solid transparent;}
+  .dep-chip{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:6px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);white-space:nowrap;border:1px solid transparent;}
   .dep-chip.dep-open{background:#fef3c7;color:#92400e;border-color:#fcd34d;}
   .dep-chip.dep-done{background:#d1fae5;color:#065f46;border-color:#6ee7b7;text-decoration:line-through;opacity:.7;}
   .dep-chip.dep-blocked{background:#fee2e2;color:#991b1b;border-color:#fca5a5;}
@@ -130,36 +148,36 @@
   .dexp-link:hover{color:#1d4ed8;border-bottom-style:solid;}
 
   .dep-selector{border:1px solid var(--border-strong);border-radius:8px;background:var(--bg);max-height:150px;overflow-y:auto;padding:6px;display:flex;flex-direction:column;gap:3px;}
-  .dep-option{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;transition:background .1s;}
+  .dep-option{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;transition:background .15s;}
   .dep-option:hover{background:var(--surface);}
   .dep-option input[type=checkbox]{accent-color:var(--accent2);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
   .dep-opt-id{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-light);min-width:32px;}
   .dep-opt-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
   /* ─ Modal (shared) ─ */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .modal-overlay.open{opacity:1;pointer-events:all;}
-  .modal{background:var(--surface);border-radius:16px;width:100%;box-shadow:var(--shadow-md);transform:translateY(12px);transition:transform .2s;max-height:90vh;overflow-y:auto;}
-  .modal-overlay.open .modal{transform:translateY(0);}
-  .modal-header{padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between;}
-  .modal-header h2{font-size:16px;font-weight:600;}
-  .modal-body{padding:20px 24px 8px;display:flex;flex-direction:column;gap:14px;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .modal{background:var(--surface);border-radius:var(--radius-xl);border:1px solid var(--border);width:100%;box-shadow:var(--shadow-lg),0 25px 50px rgba(0,0,0,.15);transform:scale(.92) translateY(10px);transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s ease;opacity:0;max-height:90vh;overflow-y:auto;}
+  .modal-overlay.open .modal{transform:scale(1) translateY(0);opacity:1;}
+  .modal-header{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:16px;}
+  .modal-header h2{font-size:17px;font-weight:600;}
+  .modal-body{padding:20px 28px 8px;display:flex;flex-direction:column;gap:16px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   .form-group{display:flex;flex-direction:column;gap:5px;}
   .form-group.full{grid-column:1/-1;}
   .form-group label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
-  .form-group input,.form-group select,.form-group textarea{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;}
+  .form-group input,.form-group select,.form-group textarea{font-family:inherit;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:10px 14px;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s cubic-bezier(.4,0,.2,1);}
   .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent2);background:#fff;}
   .form-group textarea{resize:vertical;min-height:60px;}
-  .modal-footer{padding:16px 24px 22px;display:flex;justify-content:flex-end;gap:10px;}
+  .modal-footer{padding:16px 28px 24px;display:flex;justify-content:flex-end;gap:10px;}
 
   /* ─ Chart modal ─ */
   #chart-modal .modal{max-width:800px;}
-  .chart-tabs{display:flex;gap:2px;padding:0 24px;border-bottom:1px solid var(--border);}
+  .chart-tabs{display:flex;gap:2px;padding:0 28px;border-bottom:1px solid var(--border);}
   .chart-tab{padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-muted);transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;}
   .chart-tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
   .chart-tab:hover{color:var(--text);}
-  .chart-panel{display:none;padding:20px 24px;}
+  .chart-panel{display:none;padding:20px 28px;}
   .chart-panel.active{display:block;}
   .chart-canvas-wrap{position:relative;}
   canvas.chart{width:100%!important;}
@@ -179,7 +197,7 @@
   /* ─ Add Column modal ─ */
   #addcol-modal .modal{max-width:460px;}
   .col-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .col-type-btn{padding:11px 13px;border:2px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;transition:all .15s;font-family:inherit;}
+  .col-type-btn{padding:11px 13px;border:2px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;transition:all .2s cubic-bezier(.4,0,.2,1);font-family:inherit;}
   .col-type-btn:hover{border-color:var(--accent2);background:var(--accent2-soft);}
   .col-type-btn.selected{border-color:var(--accent2);background:var(--accent2-soft);}
   .col-type-icon{font-size:17px;margin-bottom:3px;}
@@ -199,10 +217,10 @@
   .cf-rule-preview{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);flex-shrink:0;}
   .cf-rule-condition{display:grid;grid-template-columns:130px 110px 1fr;gap:8px;align-items:center;}
   .cf-rule-condition select,.cf-rule-condition input{font-size:12px;padding:6px 10px;}
-  .cf-add-rule{border:2px dashed var(--border-strong);background:transparent;color:var(--text-muted);padding:14px;border-radius:10px;cursor:pointer;text-align:center;font-weight:500;transition:all .15s;}
+  .cf-add-rule{border:2px dashed var(--border-strong);background:transparent;color:var(--text-muted);padding:14px;border-radius:10px;cursor:pointer;text-align:center;font-weight:500;transition:all .2s cubic-bezier(.4,0,.2,1);}
   .cf-add-rule:hover{border-color:var(--accent2);color:var(--accent2);background:var(--accent2-soft);}
   .cf-preset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:16px;}
-  .cf-preset-btn{padding:12px;border:2px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;transition:all .15s;font-size:12px;}
+  .cf-preset-btn{padding:12px;border:2px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;transition:all .2s cubic-bezier(.4,0,.2,1);font-size:12px;}
   .cf-preset-btn:hover{border-color:var(--accent2);background:var(--accent2-soft);}
   .cf-preset-name{font-weight:600;margin-bottom:3px;}
   .cf-preset-desc{font-size:11px;color:var(--text-muted);}
@@ -213,22 +231,82 @@
   .custom-col-item .col-type-tag{font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;background:var(--border);padding:2px 6px;border-radius:4px;}
 
   /* ─ Hint banner ─ */
-  .export-hint{margin:0 28px 14px;background:var(--accent2-soft);border:1px solid #bfdbfe;border-radius:var(--radius);padding:9px 14px;font-size:12px;color:#1e40af;display:flex;align-items:center;gap:8px;}
+  .export-hint{margin:0 28px 14px;background:var(--accent2-soft);border:1px solid #bfdbfe;border-radius:var(--radius-lg);padding:9px 14px;font-size:12px;color:#1e40af;display:flex;align-items:center;gap:8px;}
   .export-hint strong{font-weight:600;}
 
   /* ─ Tabs ─ */
-  .tabs{display:flex;gap:4px;padding:0 28px;border-bottom:2px solid var(--border);background:var(--surface);position:sticky;top:64px;z-index:99;}
-  .tab{padding:12px 20px;background:transparent;border:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border-radius:0;transition:all .15s;position:relative;}
+  .tabs{display:flex;gap:2px;padding:6px 28px 10px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:70px;z-index:99;overflow-x:auto;align-items:center;}
+  .tab{padding:12px 20px;background:transparent;border:none;font-family:inherit;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border-radius:100px;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;display:inline-flex;align-items:center;gap:6px;margin:8px 2px;}
   .tab:hover{background:var(--bg);color:var(--text);}
-  .tab.active{background:transparent;color:var(--accent2);font-weight:600;}
-  .tab.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--accent2);}
+  .tab.active{background:var(--accent2);color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(37,99,235,.25);}
+  .tab.active::after{display:none;}
   .tab-content{display:none;}
   .tab-content.active{display:block;}
 
+  /* ─ Focus visible (accessibility) ─ */
+  input[type=text]:focus-visible,select:focus-visible,textarea:focus-visible,input[type=date]:focus-visible,input[type=number]:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;}
+  button:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;}
+  a:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;border-radius:4px;}
+  [tabindex]:focus-visible{outline:2px solid var(--accent2);outline-offset:2px;}
+
+  /* ─ Kanban Board ─ */
+  .kanban-wrap{padding:0 28px 40px;display:none;}
+  .kanban-wrap.active{display:block;}
+  .kanban-board{display:flex;gap:14px;overflow-x:auto;padding-bottom:16px;align-items:flex-start;}
+  .kanban-column{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);min-width:250px;max-width:280px;flex:1;display:flex;flex-direction:column;max-height:calc(100vh - 280px);}
+  .kanban-col-header{padding:14px 16px;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .kanban-col-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:8px;}
+  .kanban-col-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .kanban-col-count{font-family:'DM Mono',monospace;font-size:12px;font-weight:700;background:var(--bg);padding:2px 8px;border-radius:100px;color:var(--text-muted);min-width:24px;text-align:center;}
+  .kanban-col-body{padding:10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1;min-height:80px;}
+  .kanban-col-body::-webkit-scrollbar{width:4px;}
+  .kanban-col-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:100px;}
+  .kanban-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow-sm);}
+  .kanban-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);border-color:var(--border-strong);}
+  .kanban-card-title{font-size:13px;font-weight:600;margin-bottom:4px;line-height:1.3;}
+  .kanban-card-desc{font-size:11px;color:var(--text-muted);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .kanban-card-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .kanban-card-priority{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.3px;}
+  .kanban-card-assignee{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);}
+  .kanban-card-assignee-avatar{width:18px;height:18px;border-radius:50%;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .kanban-card-due{font-size:10px;font-family:'DM Mono',monospace;color:var(--text-muted);margin-left:auto;}
+  .kanban-card-progress{width:100%;height:5px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:8px;}
+  .kanban-card-progress-fill{height:100%;border-radius:100px;background:var(--accent2);transition:width .3s;}
+  .kanban-empty{padding:24px 12px;text-align:center;color:var(--text-light);font-size:12px;}
+  .kanban-col-todo .kanban-col-header{border-bottom-color:#a8a09a;}
+  .kanban-col-inprogress .kanban-col-header{border-bottom-color:#f59e0b;}
+  .kanban-col-inreview .kanban-col-header{border-bottom-color:#6366f1;}
+  .kanban-col-done .kanban-col-header{border-bottom-color:#10b981;}
+  .kanban-col-blocked .kanban-col-header{border-bottom-color:#ef4444;}
+
+  /* ─ View Toggle Buttons ─ */
+  .task-view-toggle{display:flex;gap:2px;background:var(--bg);border-radius:8px;padding:2px;border:1px solid var(--border);}
+  .task-view-btn{padding:5px 10px;border:none;background:transparent;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text-muted);transition:all .2s ease;font-family:inherit;display:flex;align-items:center;gap:4px;}
+  .task-view-btn.active{background:var(--surface);color:var(--accent2);box-shadow:var(--shadow-sm);font-weight:600;}
+  .task-view-btn:hover:not(.active){color:var(--text);}
+
+  /* ─ Dark Mode Improvements ─ */
+  .dark-mode{--bg:#1a1a1a;--surface:#242424;--border:#333;--border-strong:#444;--text:#e5e5e5;--text-muted:#999;--text-light:#666;--accent-soft:#2d1b1b;--accent2-soft:#1a2340;}
+  .dark-mode .header{background:rgba(36,36,36,.92);box-shadow:0 1px 3px rgba(0,0,0,.2),0 4px 16px rgba(0,0,0,.15);}
+  .dark-mode .tabs{background:var(--surface);}
+  .dark-mode .toolbar-card{background:var(--surface);}
+  .dark-mode .tab.active{background:var(--accent2);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.4);}
+  .dark-mode .stat-pill:hover,.dark-mode .stat-pill.active{border-color:var(--accent);background:var(--accent-soft);}
+  .dark-mode .export-hint{background:var(--accent2-soft);border-color:#1e3a5f;}
+  .dark-mode .modal{box-shadow:0 25px 50px rgba(0,0,0,.5);}
+  .dark-mode .kanban-card:hover{border-color:var(--border-strong);box-shadow:0 4px 16px rgba(0,0,0,.3);}
+  .dark-mode input[type=text],.dark-mode select,.dark-mode textarea,.dark-mode input[type=date],.dark-mode input[type=number]{background:var(--surface);border-color:var(--border-strong);color:var(--text);}
+  .dark-mode input[type=text]:focus,.dark-mode select:focus,.dark-mode textarea:focus{border-color:var(--accent2);background:#1a1a2e;}
+
+  @media(max-width:1024px){
+    .header-right .hide-tablet{display:none;}
+  }
   @media(max-width:700px){
     .header,.toolbar,.stats-bar,.table-wrap,.export-hint{padding-left:14px;padding-right:14px;}
     .form-row{grid-template-columns:1fr;}
     .header-right .btn-sm:not(.btn-primary){display:none;}
+    .tabs{padding:0 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    .toolbar{flex-direction:column;align-items:stretch;}
   }
 
   /* ─ Working Hours ─ */
@@ -248,12 +326,12 @@
 
   /* Hours Entry Grid */
   .wh-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
-  .wh-table thead th{background:#faf9f7;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .wh-table thead th{background:#f7f5f2;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
   .wh-table thead th.day-col{text-align:center;min-width:70px;}
   .wh-table thead th.total-col{text-align:center;min-width:70px;background:#f0f4ff;color:var(--accent2);}
-  .wh-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+  .wh-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
   .wh-table tbody tr:last-child{border-bottom:none;}
-  .wh-table tbody tr:hover{background:#faf9f7;}
+  .wh-table tbody tr:hover{background:#f7f5f2;}
   .wh-table tbody tr.wh-total-row{background:#f0f4ff;font-weight:700;border-top:2px solid var(--border);}
   .wh-table td{padding:10px 12px;font-size:13px;vertical-align:middle;}
   .wh-table td.day-td{text-align:center;}
@@ -273,7 +351,7 @@
 
   /* Submit Hours Tab */
   .wh-weeks-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
-  .wh-week-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:16px;}
+  .wh-week-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:16px;}
   .wh-week-card:hover{border-color:var(--accent2);box-shadow:0 2px 10px rgba(37,99,235,.1);}
   .wh-week-card.selected{border-color:var(--accent2);background:var(--accent2-soft);}
   .wh-week-card-info{flex:1;}
@@ -303,8 +381,8 @@
 
   /* Lot cards grid */
   .sl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:32px;}
-  .sl-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .15s,border-color .15s;cursor:pointer;}
-  .sl-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-strong);}
+  .sl-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s cubic-bezier(.4,0,.2,1),border-color .2s;cursor:pointer;}
+  .sl-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-strong);transform:translateY(-2px);}
   .sl-card-header{padding:14px 18px 10px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--border);}
   .sl-lot-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
   .sl-card-meta{flex:1;min-width:0;}
@@ -332,12 +410,12 @@
   /* Table view */
   .sl-table-wrap{overflow-x:auto;}
   .sl-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
-  .sl-table thead th{background:#faf9f7;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
+  .sl-table thead th{background:#f7f5f2;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
   .sl-table thead th:hover{color:var(--text);}
   .sl-table thead th.sorted{color:var(--accent2);}
-  .sl-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+  .sl-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
   .sl-table tbody tr:last-child{border-bottom:none;}
-  .sl-table tbody tr:hover{background:#faf9f7;}
+  .sl-table tbody tr:hover{background:#f7f5f2;}
   .sl-table td{padding:10px 12px;font-size:12px;vertical-align:middle;}
 
   /* Lot modal */
@@ -360,89 +438,24 @@
 
   /* Stats strip */
   .sl-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
-  .sl-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 18px;display:flex;align-items:center;gap:10px;}
+  .sl-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 18px;display:flex;align-items:center;gap:10px;}
   .sl-stat-icon{font-size:20px;}
   .sl-stat-val{font-size:22px;font-weight:700;font-family:'DM Mono',monospace;color:var(--accent2);}
   .sl-stat-label{font-size:11px;color:var(--text-muted);font-weight:500;}
 
   /* View toggle */
-  .sl-view-btn{padding:7px 10px;border:1px solid var(--border-strong);background:var(--surface);border-radius:8px;cursor:pointer;font-size:14px;transition:all .15s;}
+  .sl-view-btn{padding:7px 10px;border:1px solid var(--border-strong);background:var(--surface);border-radius:8px;cursor:pointer;font-size:14px;transition:all .2s cubic-bezier(.4,0,.2,1);}
   .sl-view-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
-
-  /* ─ Tools Tab ─ */
-  .tools-wrap{padding:24px 28px 60px;display:flex;flex-direction:column;gap:28px;}
-  .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;align-items:start;}
-  .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
-  .tool-card-header{display:flex;align-items:center;gap:10px;padding:16px 20px 12px;border-bottom:1px solid var(--border);background:#fafaf8;}
-  .tool-card-icon{font-size:22px;flex-shrink:0;}
-  .tool-card-title{font-size:14px;font-weight:700;color:var(--text);}
-  .tool-card-sub{font-size:11px;color:var(--text-muted);}
-  .tool-card-body{padding:18px 20px;}
-  /* Calculator */
-  .calc-display{background:#1a1714;border-radius:10px;padding:12px 16px;margin-bottom:12px;text-align:right;}
-  .calc-expr{font-family:'DM Mono',monospace;font-size:11px;color:#7a736b;min-height:16px;word-break:break-all;}
-  .calc-result{font-family:'DM Mono',monospace;font-size:26px;font-weight:600;color:#fff;min-height:34px;word-break:break-all;}
-  .calc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
-  .calc-btn{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;border:none;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all .12s;background:var(--bg);color:var(--text);}
-  .calc-btn:hover{filter:brightness(.93);}
-  .calc-btn:active{transform:scale(.94);}
-  .calc-btn.op{background:#fef3c7;color:#92400e;}
-  .calc-btn.fn{background:#ede9fe;color:#5b21b6;font-size:10px;}
-  .calc-btn.eq{background:var(--accent2);color:#fff;grid-column:span 2;}
-  .calc-btn.clr{background:#fee2e2;color:#991b1b;}
-  .calc-btn.num{background:#f4f2ee;}
-  .calc-btn.zero{grid-column:span 2;}
-  .calc-history{max-height:100px;overflow-y:auto;margin-top:10px;background:var(--bg);border-radius:8px;padding:6px 10px;}
-  .calc-hist-item{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);padding:2px 0;cursor:pointer;border-bottom:1px solid var(--border);}
-  .calc-hist-item:last-child{border:none;}
-  .calc-hist-item:hover{color:var(--text);}
-  /* Unit Converter */
-  .uc-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;}
-  .uc-tab{padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:var(--bg);color:var(--text-muted);transition:all .12s;}
-  .uc-tab.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
-  .uc-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:10px;}
-  .uc-val{font-family:'DM Mono',monospace;font-size:14px;border:1.5px solid var(--border-strong);border-radius:8px;padding:9px 12px;background:var(--bg);color:var(--text);outline:none;width:100%;transition:border-color .15s;}
-  .uc-val:focus{border-color:var(--accent2);background:#fff;}
-  .uc-arrow{color:var(--accent2);font-size:18px;font-weight:700;text-align:center;}
-  .uc-select{font-family:inherit;font-size:12px;border:1.5px solid var(--border-strong);border-radius:8px;padding:9px 10px;background:var(--bg);color:var(--text);outline:none;width:100%;}
-  .uc-result-box{background:var(--accent2-soft);border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;text-align:center;margin-top:6px;}
-  .uc-result-val{font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--accent2);}
-  .uc-result-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
-  /* Date Calc */
-  .dc-section{margin-bottom:14px;}
-  .dc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:7px;}
-  .dc-result{font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent2);background:var(--accent2-soft);border-radius:8px;padding:8px 12px;margin-top:6px;}
-  /* Currency */
-  .fx-rate-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
-  .fx-rate-label{font-size:12px;color:var(--text-muted);}
-  .fx-rate-input{font-family:'DM Mono',monospace;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:7px 10px;width:100px;background:var(--bg);color:var(--text);outline:none;}
-  .fx-pair{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
-  .fx-pair label{font-size:11px;color:var(--text-muted);min-width:60px;}
-  /* Percentage */
-  .pct-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .pct-inp{font-family:'DM Mono',monospace;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;width:100%;background:var(--bg);color:var(--text);outline:none;}
-  .pct-result{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin-top:8px;text-align:center;}
-  /* Day pills */
-  .dc-day-pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:20px;border:1.5px solid var(--border-strong);background:var(--bg);cursor:pointer;transition:all .12s;user-select:none;}
-  .dc-day-pill input{accent-color:var(--accent2);width:14px;height:14px;cursor:pointer;}
-  .dc-day-pill:has(input:checked){background:var(--accent2);color:#fff;border-color:var(--accent2);}
-  /* Materials table */
-  .mat-td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
-  .mat-td-num{font-family:'DM Mono',monospace;font-size:12px;text-align:right;}
-  .mat-row:hover td{background:#f8f9fa;}
-  .mat-row:nth-child(even) td{background:#fafaf8;}
-  .mat-mat-name{font-weight:600;font-size:13px;}
-  .mat-sub{font-size:10px;color:var(--text-muted);}
 
   /* ── Verification Tab ── */
   .vf-wrap{padding:24px 28px 60px;}
   .vf-inner-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;}
-  .vf-inner-tab{padding:8px 18px;font-size:13px;font-weight:600;border:1.5px solid var(--border-strong);border-radius:8px;cursor:pointer;background:var(--surface);color:var(--text-muted);transition:all .15s;}
+  .vf-inner-tab{padding:8px 18px;font-size:13px;font-weight:600;border:1.5px solid var(--border-strong);border-radius:8px;cursor:pointer;background:var(--surface);color:var(--text-muted);transition:all .2s cubic-bezier(.4,0,.2,1);}
   .vf-inner-tab.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
   .vf-panel{display:none;} .vf-panel.active{display:block;}
   .vf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;}
-  .vf-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .15s;}
-  .vf-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);}
+  .vf-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s cubic-bezier(.4,0,.2,1);}
+  .vf-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);transform:translateY(-2px);}
   .vf-card-header{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
   .vf-card-body{padding:12px 16px;display:flex;flex-direction:column;gap:7px;}
   .vf-card-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fafaf8;}
@@ -462,7 +475,7 @@
   .vf-val{color:var(--text);font-weight:500;}
   .vf-reminder{background:#fef3c7;border:1px solid #fde68a;border-radius:6px;padding:5px 10px;font-size:11px;color:#92400e;}
   .vf-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
-  .vf-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;gap:8px;}
+  .vf-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:10px 16px;display:flex;align-items:center;gap:8px;}
   .vf-stat-val{font-size:20px;font-weight:700;font-family:'DM Mono',monospace;color:var(--accent2);}
   .vf-stat-label{font-size:10px;color:var(--text-muted);font-weight:500;}
   .vf-bearer-motor{color:#f97316;font-weight:700;}
@@ -471,10 +484,91 @@
   .vf-reminder-badge{background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;}
   /* sl cost bearer toggle */
   .cost-bearer-toggle{display:flex;gap:6px;}
-  .cost-bearer-btn{padding:7px 18px;font-size:12px;font-weight:700;border:1.5px solid var(--border-strong);border-radius:8px;cursor:pointer;background:var(--bg);color:var(--text-muted);transition:all .12s;}
+  .cost-bearer-btn{padding:7px 18px;font-size:12px;font-weight:700;border:1.5px solid var(--border-strong);border-radius:8px;cursor:pointer;background:var(--bg);color:var(--text-muted);transition:all .2s cubic-bezier(.4,0,.2,1);}
   .cost-bearer-btn.active-motor{background:#fff7ed;color:#c2410c;border-color:#fb923c;}
   .cost-bearer-btn.active-others{background:#f5f3ff;color:#6d28d9;border-color:#a78bfa;}
-</style>
+
+  /* ─ Person Definition Tab ─ */
+  .pd-wrap{padding:20px 28px 60px;}
+  .pd-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .pd-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 18px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px;}
+  .pd-stat-val{font-size:22px;font-weight:700;font-family:'DM Mono',monospace;color:var(--accent2);}
+  .pd-stat-label{font-size:11px;color:var(--text-muted);font-weight:500;}
+  .pd-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .pd-toolbar .search-wrap input{width:240px;}
+  .pd-toolbar select{min-width:140px;}
+  .pd-view-toggle{display:flex;gap:4px;margin-left:auto;}
+  .pd-view-btn{padding:7px 10px;border:1px solid var(--border-strong);background:var(--surface);border-radius:8px;cursor:pointer;font-size:14px;transition:all .2s cubic-bezier(.4,0,.2,1);}
+  .pd-view-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+  .pd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+  .pd-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s cubic-bezier(.4,0,.2,1),border-color .2s;position:relative;}
+  .pd-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-strong);transform:translateY(-2px);}
+  .pd-card-header{padding:16px 18px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);}
+  .pd-avatar{width:44px;height:44px;border-radius:50%;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .pd-card-info{flex:1;min-width:0;}
+  .pd-card-name{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .pd-card-role{font-size:12px;color:var(--text-muted);margin-top:2px;}
+  .pd-card-status{position:absolute;top:14px;right:14px;}
+  .pd-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;}
+  .pd-status-Active{background:#d1fae5;color:#065f46;}
+  .pd-status-On Leave{background:#fef3c7;color:#92400e;}
+  .pd-status-Busy{background:#fee2e2;color:#991b1b;}
+  .pd-status-Inactive{background:#f3f4f6;color:#6b7280;}
+  .pd-card-body{padding:12px 18px;display:flex;flex-direction:column;gap:6px;}
+  .pd-row{display:flex;align-items:center;gap:8px;font-size:12px;}
+  .pd-row-icon{font-size:13px;width:18px;text-align:center;flex-shrink:0;}
+  .pd-row-label{color:var(--text-muted);min-width:80px;font-weight:500;}
+  .pd-row-val{color:var(--text);font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .pd-skills-wrap{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
+  .pd-skill-chip{display:inline-flex;font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px;background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe;}
+  .pd-card-footer{padding:10px 18px;background:var(--bg);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .pd-task-count{font-size:12px;color:var(--text-muted);font-weight:500;}
+  .pd-task-count strong{color:var(--accent2);font-family:'DM Mono',monospace;}
+  .pd-card-actions{display:flex;gap:4px;}
+  /* Table view */
+  .pd-table-wrap{overflow-x:auto;}
+  .pd-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .pd-table thead th{background:#f7f5f2;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
+  .pd-table thead th:hover{color:var(--text);}
+  .pd-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+  .pd-table tbody tr:last-child{border-bottom:none;}
+  .pd-table tbody tr:hover{background:#f7f5f2;}
+  .pd-table td{padding:10px 12px;font-size:12px;vertical-align:middle;}
+  /* Person Modal */
+  #pd-modal .modal{max-width:620px;}
+  .pd-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .pd-form-grid .full{grid-column:1/-1;}
+  .pd-color-options{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .pd-color-opt{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s cubic-bezier(.4,0,.2,1);}
+  .pd-color-opt:hover{transform:scale(1.15);}
+  .pd-color-opt.selected{border-color:var(--text);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--text);}
+  .pd-skill-input-wrap{display:flex;gap:6px;}
+  .pd-skill-input-wrap input{flex:1;}
+  .pd-skill-input-wrap button{flex-shrink:0;}
+  .pd-existing-skills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .pd-existing-skill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:100px;background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe;}
+  .pd-existing-skill button{background:none;border:none;color:#5b21b6;cursor:pointer;font-size:13px;padding:0 2px;line-height:1;}
+  .pd-existing-skill button:hover{color:#991b1b;}
+
+  /* ─ Dark Mode ─ */
+  body.dark-mode{--bg:#111113;--surface:#1c1c20;--border:#2e2e34;--border-strong:#444;--text:#eae8e4;--text-muted:#908a84;--text-light:#605c58;--tag-todo:#2a2a2e;--tag-todo-text:#b0a8a0;--tag-inprogress:#3a3020;--tag-inprogress-text:#f0c060;--tag-review:#202840;--tag-review-text:#8090e0;--tag-done:#1a3025;--tag-done-text:#60c090;--tag-blocked:#301818;--tag-blocked-text:#e08080;--accent-soft:#2a1510;--accent2-soft:#151a2a;}
+  body.dark-mode .header{background:rgba(37,37,41,.92);box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  body.dark-mode .tab.active{background:rgba(37,99,235,.08);}
+  body.dark-mode thead th{background:#2a2a2e;}body.dark-mode th.add-col-th{background:#2a2a2e;}
+  body.dark-mode tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  body.dark-mode tbody tr:hover{background:#252528;border-left:3px solid var(--accent2);}
+  body.dark-mode .export-hint{background:var(--accent2-soft);border-color:#2a3a5a;color:#80a0e0;}
+  body.dark-mode .modal{background:#2a2a2e;border-color:#3a3a40;}
+  body.dark-mode .sl-card,body.dark-mode .pd-card,body.dark-mode .vf-card{background:var(--surface);border-color:var(--border);}
+  body.dark-mode .stat-pill{background:var(--surface);border-color:var(--border);}
+  body.dark-mode .sl-stat,body.dark-mode .vf-stat,body.dark-mode .pd-stat{background:var(--surface);border-color:var(--border);}
+  body.dark-mode .inline-edit:focus{background:var(--surface);}
+  body.dark-mode .form-group input:focus,body.dark-mode .form-group select:focus,body.dark-mode .form-group textarea:focus{background:var(--surface);}
+  body.dark-mode .week-badge{background:var(--surface);border-color:var(--border);}
+  body.dark-mode .no-results .icon{opacity:.4;}
+  body.dark-mode .export-hint{background:var(--accent2-soft);border-color:#2a3a5a;color:#80a0e0;}
+
+  </style>
 </head>
 <body>
 
@@ -491,11 +585,13 @@
     </div>
   </div>
   <div class="header-right">
+    <button class="btn btn-ghost btn-sm" id="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button>
     <button class="btn btn-ghost btn-sm" onclick="openInfoModal()" title="About data storage">ℹ️ Info</button>
+    <span class="header-divider"></span>
     <button class="btn btn-blue btn-sm" onclick="openChartModal()">📊 Team Stats</button>
     <button class="btn btn-secondary btn-sm" onclick="openCFModal()">🎨 Formatting</button>
-    <button class="btn btn-secondary btn-sm" onclick="openAddColModal()">＋ Column</button>
-    <button class="btn btn-secondary btn-sm" onclick="exportJSON()">⬇ Export JSON</button>
+    <button class="btn btn-secondary btn-sm hide-tablet" onclick="openAddColModal()">＋ Column</button>
+    <button class="btn btn-secondary btn-sm hide-tablet" onclick="exportJSON()">⬇ Export JSON</button>
     <button class="btn btn-secondary btn-sm" onclick="exportAllExcel()" title="Export everything to a multi-sheet Excel file">📊 Export Excel</button>
     <button class="btn btn-secondary btn-sm" onclick="importJSON()">⬆ Import JSON</button>
     <input type="file" id="json-input" accept=".json" style="display:none" onchange="handleJSONImport(event)" />
@@ -511,7 +607,7 @@
   <button class="tab" onclick="switchMainTab('workinghours')">⏱ Working Hours</button>
   <button class="tab" onclick="switchMainTab('samples')">🧪 Samples</button>
   <button class="tab" id="tab-verification" onclick="switchMainTab('verification')">🔬 Verification</button>
-  <button class="tab" onclick="switchMainTab('tools')">🛠 Tools</button>
+  <button class="tab" onclick="switchMainTab('persons')">👤 Person Definition</button>
 </div>
 
 <!-- ══ TASKS TAB ══ -->
@@ -538,6 +634,10 @@
     <input type="date" id="filter-date-to" onchange="renderTable()" placeholder="To date" title="Due date to" />
   </div>
   <div class="toolbar-right">
+    <div class="task-view-toggle">
+      <button class="task-view-btn active" id="view-table-btn" onclick="toggleView('table')" title="Table view">☰ Table</button>
+      <button class="task-view-btn" id="view-kanban-btn" onclick="toggleView('kanban')" title="Kanban view">⊞ Kanban</button>
+    </div>
     <button class="btn btn-secondary btn-sm" onclick="showLastWeekModified()">📝 Last Week Modified</button>
     <button class="btn btn-secondary btn-sm" onclick="syncToGitHub()">☁️ Sync to GitHub</button>
     <button class="btn btn-secondary btn-sm" onclick="loadFromGitHub()">📥 Load from GitHub</button>
@@ -556,8 +656,7 @@
   💡 <span><strong>Data Persistence:</strong> All edits auto-save to your <strong>browser's local storage</strong> on THIS device only. Data does NOT sync across devices. To share or backup: <strong>Export JSON</strong> → save to OneDrive/SharePoint → <strong>Import JSON</strong> on other devices (preserves all tasks, columns, formatting, and logo). Place <strong>ELARABY.LOGO</strong> file (4002×650px) in same folder for automatic logo loading.</span>
 </div>
 
-<!-- ══ TABLE ══ -->
-<div class="table-wrap">
+  <div class="table-wrap" id="table-view-wrap">
   <table>
     <thead>
       <tr id="table-head-row">
@@ -581,6 +680,11 @@
     </thead>
     <tbody id="task-tbody"></tbody>
   </table>
+</div>
+
+<!-- ══ KANBAN BOARD ══ -->
+<div class="kanban-wrap" id="kanban-view-wrap">
+  <div class="kanban-board" id="kanban-board"></div>
 </div>
 
 </div><!-- END TASKS TAB -->
@@ -855,316 +959,88 @@
   </div>
 </div><!-- END SAMPLES TAB -->
 
-<!-- ══ TOOLS TAB ══ -->
-<div id="tools-tab" class="tab-content">
-<div class="tools-wrap">
+<!-- ══ PERSON DEFINITION TAB ══ -->
+<div id="persons-tab" class="tab-content">
+<div class="pd-wrap">
+  <!-- Quick Tips Banner -->
+  <div class="export-hint" style="margin-bottom:16px">
+    <span>💡</span>
+    <strong>Quick Tips:</strong> 
+    Define your team members here and use their names when assigning tasks. 
+    Use the <strong>Export CSV</strong> to share the team roster. 
+    Skills help identify the right person for specific task types. 
+    Filter by department or status to find team members quickly.
+  </div>
+
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:4px">
     <div>
-      <h2 style="font-size:20px;font-weight:700;margin-bottom:3px">🛠 Tools</h2>
-      <p style="font-size:13px;color:var(--text-muted)">Handy calculators and converters — all offline, nothing leaves your device.</p>
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:3px">👤 Person Definition</h2>
+      <p style="font-size:13px;color:var(--text-muted)">Manage team members, roles, skills, and availability. Defined persons can be assigned to tasks.</p>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="pdExportCSV()">⬇ Export CSV</button>
+      <button class="btn btn-primary btn-sm" onclick="pdOpenModal()">＋ Add Person</button>
     </div>
   </div>
 
-  <div class="tools-grid">
+  <!-- Stats Strip -->
+  <div class="pd-stats" id="pd-stats">
+    <div class="pd-stat"><span class="pd-stat-val" id="pd-stat-total">0</span><span class="pd-stat-label">Total Members</span></div>
+    <div class="pd-stat"><span class="pd-stat-val" id="pd-stat-active">0</span><span class="pd-stat-label">Active</span></div>
+    <div class="pd-stat"><span class="pd-stat-val" id="pd-stat-dept">0</span><span class="pd-stat-label">Departments</span></div>
+    <div class="pd-stat"><span class="pd-stat-val" id="pd-stat-tasks">0</span><span class="pd-stat-label">Tasks Assigned</span></div>
+  </div>
 
-    <!-- ╔══ SCIENTIFIC CALCULATOR ══╗ -->
-    <div class="tool-card" style="grid-row:span 2">
-      <div class="tool-card-header">
-        <div class="tool-card-icon">🔢</div>
-        <div><div class="tool-card-title">Scientific Calculator</div><div class="tool-card-sub">Arithmetic, trig, log, powers, constants</div></div>
-      </div>
-      <div class="tool-card-body">
-        <div class="calc-display">
-          <div class="calc-expr" id="calc-expr"></div>
-          <div class="calc-result" id="calc-result">0</div>
-        </div>
-        <div class="calc-grid">
-          <!-- Row 1: sci functions -->
-          <button class="calc-btn fn" onclick="calcFn('sin(')">sin</button>
-          <button class="calc-btn fn" onclick="calcFn('cos(')">cos</button>
-          <button class="calc-btn fn" onclick="calcFn('tan(')">tan</button>
-          <button class="calc-btn fn" onclick="calcFn('log(')">log</button>
-          <button class="calc-btn fn" onclick="calcFn('ln(')">ln</button>
-          <!-- Row 2 -->
-          <button class="calc-btn fn" onclick="calcFn('asin(')">sin⁻¹</button>
-          <button class="calc-btn fn" onclick="calcFn('acos(')">cos⁻¹</button>
-          <button class="calc-btn fn" onclick="calcFn('atan(')">tan⁻¹</button>
-          <button class="calc-btn fn" onclick="calcFn('sqrt(')">√</button>
-          <button class="calc-btn fn" onclick="calcFn('cbrt(')">∛</button>
-          <!-- Row 3 -->
-          <button class="calc-btn fn" onclick="calcFn('π')">π</button>
-          <button class="calc-btn fn" onclick="calcFn('e')">e</button>
-          <button class="calc-btn fn" onclick="calcFn('^')">xⁿ</button>
-          <button class="calc-btn fn" onclick="calcFn('!')">x!</button>
-          <button class="calc-btn fn" onclick="calcFn('%')">%</button>
-          <!-- Row 4 -->
-          <button class="calc-btn clr" onclick="calcClear()">AC</button>
-          <button class="calc-btn clr" onclick="calcDel()">⌫</button>
-          <button class="calc-btn fn" onclick="calcFn('(')">(</button>
-          <button class="calc-btn fn" onclick="calcFn(')')">)</button>
-          <button class="calc-btn op" onclick="calcFn('÷')">÷</button>
-          <!-- Row 5 -->
-          <button class="calc-btn num" onclick="calcFn('7')">7</button>
-          <button class="calc-btn num" onclick="calcFn('8')">8</button>
-          <button class="calc-btn num" onclick="calcFn('9')">9</button>
-          <button class="calc-btn op" onclick="calcFn('×')">×</button>
-          <button class="calc-btn fn" onclick="calcFn('abs(')">|x|</button>
-          <!-- Row 6 -->
-          <button class="calc-btn num" onclick="calcFn('4')">4</button>
-          <button class="calc-btn num" onclick="calcFn('5')">5</button>
-          <button class="calc-btn num" onclick="calcFn('6')">6</button>
-          <button class="calc-btn op" onclick="calcFn('−')">−</button>
-          <button class="calc-btn fn" onclick="calcFn('floor(')">⌊x⌋</button>
-          <!-- Row 7 -->
-          <button class="calc-btn num" onclick="calcFn('1')">1</button>
-          <button class="calc-btn num" onclick="calcFn('2')">2</button>
-          <button class="calc-btn num" onclick="calcFn('3')">3</button>
-          <button class="calc-btn op" onclick="calcFn('+')">+</button>
-          <button class="calc-btn fn" onclick="calcFn('ceil(')">⌈x⌉</button>
-          <!-- Row 8 -->
-          <button class="calc-btn num zero" onclick="calcFn('0')">0</button>
-          <button class="calc-btn num" onclick="calcFn('.')">.</button>
-          <button class="calc-btn eq" onclick="calcEquals()">=</button>
-        </div>
-        <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;color:var(--text-muted)">📋 History (click to reuse)</span>
-          <button class="btn btn-ghost btn-xs" onclick="calcClearHistory()">Clear</button>
-        </div>
-        <div class="calc-history" id="calc-history"><div style="font-size:11px;color:var(--text-light);padding:4px">No history yet</div></div>
-      </div>
+  <!-- Search & Filter Bar -->
+  <div class="pd-toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="pd-search" placeholder="Search by name, role, department..." oninput="pdRender()" />
     </div>
-
-    <!-- ╔══ UNIT CONVERTER ══╗ -->
-    <div class="tool-card">
-      <div class="tool-card-header">
-        <div class="tool-card-icon">📏</div>
-        <div><div class="tool-card-title">Unit Converter</div><div class="tool-card-sub">Length, weight, temperature, area, volume, speed, force</div></div>
-      </div>
-      <div class="tool-card-body">
-        <div class="uc-tabs" id="uc-tabs">
-          <span class="uc-tab active" onclick="ucSetCategory(event,'length')">📏 Length</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'weight')">⚖️ Weight</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'temp')">🌡️ Temp</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'area')">📐 Area</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'volume')">🧪 Volume</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'speed')">💨 Speed</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'force')">⚡ Force</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'pressure')">🔵 Pressure</span>
-          <span class="uc-tab" onclick="ucSetCategory(event,'energy')">⚡ Energy</span>
-        </div>
-        <div class="uc-row">
-          <input class="uc-val" id="uc-from-val" type="number" value="1" oninput="ucConvert()" placeholder="Value" />
-          <div class="uc-arrow">→</div>
-          <div id="uc-result-val" class="uc-val" style="background:var(--accent2-soft);border-color:#bfdbfe;color:var(--accent2);font-weight:700;cursor:default" readonly></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-          <select class="uc-select" id="uc-from-unit" onchange="ucConvert()"></select>
-          <select class="uc-select" id="uc-to-unit" onchange="ucConvert()"></select>
-        </div>
-        <button class="btn btn-secondary btn-sm" style="width:100%" onclick="ucSwap()">⇅ Swap Units</button>
-      </div>
+    <select id="pd-filter-dept" onchange="pdRender()"><option value="">All Departments</option></select>
+    <select id="pd-filter-status" onchange="pdRender()">
+      <option value="">All Status</option>
+      <option value="Active">Active</option>
+      <option value="On Leave">On Leave</option>
+      <option value="Busy">Busy</option>
+      <option value="Inactive">Inactive</option>
+    </select>
+    <div class="pd-view-toggle">
+      <button class="pd-view-btn active" onclick="pdSetView('cards',this)">📦</button>
+      <button class="pd-view-btn" onclick="pdSetView('table',this)">📋</button>
     </div>
+  </div>
 
-    <!-- ╔══ MATERIALS REFERENCE ══╗ -->
-    <div class="tool-card" style="grid-column:1/-1">
-      <div class="tool-card-header">
-        <div class="tool-card-icon">🔩</div>
-        <div><div class="tool-card-title">Engineering Materials Reference</div><div class="tool-card-sub">Resistivity, conductivity, density, temp coefficient — Copper, Steel, Aluminium &amp; more</div></div>
-      </div>
-      <div class="tool-card-body" style="padding-top:10px">
-        <div class="uc-tabs" style="margin-bottom:16px">
-          <span class="uc-tab active" id="mat-tab-elec" onclick="matSetTab(event,'elec')">⚡ Electrical</span>
-          <span class="uc-tab" id="mat-tab-mech" onclick="matSetTab(event,'mech')">🔩 Mechanical</span>
-          <span class="uc-tab" id="mat-tab-therm" onclick="matSetTab(event,'therm')">🌡️ Thermal</span>
-        </div>
-        <!-- Electrical panel -->
-        <div id="mat-panel-elec">
-          <div style="overflow-x:auto">
-            <table style="width:100%;border-collapse:collapse;font-size:12px">
-              <thead>
-                <tr style="background:#f0f4ff">
-                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Material</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Resistivity ρ (Ω·m) @20°C</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Conductivity σ (S/m)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Temp Coeff α (/°C)</th>
-                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border)">Note</th>
-                </tr>
-              </thead>
-              <tbody id="mat-elec-tbody"></tbody>
-            </table>
-          </div>
-          <!-- Resistance calculator -->
-          <div style="margin-top:16px;background:#f0f4ff;border-radius:10px;padding:14px 16px">
-            <div class="dc-label" style="margin-bottom:10px">⚡ Resistance Calculator: R = ρ × L / A</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:10px">
-              <div><label style="font-size:11px;color:var(--text-muted)">Material</label>
-                <select class="uc-select" id="rcalc-mat" onchange="rcalcCompute()"></select>
-              </div>
-              <div><label style="font-size:11px;color:var(--text-muted)">Length (m)</label>
-                <input class="pct-inp" id="rcalc-L" type="number" value="1" min="0" step="any" oninput="rcalcCompute()" placeholder="m" />
-              </div>
-              <div><label style="font-size:11px;color:var(--text-muted)">Cross-section (mm²)</label>
-                <input class="pct-inp" id="rcalc-A" type="number" value="1" min="0" step="any" oninput="rcalcCompute()" placeholder="mm²" />
-              </div>
-              <div><label style="font-size:11px;color:var(--text-muted)">Temp (°C)</label>
-                <input class="pct-inp" id="rcalc-T" type="number" value="20" step="any" oninput="rcalcCompute()" placeholder="°C" />
-              </div>
-            </div>
-            <div id="rcalc-result" class="dc-result" style="display:none"></div>
-          </div>
-        </div>
-        <!-- Mechanical panel -->
-        <div id="mat-panel-mech" style="display:none">
-          <div style="overflow-x:auto">
-            <table style="width:100%;border-collapse:collapse;font-size:12px">
-              <thead>
-                <tr style="background:#fff7ed">
-                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Material</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Density (kg/m³)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Young's Modulus (GPa)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Yield Strength (MPa)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Tensile Strength (MPa)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Poisson's Ratio</th>
-                </tr>
-              </thead>
-              <tbody id="mat-mech-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-        <!-- Thermal panel -->
-        <div id="mat-panel-therm" style="display:none">
-          <div style="overflow-x:auto">
-            <table style="width:100%;border-collapse:collapse;font-size:12px">
-              <thead>
-                <tr style="background:#f0fdf4">
-                  <th style="padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Material</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Thermal Cond. (W/m·K)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Specific Heat (J/kg·K)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Thermal Exp. (µm/m·°C)</th>
-                  <th style="padding:9px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap">Melt Point (°C)</th>
-                </tr>
-              </thead>
-              <tbody id="mat-therm-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- Cards View -->
+  <div id="pd-cards-view" class="pd-grid"></div>
 
-    <!-- ╔══ DATE CALCULATOR ══╗ -->
-    <div class="tool-card">
-      <div class="tool-card-header">
-        <div class="tool-card-icon">📅</div>
-        <div><div class="tool-card-title">Date & Duration Calculator</div><div class="tool-card-sub">Days between dates, working days, add/subtract days</div></div>
-      </div>
-      <div class="tool-card-body">
-        <!-- Working Day Selector -->
-        <div class="dc-section">
-          <div class="dc-label" style="margin-bottom:8px">⚙️ Working Days Setup</div>
-          <div style="display:flex;gap:5px;flex-wrap:wrap" id="dc-weekday-checks">
-            <label class="dc-day-pill" id="dc-day-0"><input type="checkbox" value="0" onchange="dcSaveWorkdays()"> Sun</label>
-            <label class="dc-day-pill" id="dc-day-1"><input type="checkbox" value="1" checked onchange="dcSaveWorkdays()"> Mon</label>
-            <label class="dc-day-pill" id="dc-day-2"><input type="checkbox" value="2" checked onchange="dcSaveWorkdays()"> Tue</label>
-            <label class="dc-day-pill" id="dc-day-3"><input type="checkbox" value="3" checked onchange="dcSaveWorkdays()"> Wed</label>
-            <label class="dc-day-pill" id="dc-day-4"><input type="checkbox" value="4" checked onchange="dcSaveWorkdays()"> Thu</label>
-            <label class="dc-day-pill" id="dc-day-5"><input type="checkbox" value="5" onchange="dcSaveWorkdays()"> Fri</label>
-            <label class="dc-day-pill" id="dc-day-6"><input type="checkbox" value="6" onchange="dcSaveWorkdays()"> Sat</label>
-          </div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:5px" id="dc-workdays-summary"></div>
-        </div>
-        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
-        <!-- Days Between -->
-        <div class="dc-section">
-          <div class="dc-label">Days Between Two Dates</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div><label style="font-size:11px;color:var(--text-muted)">From</label>
-              <input type="date" id="dc-from" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcDiff()" />
-            </div>
-            <div><label style="font-size:11px;color:var(--text-muted)">To</label>
-              <input type="date" id="dc-to" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcDiff()" />
-            </div>
-          </div>
-          <div class="dc-result" id="dc-diff-result" style="display:none"></div>
-        </div>
-        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
-        <!-- Add/Subtract -->
-        <div class="dc-section">
-          <div class="dc-label">Add / Subtract Working Days</div>
-          <div style="display:grid;grid-template-columns:1fr 80px 80px;gap:8px;align-items:end">
-            <div><label style="font-size:11px;color:var(--text-muted)">Start Date</label>
-              <input type="date" id="dc-start" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcAdd()" />
-            </div>
-            <div><label style="font-size:11px;color:var(--text-muted)">± Work Days</label>
-              <input type="number" id="dc-days" style="width:100%;font-family:'DM Mono',monospace;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" placeholder="30" oninput="dcCalcAdd()" />
-            </div>
-            <button class="btn btn-blue btn-sm" onclick="dcCalcAdd()" style="height:38px">Calc</button>
-          </div>
-          <div class="dc-result" id="dc-add-result" style="display:none"></div>
-        </div>
-        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
-        <!-- Age -->
-        <div class="dc-section">
-          <div class="dc-label">Age / Time Elapsed</div>
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <div style="flex:1"><label style="font-size:11px;color:var(--text-muted)">Birth / Start Date</label>
-              <input type="date" id="dc-birth" style="width:100%;font-family:inherit;font-size:13px;border:1.5px solid var(--border-strong);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--text);outline:none;" oninput="dcCalcAge()" />
-            </div>
-            <button class="btn btn-blue btn-sm" onclick="dcCalcAge()" style="height:38px">Today</button>
-          </div>
-          <div class="dc-result" id="dc-age-result" style="display:none"></div>
-        </div>
-      </div>
-    </div>
+  <!-- Table View -->
+  <div id="pd-table-view" style="display:none" class="pd-table-wrap">
+    <table class="pd-table">
+      <thead>
+        <tr>
+          <th onclick="pdSort('name')">Name</th>
+          <th onclick="pdSort('role')">Role</th>
+          <th onclick="pdSort('department')">Department</th>
+          <th onclick="pdSort('email')">Email</th>
+          <th onclick="pdSort('phone')">Phone</th>
+          <th onclick="pdSort('status')">Status</th>
+          <th>Skills</th>
+          <th>Tasks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="pd-table-body"></tbody>
+    </table>
+  </div>
 
-    <!-- ╔══ PERCENTAGE CALCULATOR ══╗ -->
-    <div class="tool-card">
-      <div class="tool-card-header">
-        <div class="tool-card-icon">%</div>
-        <div><div class="tool-card-title">Percentage Calculator</div><div class="tool-card-sub">What is X% of Y? Increase/decrease, back-calculate</div></div>
-      </div>
-      <div class="tool-card-body" style="display:flex;flex-direction:column;gap:14px;">
-        <!-- What is X% of Y -->
-        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
-          <div class="dc-label" style="margin-bottom:8px">What is X% of Y?</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input class="pct-inp" id="pct1-x" type="number" placeholder="X (%)" oninput="pctCalc1()" />
-            <input class="pct-inp" id="pct1-y" type="number" placeholder="Y (base)" oninput="pctCalc1()" />
-          </div>
-          <div class="pct-result" id="pct1-r" style="display:none"></div>
-        </div>
-        <!-- X is what % of Y -->
-        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
-          <div class="dc-label" style="margin-bottom:8px">X is what % of Y?</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input class="pct-inp" id="pct2-x" type="number" placeholder="X (part)" oninput="pctCalc2()" />
-            <input class="pct-inp" id="pct2-y" type="number" placeholder="Y (whole)" oninput="pctCalc2()" />
-          </div>
-          <div class="pct-result" id="pct2-r" style="display:none"></div>
-        </div>
-        <!-- % change -->
-        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
-          <div class="dc-label" style="margin-bottom:8px">% Change (from → to)</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input class="pct-inp" id="pct3-from" type="number" placeholder="From" oninput="pctCalc3()" />
-            <input class="pct-inp" id="pct3-to" type="number" placeholder="To" oninput="pctCalc3()" />
-          </div>
-          <div class="pct-result" id="pct3-r" style="display:none"></div>
-        </div>
-        <!-- add/remove X% from value -->
-        <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
-          <div class="dc-label" style="margin-bottom:8px">Add / Remove X% from value</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input class="pct-inp" id="pct4-val" type="number" placeholder="Value" oninput="pctCalc4()" />
-            <input class="pct-inp" id="pct4-pct" type="number" placeholder="% amount" oninput="pctCalc4()" />
-          </div>
-          <div class="pct-result" id="pct4-r" style="display:none"></div>
-        </div>
-      </div>
-    </div>
+  <div class="no-results" id="pd-no-results" style="display:none">
+    <div class="icon">👤</div>
+    <p>No team members found. Click "＋ Add Person" to get started.</p>
+  </div>
+</div>
+</div><!-- END PERSON DEFINITION TAB -->
 
-  </div><!-- /tools-grid -->
-</div><!-- /tools-wrap -->
-</div><!-- END TOOLS TAB -->
 
 <!-- ══ VERIFICATION TAB ══ -->
 <div id="verification-tab" class="tab-content">
@@ -1671,6 +1547,12 @@
       </ul>
     </div>
     <div class="modal-footer">
+      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:10px">
+        <strong>⌨️ Keyboard Shortcuts:</strong> 
+        <span style="margin-left:6px"><kbd style="background:var(--bg);padding:1px 5px;border-radius:4px;border:1px solid var(--border)">N</kbd> New Task</span>
+        <span style="margin-left:6px"><kbd style="background:var(--bg);padding:1px 5px;border-radius:4px;border:1px solid var(--border)">F</kbd> Focus Search</span>
+        <span style="margin-left:6px"><kbd style="background:var(--bg);padding:1px 5px;border-radius:4px;border:1px solid var(--border)">E</kbd> Export</span>
+      </div>
       <button class="btn btn-secondary" onclick="closeModal('info-modal')">Got it!</button>
     </div>
   </div>
@@ -1727,6 +1609,53 @@
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('project-modal')">Cancel</button>
       <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Person Definition Modal ══ -->
+<div class="modal-overlay" id="pd-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="pd-modal-title">Add New Person</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('pd-modal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="pd-form-grid">
+        <div class="form-group"><label>Name *</label><input type="text" id="pd-m-name" placeholder="Full name" /></div>
+        <div class="form-group"><label>Role</label><input type="text" id="pd-m-role" placeholder="e.g. Mechanical Engineer" /></div>
+        <div class="form-group"><label>Department</label><input type="text" id="pd-m-dept" placeholder="e.g. R&D" /></div>
+        <div class="form-group"><label>Status</label>
+          <select id="pd-m-status">
+            <option value="Active">Active</option>
+            <option value="On Leave">On Leave</option>
+            <option value="Busy">Busy</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="pd-m-email" placeholder="name@company.com" /></div>
+        <div class="form-group"><label>Phone</label><input type="text" id="pd-m-phone" placeholder="+20 xxx xxx xxxx" /></div>
+      </div>
+      <div class="form-group full" style="margin-top:10px">
+        <label>Avatar Color</label>
+        <div class="pd-color-options" id="pd-color-options"></div>
+      </div>
+      <div class="form-group full">
+        <label>Skills</label>
+        <div class="pd-skill-input-wrap">
+          <input type="text" id="pd-m-skill-input" placeholder="Type a skill and press Add" onkeydown="if(event.key==='Enter'){event.preventDefault();pdAddSkill();}" />
+          <button class="btn btn-secondary btn-sm" onclick="pdAddSkill()">＋ Add</button>
+        </div>
+        <div class="pd-existing-skills" id="pd-modal-skills"></div>
+      </div>
+      <div class="form-group full">
+        <label>Notes</label>
+        <textarea id="pd-m-notes" rows="2" placeholder="Additional notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('pd-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="pdSavePerson()">💾 Save Person</button>
     </div>
   </div>
 </div>
@@ -1960,10 +1889,12 @@ function updateStats(){
   const counts={};tasks.forEach(t=>{counts[t.status]=(counts[t.status]||0)+1;});
   const fS=document.getElementById('filter-status').value;
   const statuses=['To Do','In Progress','In Review','Done','Blocked'];
-  bar.innerHTML=`<span class="stat-pill ${!fS?'active':''}" onclick="setStatusFilter('')" style="font-weight:600"><span class="count">${tasks.length}</span> Total</span>`
-    +statuses.map(s=>`<span class="stat-pill ${fS===s?'active':''}" onclick="setStatusFilter('${s}')"><span class="dot" style="background:${STATUS_COLORS[s]}"></span><span class="count">${counts[s]||0}</span> ${s}</span>`).join('');
+  const statusIcons={'To Do':'📋','In Progress':'🔄','In Review':'🔍','Done':'✅','Blocked':'🚫'};
+  const statusIconColors={'To Do':'#78716c','In Progress':'#d97706','In Review':'#4f46e5','Done':'#059669','Blocked':'#dc2626'};
+  bar.innerHTML=`<span class="stat-pill ${!fS?'active':''}" onclick="setStatusFilter('')" style="font-weight:600"><span style="font-size:14px">📊</span><span class="count">${tasks.length}</span> Total</span>`
+    +statuses.map(s=>`<span class="stat-pill ${fS===s?'active':''}" onclick="setStatusFilter('${s}')"><span class="dot" style="background:${STATUS_COLORS[s]}"></span><span style="font-size:12px;color:${statusIconColors[s]}">${statusIcons[s]}</span><span class="count">${counts[s]||0}</span> ${s}</span>`).join('');
 }
-function setStatusFilter(v){document.getElementById('filter-status').value=v;renderTable();}
+function setStatusFilter(v){document.getElementById('filter-status').value=v;if(currentTaskView==='kanban'){renderKanban();}else{renderTable();}}
 function updateFilterDropdowns(){
   const assignees=[...new Set(tasks.map(t=>t.assignee).filter(Boolean))].sort();
   const projects=[...new Set(tasks.map(t=>t.project).filter(Boolean))].sort();
@@ -2234,6 +2165,7 @@ function exportJSON(){
     workingHoursSubmitted:whSubmitted,
     sampleLots:sampleLots,
     nextLotId:nextLotId,
+    persons:persons,
     logo:localStorage.getItem(LK)||null
   };
   const json=JSON.stringify(exportData,null,2);
@@ -2491,6 +2423,9 @@ function handleJSONImport(e){
         saveCols();
         if(importData.workingHours){whHours=importData.workingHours;whSubmitted=importData.workingHoursSubmitted||{};whSaveData();}
         if(importData.sampleLots){sampleLots=importData.sampleLots;nextLotId=importData.nextLotId||(sampleLots.length?Math.max(...sampleLots.map(l=>l.id))+1:1);slSaveData();}
+        persons = importData.persons || persons;
+        pdNextId = persons.length ? Math.max(...persons.map(p => p.id)) + 1 : 1;
+        pdSaveData();
         
         // Re-render
         renderTable();
@@ -2665,12 +2600,12 @@ function switchMainTab(tab){
   event.target.classList.add('active');
   document.getElementById(tab+'-tab').classList.add('active');
   if(tab==='projects')renderProjectsTable();
-  if(tab==='tasks'){renderTable();updateFilterDropdowns();}
+  if(tab==='tasks'){if(currentTaskView==='kanban'){renderKanban();}else{renderTable();}updateFilterDropdowns();}
   if(tab==='statistics')renderStatistics();
   if(tab==='workinghours'){whLoadData();whLoadWorkdays();whGoCurrentWeek();setTimeout(whSetExportCurrentMonth,50);}
   if(tab==='samples'){slLoadData();slRender();}
   if(tab==='verification'){vfRender();}
-  if(tab==='tools'){toolsInit();}
+  if(tab==='persons'){pdRender();}
 }
 
 function openProjectModal(id=null){
@@ -4287,373 +4222,8 @@ function closeOverlay(e,id){if(e.target===document.getElementById(id))closeModal
 
 document.addEventListener('keydown',ev=>{
   if(ev.key==='n'&&!ev.ctrlKey&&!ev.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&document.activeElement.contentEditable!=='true')openModal();
-  if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal','sl-modal','vf-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
+  if(ev.key==='Escape'){['modal-overlay','addcol-modal','chart-modal','cf-modal','info-modal','project-modal','sl-modal','vf-modal','pd-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));}
 });
-
-// ══════════ TOOLS ══════════
-const DC_WD_KEY = 'team_tasks_workdays';
-let toolsReady = false;
-function toolsInit() {
-  if (!toolsReady) {
-    toolsReady = true;
-    dcLoadWorkdays();
-    ucInitCategory();
-    matRenderAll();
-    rcalcBuildMaterials();
-    // set today in date calc
-    const today = new Date().toISOString().slice(0, 10);
-    ['dc-from','dc-to','dc-start','dc-birth'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = today;
-    });
-    document.getElementById('dc-days').value = '10';
-    dcCalcAge();
-    dcUpdateSummary();
-  }
-}
-
-// ── Scientific Calculator ──
-let calcExpr = '';
-let calcHistory = [];
-function calcFn(v) {
-  const mapIn = { '÷': '/', '×': '*', '−': '-', 'π': 'Math.PI', 'e': 'Math.E' };
-  calcExpr += mapIn[v] !== undefined ? mapIn[v] : v;
-  document.getElementById('calc-expr').textContent = calcExpr;
-  try {
-    const prev = calcEval(calcExpr);
-    if (prev !== null && isFinite(prev)) document.getElementById('calc-result').textContent = +prev.toFixed(10).toString();
-  } catch {}
-}
-function calcClear() {
-  calcExpr = '';
-  document.getElementById('calc-expr').textContent = '';
-  document.getElementById('calc-result').textContent = '0';
-}
-function calcDel() {
-  calcExpr = calcExpr.slice(0, -1);
-  document.getElementById('calc-expr').textContent = calcExpr;
-}
-function calcEval(expr) {
-  let ev = expr
-    .replace(/Math\.PI/g, Math.PI).replace(/Math\.E/g, Math.E)
-    .replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(')
-    .replace(/asin\(/g,'Math.asin(').replace(/acos\(/g,'Math.acos(').replace(/atan\(/g,'Math.atan(')
-    .replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(')
-    .replace(/sqrt\(/g,'Math.sqrt(').replace(/cbrt\(/g,'Math.cbrt(')
-    .replace(/abs\(/g,'Math.abs(').replace(/floor\(/g,'Math.floor(').replace(/ceil\(/g,'Math.ceil(')
-    .replace(/\^/g,'**').replace(/!(\d+)?/g,(m,n)=>m);
-  ev = ev.replace(/(\d+(?:\.\d+)?)\s*!/g,(_,n)=>{
-    const num=parseFloat(n);
-    if(!Number.isInteger(num)||num<0||num>170)return NaN;
-    let f=1;for(let i=2;i<=num;i++)f*=i;return f;
-  });
-  return Function('"use strict"; return ('+ev+')')();
-}
-function calcEquals() {
-  if (!calcExpr) return;
-  try {
-    const result = calcEval(calcExpr);
-    const display = isFinite(result) ? +result.toFixed(10).toString() : 'Error';
-    const histEntry = calcExpr.replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e')+' = '+display;
-    document.getElementById('calc-expr').textContent = histEntry;
-    document.getElementById('calc-result').textContent = display;
-    calcHistory.unshift(histEntry);
-    if (calcHistory.length > 15) calcHistory.pop();
-    calcRenderHistory();
-    calcExpr = display === 'Error' ? '' : display;
-  } catch {
-    document.getElementById('calc-result').textContent = 'Error';
-    calcExpr = '';
-  }
-}
-function calcRenderHistory() {
-  const el = document.getElementById('calc-history');
-  if (!calcHistory.length) { el.innerHTML='<div style="font-size:11px;color:var(--text-light);padding:4px">No history yet</div>'; return; }
-  el.innerHTML = calcHistory.map((h,i)=>`<div class="calc-hist-item" onclick="calcUseHistory(${i})">${e(h)}</div>`).join('');
-}
-function calcUseHistory(i) {
-  const parts = calcHistory[i].split(' = ');
-  const val = parts[parts.length-1];
-  calcExpr = val;
-  document.getElementById('calc-expr').textContent = calcHistory[i];
-  document.getElementById('calc-result').textContent = val;
-}
-function calcClearHistory() { calcHistory = []; calcRenderHistory(); }
-document.addEventListener('keydown', ev => {
-  const toolsActive = document.getElementById('tools-tab')?.classList.contains('active');
-  if (!toolsActive) return;
-  const key = ev.key;
-  if (key>='0'&&key<='9') calcFn(key);
-  else if (key==='.') calcFn('.');
-  else if (key==='+') calcFn('+');
-  else if (key==='-') calcFn('−');
-  else if (key==='*') calcFn('×');
-  else if (key==='/'){ev.preventDefault();calcFn('÷');}
-  else if (key==='Enter'||key==='=') calcEquals();
-  else if (key==='Backspace') calcDel();
-  else if (key==='Escape'&&document.activeElement.tagName!=='INPUT') calcClear();
-  else if (key==='(') calcFn('(');
-  else if (key===')') calcFn(')');
-  else if (key==='^') calcFn('^');
-});
-
-// ── Unit Converter ──
-const UC_CATEGORIES = {
-  length:   { units:['mm','cm','m','km','inch','foot','yard','mile','nautical mile'], toBase:{mm:0.001,cm:0.01,m:1,km:1000,inch:0.0254,foot:0.3048,yard:0.9144,mile:1609.344,'nautical mile':1852} },
-  weight:   { units:['mg','g','kg','tonne','oz','lb','stone'], toBase:{mg:1e-6,g:0.001,kg:1,tonne:1000,oz:0.0283495,lb:0.453592,stone:6.35029} },
-  temp:     { units:['°C','°F','K'], toBase:null },
-  area:     { units:['mm²','cm²','m²','km²','in²','ft²','acre','hectare'], toBase:{'mm²':1e-6,'cm²':1e-4,'m²':1,'km²':1e6,'in²':6.4516e-4,'ft²':0.092903,'acre':4046.86,'hectare':10000} },
-  volume:   { units:['ml','cl','dl','L','m³','tsp','tbsp','fl oz','cup','pint','gallon'], toBase:{ml:1e-3,cl:1e-2,dl:1e-1,L:1,'m³':1000,tsp:0.00492892,tbsp:0.0147868,'fl oz':0.0295735,cup:0.236588,pint:0.473176,gallon:3.78541} },
-  speed:    { units:['m/s','km/h','mph','knot','ft/s'], toBase:{'m/s':1,'km/h':1/3.6,mph:0.44704,knot:0.514444,'ft/s':0.3048} },
-  force:    { units:['N','kN','MN','lbf','kgf','dyn','ton-force'], toBase:{N:1,kN:1e3,MN:1e6,lbf:4.44822,kgf:9.80665,dyn:1e-5,'ton-force':9806.65} },
-  pressure: { units:['Pa','kPa','MPa','bar','mbar','atm','psi','mmHg','inHg'], toBase:{Pa:1,kPa:1e3,MPa:1e6,bar:1e5,mbar:100,atm:101325,psi:6894.76,mmHg:133.322,inHg:3386.39} },
-  energy:   { units:['J','kJ','MJ','kWh','cal','kcal','BTU','ft·lbf','eV'], toBase:{J:1,kJ:1e3,MJ:1e6,kWh:3.6e6,cal:4.184,kcal:4184,BTU:1055.06,'ft·lbf':1.35582,eV:1.60218e-19} }
-};
-let ucCurrentCat = 'length';
-function ucInitCategory() { ucSetCategoryByName('length'); }
-function ucSetCategory(ev, cat) {
-  ucCurrentCat = cat;
-  document.querySelectorAll('#uc-tabs .uc-tab').forEach(t => t.classList.remove('active'));
-  if (ev && ev.target) ev.target.classList.add('active');
-  const units = UC_CATEGORIES[cat].units;
-  const fromSel = document.getElementById('uc-from-unit');
-  const toSel = document.getElementById('uc-to-unit');
-  fromSel.innerHTML = units.map((u,i)=>`<option value="${u}"${i===0?' selected':''}>${u}</option>`).join('');
-  toSel.innerHTML = units.map((u,i)=>`<option value="${u}"${i===1?' selected':''}>${u}</option>`).join('');
-  ucConvert();
-}
-function ucSetCategoryByName(cat) {
-  ucCurrentCat = cat;
-  const tabs = document.querySelectorAll('#uc-tabs .uc-tab');
-  const catOrder = ['length','weight','temp','area','volume','speed','force','pressure','energy'];
-  tabs.forEach((t,i) => t.classList.toggle('active', catOrder[i]===cat));
-  const units = UC_CATEGORIES[cat].units;
-  document.getElementById('uc-from-unit').innerHTML = units.map((u,i)=>`<option value="${u}"${i===0?' selected':''}>${u}</option>`).join('');
-  document.getElementById('uc-to-unit').innerHTML = units.map((u,i)=>`<option value="${u}"${i===1?' selected':''}>${u}</option>`).join('');
-  ucConvert();
-}
-function ucConvert() {
-  const val = parseFloat(document.getElementById('uc-from-val').value);
-  const from = document.getElementById('uc-from-unit').value;
-  const to = document.getElementById('uc-to-unit').value;
-  const resEl = document.getElementById('uc-result-val');
-  if (isNaN(val)) { resEl.value=''; return; }
-  let result;
-  if (ucCurrentCat==='temp') result = ucConvertTemp(val,from,to);
-  else { const fac=UC_CATEGORIES[ucCurrentCat].toBase; result=(val*fac[from])/fac[to]; }
-  resEl.value = +result.toFixed(8);
-}
-function ucConvertTemp(val,from,to) {
-  let c;
-  if(from==='°C')c=val; else if(from==='°F')c=(val-32)*5/9; else c=val-273.15;
-  if(to==='°C')return c; if(to==='°F')return c*9/5+32; return c+273.15;
-}
-function ucSwap() {
-  const fromSel=document.getElementById('uc-from-unit'),toSel=document.getElementById('uc-to-unit');
-  const fromVal=document.getElementById('uc-from-val'),resEl=document.getElementById('uc-result-val');
-  const tmpU=fromSel.value; fromSel.value=toSel.value; toSel.value=tmpU;
-  fromVal.value=resEl.value||fromVal.value; ucConvert();
-}
-
-// ── Working Days ──
-let dcWorkdays = [1,2,3,4]; // 0=Sun...6=Sat
-function dcLoadWorkdays() {
-  try { const s=JSON.parse(localStorage.getItem(DC_WD_KEY)); if(Array.isArray(s))dcWorkdays=s; } catch {}
-  dcWorkdays.forEach(d => {
-    const cb = document.querySelector(`#dc-day-${d} input`);
-    if (cb) cb.checked = true;
-  });
-  // uncheck non-workdays
-  for(let i=0;i<7;i++){
-    const cb=document.querySelector(`#dc-day-${i} input`);
-    if(cb)cb.checked=dcWorkdays.includes(i);
-  }
-  dcUpdateSummary();
-}
-function dcSaveWorkdays() {
-  dcWorkdays=[];
-  for(let i=0;i<7;i++){
-    const cb=document.querySelector(`#dc-day-${i} input`);
-    if(cb&&cb.checked)dcWorkdays.push(i);
-  }
-  localStorage.setItem(DC_WD_KEY,JSON.stringify(dcWorkdays));
-  dcUpdateSummary();
-  dcCalcDiff(); dcCalcAdd();
-}
-function dcUpdateSummary() {
-  const names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const el=document.getElementById('dc-workdays-summary');
-  if(!el)return;
-  el.textContent = dcWorkdays.length
-    ? `✅ ${dcWorkdays.length} working day(s): ${dcWorkdays.map(d=>names[d]).join(', ')}`
-    : '⚠️ No working days selected';
-}
-function dcCountWorkdays(a, b) {
-  if(!dcWorkdays.length) return 0;
-  let count=0, d=new Date(a<b?a:b), end=new Date(a<b?b:a);
-  d.setDate(d.getDate()+1); // exclusive start
-  while(d<=end){if(dcWorkdays.includes(d.getDay()))count++;d.setDate(d.getDate()+1);}
-  return (a<=b?1:-1)*count;
-}
-function dcCalcDiff() {
-  const a=document.getElementById('dc-from').value, b=document.getElementById('dc-to').value;
-  const el=document.getElementById('dc-diff-result');
-  if(!a||!b){el.style.display='none';return;}
-  const da=new Date(a),db=new Date(b);
-  const totalDiff=Math.round((db-da)/86400000);
-  const wdDiff=dcCountWorkdays(da,db);
-  const abs=Math.abs(totalDiff),sign=totalDiff<0?'−':'+';
-  const wks=Math.floor(abs/7),days=abs%7;
-  el.style.display='';
-  el.innerHTML=`<div>${sign}${abs} calendar days (${wks}w ${days}d)</div><div style="margin-top:4px;font-size:13px;color:var(--accent2);font-weight:700">📅 ${Math.abs(wdDiff)} working day${Math.abs(wdDiff)!==1?'s':''} (${dcWorkdays.length} work days/wk)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">${totalDiff<0?'B is earlier':totalDiff===0?'Same date':'B is later'}</div>`;
-}
-function dcCalcAdd() {
-  const start=document.getElementById('dc-start').value;
-  const wdCount=parseInt(document.getElementById('dc-days').value);
-  const el=document.getElementById('dc-add-result');
-  if(!start||isNaN(wdCount)){el.style.display='none';return;}
-  if(!dcWorkdays.length){el.style.display='';el.textContent='⚠️ No working days selected';return;}
-  const d=new Date(start); let remaining=Math.abs(wdCount); const dir=wdCount>=0?1:-1;
-  while(remaining>0){d.setDate(d.getDate()+dir);if(dcWorkdays.includes(d.getDay()))remaining--;}
-  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  el.style.display='';
-  el.innerHTML=`<div>Result: <strong>${d.getDate()} ${mn[d.getMonth()]} ${d.getFullYear()}</strong> (${d.toISOString().slice(0,10)})</div><div style="font-size:11px;color:var(--text-muted);margin-top:3px">${Math.abs(wdCount)} working day${Math.abs(wdCount)!==1?'s':''} ${wdCount>=0?'after':'before'} ${start}</div>`;
-}
-function dcCalcAge() {
-  const birth=document.getElementById('dc-birth').value;
-  const el=document.getElementById('dc-age-result');
-  if(!birth){el.style.display='none';return;}
-  const db=new Date(birth),now=new Date();
-  if(db>now){el.style.display='';el.textContent='Date is in the future';return;}
-  let years=now.getFullYear()-db.getFullYear(),months=now.getMonth()-db.getMonth(),days=now.getDate()-db.getDate();
-  if(days<0){months--;days+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
-  if(months<0){years--;months+=12;}
-  const totalDays=Math.round((now-db)/86400000);
-  el.style.display='';
-  el.textContent=`${years}y ${months}m ${days}d  ·  ${totalDays.toLocaleString()} total days`;
-}
-
-// ── Percentage Calculator ──
-function pctCalc1(){const x=parseFloat(document.getElementById('pct1-x').value),y=parseFloat(document.getElementById('pct1-y').value),el=document.getElementById('pct1-r');if(isNaN(x)||isNaN(y)){el.style.display='none';return;}el.style.display='';el.textContent=`${x}% of ${y} = ${+(x*y/100).toFixed(8)}`;}
-function pctCalc2(){const x=parseFloat(document.getElementById('pct2-x').value),y=parseFloat(document.getElementById('pct2-y').value),el=document.getElementById('pct2-r');if(isNaN(x)||isNaN(y)||y===0){el.style.display='none';return;}el.style.display='';el.textContent=`${x} is ${+(x/y*100).toFixed(4)}% of ${y}`;}
-function pctCalc3(){const from=parseFloat(document.getElementById('pct3-from').value),to=parseFloat(document.getElementById('pct3-to').value),el=document.getElementById('pct3-r');if(isNaN(from)||isNaN(to)||from===0){el.style.display='none';return;}const chg=(to-from)/Math.abs(from)*100;el.style.display='';el.style.background=chg>=0?'#d1fae5':'#fee2e2';el.style.color=chg>=0?'#065f46':'#991b1b';el.textContent=`${chg>=0?'▲ +':'▼ '}${+chg.toFixed(4)}% (${chg>=0?'increase':'decrease'})`;}
-function pctCalc4(){const val=parseFloat(document.getElementById('pct4-val').value),pct=parseFloat(document.getElementById('pct4-pct').value),el=document.getElementById('pct4-r');if(isNaN(val)||isNaN(pct)){el.style.display='none';return;}el.style.display='';el.textContent=`+${pct}% → ${+(val+val*pct/100).toFixed(8)}   |   −${pct}% → ${+(val-val*pct/100).toFixed(8)}`;}
-
-// ── Engineering Materials Reference ──
-const MAT_ELEC = [
-  {name:'Copper',sub:'Pure, annealed',rho:1.68e-8,alpha:0.00393,note:'Best conductor — wire, coil'},
-  {name:'Silver',sub:'Pure',rho:1.59e-8,alpha:0.0038,note:'Highest conductivity'},
-  {name:'Gold',sub:'Pure',rho:2.44e-8,alpha:0.0034,note:'Corrosion-resistant contacts'},
-  {name:'Aluminium',sub:'Pure (1100)',rho:2.82e-8,alpha:0.00429,note:'Overhead lines, heat sinks'},
-  {name:'Brass (Cu70Zn30)',sub:'',rho:6.4e-8,alpha:0.0015,note:'Connectors, terminals'},
-  {name:'Iron (pure)',sub:'',rho:1.0e-7,alpha:0.005,note:'Reference metal'},
-  {name:'Steel (carbon)',sub:'',rho:1.43e-7,alpha:0.003,note:'Structural, magnetic core'},
-  {name:'Stainless Steel 316',sub:'',rho:7.4e-7,alpha:0.00094,note:'Corrosion-resistant'},
-  {name:'Tungsten',sub:'Pure',rho:5.6e-8,alpha:0.0045,note:'Filaments, high-temp'},
-  {name:'Nickel',sub:'Pure',rho:6.99e-8,alpha:0.006,note:'Alloys, batteries'},
-  {name:'Nichrome (Ni80Cr20)',sub:'Resistance alloy',rho:1.1e-6,alpha:0.0004,note:'Heating elements'},
-  {name:'Titanium',sub:'Grade 2',rho:4.2e-7,alpha:0.0038,note:'Aerospace, implants'},
-  {name:'Zinc',sub:'Pure',rho:5.9e-8,alpha:0.0037,note:'Galvanizing, alloys'},
-  {name:'Carbon (graphite)',sub:'',rho:3.5e-5,alpha:-0.0005,note:'Electrodes, lubricant'},
-  {name:'Silicon (intrinsic)',sub:'',rho:640,alpha:null,note:'Semiconductor'},
-];
-const MAT_MECH = [
-  {name:'Copper (pure)',density:8940,E:117,yield:70,tensile:220,poisson:0.34},
-  {name:'Aluminium 6061-T6',density:2700,E:69,yield:276,tensile:310,poisson:0.33},
-  {name:'Mild Steel (1020)',density:7870,E:200,yield:210,tensile:380,poisson:0.29},
-  {name:'Stainless 304',density:8000,E:193,yield:215,tensile:505,poisson:0.29},
-  {name:'Stainless 316',density:7990,E:193,yield:205,tensile:515,poisson:0.29},
-  {name:'Cast Iron (grey)',density:7150,E:100,yield:null,tensile:200,poisson:0.26},
-  {name:'Brass (Cu70Zn30)',density:8500,E:100,yield:95,tensile:340,poisson:0.34},
-  {name:'Titanium Grade 5',density:4430,E:114,yield:880,tensile:950,poisson:0.34},
-  {name:'Nickel (pure)',density:8908,E:200,yield:148,tensile:462,poisson:0.31},
-  {name:'Tungsten',density:19300,E:411,yield:550,tensile:980,poisson:0.28},
-  {name:'Polypropylene (PP)',density:910,E:1.5,yield:30,tensile:35,poisson:0.42},
-  {name:'ABS',density:1050,E:2.3,yield:40,tensile:43,poisson:0.40},
-  {name:'Nylon 66',density:1140,E:2.7,yield:55,tensile:80,poisson:0.39},
-];
-const MAT_THERM = [
-  {name:'Copper (pure)',k:401,cp:385,alpha:17.0,melt:1085},
-  {name:'Silver (pure)',k:429,cp:235,alpha:18.9,melt:962},
-  {name:'Gold (pure)',k:317,cp:129,alpha:14.2,melt:1064},
-  {name:'Aluminium (pure)',k:237,cp:900,alpha:23.1,melt:660},
-  {name:'Aluminium 6061',k:167,cp:896,alpha:23.6,melt:652},
-  {name:'Mild Steel',k:50,cp:490,alpha:11.7,melt:1425},
-  {name:'Stainless 304',k:16.2,cp:500,alpha:17.2,melt:1400},
-  {name:'Stainless 316',k:13.4,cp:500,alpha:15.9,melt:1380},
-  {name:'Cast Iron',k:52,cp:490,alpha:10.8,melt:1200},
-  {name:'Brass',k:120,cp:380,alpha:18.7,melt:900},
-  {name:'Titanium (pure)',k:21.9,cp:520,alpha:8.6,melt:1668},
-  {name:'Nickel (pure)',k:90.7,cp:444,alpha:13.4,melt:1455},
-  {name:'Tungsten',k:173,cp:132,alpha:4.5,melt:3422},
-  {name:'Polypropylene',k:0.12,cp:1900,alpha:100,melt:165},
-  {name:'ABS',k:0.17,cp:1400,alpha:70,melt:105},
-];
-function matRenderAll() {
-  // Electrical
-  const eTbody = document.getElementById('mat-elec-tbody');
-  if (eTbody) eTbody.innerHTML = MAT_ELEC.map((m,i)=>{
-    const sig = m.rho ? (1/m.rho).toExponential(3) : '—';
-    return `<tr class="mat-row" style="${i%2===0?'background:var(--surface)':'background:#fafaf8'}">
-      <td class="mat-td"><div class="mat-mat-name">${e(m.name)}</div>${m.sub?`<div class="mat-sub">${e(m.sub)}</div>`:''}</td>
-      <td class="mat-td mat-td-num"><span style="font-family:'DM Mono',monospace;font-size:11px">${m.rho ? m.rho.toExponential(2) : '—'}</span></td>
-      <td class="mat-td mat-td-num"><span style="font-family:'DM Mono',monospace;font-size:11px">${sig}</span></td>
-      <td class="mat-td mat-td-num"><span style="font-family:'DM Mono',monospace;font-size:11px">${m.alpha!==null ? m.alpha : 'semi'}</span></td>
-      <td class="mat-td" style="font-size:11px;color:var(--text-muted)">${e(m.note||'')}</td>
-    </tr>`;
-  }).join('');
-  // Mechanical
-  const mTbody = document.getElementById('mat-mech-tbody');
-  if (mTbody) mTbody.innerHTML = MAT_MECH.map((m,i)=>`<tr class="mat-row" style="${i%2===0?'background:var(--surface)':'background:#fafaf8'}">
-    <td class="mat-td"><div class="mat-mat-name">${e(m.name)}</div></td>
-    <td class="mat-td mat-td-num">${m.density.toLocaleString()}</td>
-    <td class="mat-td mat-td-num">${m.E}</td>
-    <td class="mat-td mat-td-num">${m.yield!==null?m.yield:'—'}</td>
-    <td class="mat-td mat-td-num">${m.tensile}</td>
-    <td class="mat-td mat-td-num">${m.poisson}</td>
-  </tr>`).join('');
-  // Thermal
-  const tTbody = document.getElementById('mat-therm-tbody');
-  if (tTbody) tTbody.innerHTML = MAT_THERM.map((m,i)=>`<tr class="mat-row" style="${i%2===0?'background:var(--surface)':'background:#fafaf8'}">
-    <td class="mat-td"><div class="mat-mat-name">${e(m.name)}</div></td>
-    <td class="mat-td mat-td-num">${m.k}</td>
-    <td class="mat-td mat-td-num">${m.cp}</td>
-    <td class="mat-td mat-td-num">${m.alpha}</td>
-    <td class="mat-td mat-td-num">${m.melt}</td>
-  </tr>`).join('');
-}
-function matSetTab(ev, tab) {
-  ['elec','mech','therm'].forEach(t => {
-    document.getElementById('mat-panel-'+t).style.display = t===tab?'':'none';
-  });
-  document.querySelectorAll('.tool-card:last-child .uc-tab').forEach(t=>t.classList.remove('active'));
-  if(ev&&ev.target)ev.target.classList.add('active');
-}
-function rcalcBuildMaterials() {
-  const sel = document.getElementById('rcalc-mat');
-  if (!sel) return;
-  sel.innerHTML = MAT_ELEC.filter(m=>m.rho&&m.alpha!==null&&m.alpha!=='semi').map(m=>`<option value="${m.rho}|${m.alpha}">${m.name}</option>`).join('');
-  rcalcCompute();
-}
-function rcalcCompute() {
-  const sel = document.getElementById('rcalc-mat');
-  const L = parseFloat(document.getElementById('rcalc-L').value);
-  const A = parseFloat(document.getElementById('rcalc-A').value); // mm²
-  const T = parseFloat(document.getElementById('rcalc-T').value);
-  const el = document.getElementById('rcalc-result');
-  if (!sel||isNaN(L)||isNaN(A)||A<=0||isNaN(T)){el.style.display='none';return;}
-  const [rho0,alpha]=sel.value.split('|').map(Number);
-  const rhoT = rho0*(1+alpha*(T-20));
-  const Amm2 = A*1e-6; // convert mm² to m²
-  const R = rhoT*L/Amm2;
-  const matName = sel.options[sel.selectedIndex].text;
-  el.style.display='';
-  el.innerHTML=`<strong>${matName}</strong> · L=${L}m · A=${A}mm² · T=${T}°C<br/>
-    ρ(T) = ${rhoT.toExponential(4)} Ω·m<br/>
-    <span style="font-size:16px;color:var(--accent2)">R = ${R < 1 ? R.toExponential(4) : +R.toFixed(6)} Ω</span>
-    <span style="font-size:11px;color:var(--text-muted);margin-left:8px">(${(R*1000).toFixed(4)} mΩ)</span>`;
-}
-
 
 // ══════════ VERIFICATION ══════════
 const VFK = 'team_tasks_verification';
@@ -5117,7 +4687,8 @@ async function syncToGitHub() {
       sampleLots: sampleLots,
       vfItems: vfItems,
       whWorkdays: whWorkdays || [],
-      customCols: customCols || []
+      customCols: customCols || [],
+      persons: persons || [],
     };
     
     const jsonContent = JSON.stringify(exportData, null, 2);
@@ -5213,6 +4784,7 @@ async function loadFromGitHub() {
       `- ${importData.tasks?.length || 0} tasks\n` +
       `- ${importData.projects?.length || 0} projects\n` +
       `- ${importData.sampleLots?.length || 0} sample lots\n` +
+      `- ${importData.persons?.length || 0} persons\n` +
       `- ${importData.vfItems?.length || 0} verification items\n\n` +
       `⚠️ Current data will be backed up but REPLACED.`;
     
@@ -5225,6 +4797,7 @@ async function loadFromGitHub() {
       sampleLots: sampleLots,
       vfItems: vfItems,
       whWorkdays: whWorkdays || [],
+      persons: persons || [],
       customCols: customCols || [],
       backupDate: new Date().toISOString()
     };
@@ -5234,6 +4807,7 @@ async function loadFromGitHub() {
     if (importData.tasks) tasks = importData.tasks;
     if (importData.projects) projects = importData.projects;
     if (importData.sampleLots) sampleLots = importData.sampleLots;
+    if (importData.persons) { persons = importData.persons; pdNextId = persons.length ? Math.max(...persons.map(p => p.id)) + 1 : 1; pdSaveData(); }
     if (importData.vfItems) vfItems = importData.vfItems || [];
     if (importData.whWorkdays) whWorkdays = importData.whWorkdays;
     if (importData.workingHours) whWorkdays = importData.workingHours; // Old format compatibility
@@ -5301,7 +4875,8 @@ function importFromFile() {
           `- ${importData.tasks?.length || 0} tasks\n` +
           `- ${importData.projects?.length || 0} projects\n` +
           `- ${importData.sampleLots?.length || 0} sample lots\n` +
-          `- ${importData.vfItems?.length || 0} verification items\n\n` +
+          `- ${importData.vfItems?.length || 0} verification items\n` +
+          `- ${importData.persons?.length || 0} persons\n\n` +
           `⚠️ Current data will be backed up but REPLACED.`;
         
         if (!confirm(confirmMsg)) return;
@@ -5313,6 +4888,7 @@ function importFromFile() {
           sampleLots: sampleLots || [],
           vfItems: vfItems || [],
           whWorkdays: whWorkdays || [],
+          persons: persons || [],
           customCols: customCols || [],
           backupDate: new Date().toISOString()
         };
@@ -5322,6 +4898,7 @@ function importFromFile() {
         if (importData.tasks) tasks = importData.tasks;
         if (importData.projects) projects = importData.projects;
         if (importData.sampleLots) sampleLots = importData.sampleLots;
+        if (importData.persons) { persons = importData.persons; pdNextId = persons.length ? Math.max(...persons.map(p => p.id)) + 1 : 1; pdSaveData(); }
         if (importData.vfItems) vfItems = importData.vfItems || [];
         if (importData.whWorkdays) whWorkdays = importData.whWorkdays;
         if (importData.workingHours) whWorkdays = importData.workingHours; // Old format
@@ -5347,6 +4924,7 @@ function importFromFile() {
         slSaveData();
         vfSaveData();
         if (typeof whSaveData === 'function') whSaveData();
+        pdSaveData();
         
         alert('✅ Import successful!\n\nAll data has been imported. Your previous data was backed up.');
         location.reload();
@@ -5362,8 +4940,326 @@ function importFromFile() {
   input.click();
 }
 
+
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  const isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('dark-mode', isDark ? '1' : '0');
+  document.getElementById('dark-mode-toggle').textContent = isDark ? '☀️' : '🌙';
+}
+// Restore dark mode on load
+(function(){ if(localStorage.getItem('dark-mode')==='1'){document.body.classList.add('dark-mode');const b=document.getElementById('dark-mode-toggle');if(b)b.textContent='☀️';} })();
+// ══════════ PERSON DEFINITION ══════════
+const PDK = 'team_tasks_persons';
+const PD_COLORS = ['#c84b2f','#2563eb','#059669','#7c3aed','#d97706','#dc2626','#0891b2','#4f46e5','#be185d','#65a30d','#6d28d9','#ea580c'];
+let persons = [];
+let pdNextId = 1;
+let pdEditingId = null;
+let pdCurrentView = 'cards';
+let pdSortCol = 'name';
+let pdSortDir = 1;
+
+function pdLoadData() {
+  try { const r = JSON.parse(localStorage.getItem(PDK)); if (r) { persons = r.persons || []; pdNextId = r.nextId || 1; } } catch {}
+  if (!persons.length) {
+    // Pre-populate from existing task assignees
+    const assignees = [...new Set(tasks.map(t => t.assignee).filter(Boolean))];
+    assignees.forEach(name => {
+      persons.push({ id: pdNextId++, name, role: '', department: '', email: '', phone: '', status: 'Active', skills: [], color: PD_COLORS[(pdNextId - 1) % PD_COLORS.length], notes: '' });
+    });
+    pdSaveData();
+  }
+}
+function pdSaveData() { localStorage.setItem(PDK, JSON.stringify({ persons, nextId: pdNextId })); }
+
+function pdOpenModal(id) {
+  pdEditingId = id || null;
+  const p = id ? persons.find(x => x.id === id) : null;
+  document.getElementById('pd-m-name').value = p ? p.name : '';
+  document.getElementById('pd-m-role').value = p ? p.role : '';
+  document.getElementById('pd-m-dept').value = p ? p.department : '';
+  document.getElementById('pd-m-email').value = p ? p.email : '';
+  document.getElementById('pd-m-phone').value = p ? p.phone : '';
+  document.getElementById('pd-m-status').value = p ? p.status : 'Active';
+  document.getElementById('pd-m-notes').value = p ? p.notes : '';
+  // Color
+  document.querySelectorAll('.pd-color-opt').forEach(el => el.classList.remove('selected'));
+  const c = p ? p.color : PD_COLORS[(pdNextId - 1) % PD_COLORS.length];
+  const match = document.querySelector(`.pd-color-opt[data-color="${c}"]`);
+  if (match) match.classList.add('selected');
+  else document.querySelector('.pd-color-opt')?.classList.add('selected');
+  // Skills
+  pdModalSkills = p ? [...p.skills] : [];
+  pdRenderModalSkills();
+  document.getElementById('pd-modal-title').textContent = p ? 'Edit Person' : 'Add New Person';
+  document.getElementById('pd-modal').classList.add('open');
+}
+
+function pdSavePerson() {
+  const name = document.getElementById('pd-m-name').value.trim();
+  if (!name) { alert('Name is required.'); return; }
+  const colorEl = document.querySelector('.pd-color-opt.selected');
+  const color = colorEl ? colorEl.dataset.color : PD_COLORS[0];
+  const data = {
+    name,
+    role: document.getElementById('pd-m-role').value.trim(),
+    department: document.getElementById('pd-m-dept').value.trim(),
+    email: document.getElementById('pd-m-email').value.trim(),
+    phone: document.getElementById('pd-m-phone').value.trim(),
+    status: document.getElementById('pd-m-status').value,
+    skills: [...pdModalSkills],
+    color,
+    notes: document.getElementById('pd-m-notes').value.trim()
+  };
+  if (pdEditingId) {
+    const idx = persons.findIndex(p => p.id === pdEditingId);
+    if (idx >= 0) { const old = persons[idx]; persons[idx] = { ...old, ...data }; }
+  } else {
+    persons.push({ id: pdNextId++, ...data });
+  }
+  pdSaveData(); pdRender(); closeModal('pd-modal');
+}
+
+function pdDeletePerson(id) {
+  if (!confirm('Delete this person? Their tasks will keep the name but the person definition will be removed.')) return;
+  persons = persons.filter(p => p.id !== id);
+  pdSaveData(); pdRender();
+}
+
+let pdModalSkills = [];
+function pdAddSkill() {
+  const input = document.getElementById('pd-m-skill-input');
+  const skill = input.value.trim();
+  if (skill && !pdModalSkills.includes(skill)) { pdModalSkills.push(skill); pdRenderModalSkills(); }
+  input.value = '';
+}
+function pdRemoveSkill(i) { pdModalSkills.splice(i, 1); pdRenderModalSkills(); }
+function pdRenderModalSkills() {
+  const wrap = document.getElementById('pd-modal-skills');
+  wrap.innerHTML = pdModalSkills.map((s, i) => `<span class="pd-existing-skill">${e(s)}<button onclick="pdRemoveSkill(${i})">&times;</button></span>`).join('');
+}
+
+function pdGetInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function pdGetTaskCount(personName) {
+  return tasks.filter(t => t.assignee === personName).length;
+}
+
+function pdSetView(view, btn) {
+  pdCurrentView = view;
+  document.querySelectorAll('.pd-view-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  pdRender();
+}
+
+function pdSort(col) {
+  if (pdSortCol === col) pdSortDir *= -1; else { pdSortCol = col; pdSortDir = 1; }
+  pdRender();
+}
+
+function pdRender() {
+  const search = (document.getElementById('pd-search')?.value || '').toLowerCase();
+  const deptFilter = document.getElementById('pd-filter-dept')?.value || '';
+  const statusFilter = document.getElementById('pd-filter-status')?.value || '';
+
+  let filtered = persons.filter(p => {
+    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.role.toLowerCase().includes(search) || p.department.toLowerCase().includes(search);
+    const matchDept = !deptFilter || p.department === deptFilter;
+    const matchStatus = !statusFilter || p.status === statusFilter;
+    return matchSearch && matchDept && matchStatus;
+  });
+
+  // Sort
+  filtered.sort((a, b) => {
+    const va = (a[pdSortCol] || '').toLowerCase();
+    const vb = (b[pdSortCol] || '').toLowerCase();
+    return va < vb ? -pdSortDir : va > vb ? pdSortDir : 0;
+  });
+
+  // Update dept dropdown
+  const depts = [...new Set(persons.map(p => p.department).filter(Boolean))];
+  const deptSelect = document.getElementById('pd-filter-dept');
+  if (deptSelect) {
+    const curVal = deptSelect.value;
+    deptSelect.innerHTML = '<option value="">All Departments</option>' + depts.map(d => `<option value="${e(d)}">${e(d)}</option>`).join('');
+    deptSelect.value = curVal;
+  }
+
+  // Stats
+  document.getElementById('pd-stat-total').textContent = persons.length;
+  document.getElementById('pd-stat-active').textContent = persons.filter(p => p.status === 'Active').length;
+  document.getElementById('pd-stat-dept').textContent = depts.length;
+  document.getElementById('pd-stat-tasks').textContent = persons.reduce((sum, p) => sum + pdGetTaskCount(p.name), 0);
+
+  // No results
+  document.getElementById('pd-no-results').style.display = filtered.length === 0 ? 'block' : 'none';
+
+  // Cards View
+  const cardsEl = document.getElementById('pd-cards-view');
+  const tableEl = document.getElementById('pd-table-view');
+  cardsEl.style.display = pdCurrentView === 'cards' ? 'grid' : 'none';
+  tableEl.style.display = pdCurrentView === 'table' ? 'block' : 'none';
+
+  if (pdCurrentView === 'cards') {
+    cardsEl.innerHTML = filtered.map(p => {
+      const initials = pdGetInitials(p.name);
+      const taskCount = pdGetTaskCount(p.name);
+      return `<div class="pd-card">
+        <div class="pd-card-header">
+          <div class="pd-avatar" style="background:${p.color}">${initials}</div>
+          <div class="pd-card-info">
+            <div class="pd-card-name">${e(p.name)}</div>
+            <div class="pd-card-role">${e(p.role || 'No role specified')}</div>
+          </div>
+          <div class="pd-card-status"><span class="pd-status-badge pd-status-${e(p.status)}">${e(p.status)}</span></div>
+        </div>
+        <div class="pd-card-body">
+          ${p.department ? `<div class="pd-row"><span class="pd-row-icon">🏢</span><span class="pd-row-label">Department</span><span class="pd-row-val">${e(p.department)}</span></div>` : ''}
+          ${p.email ? `<div class="pd-row"><span class="pd-row-icon">✉️</span><span class="pd-row-label">Email</span><span class="pd-row-val">${e(p.email)}</span></div>` : ''}
+          ${p.phone ? `<div class="pd-row"><span class="pd-row-icon">📞</span><span class="pd-row-label">Phone</span><span class="pd-row-val">${e(p.phone)}</span></div>` : ''}
+          ${p.skills.length ? `<div class="pd-skills-wrap">${p.skills.map(s => `<span class="pd-skill-chip">${e(s)}</span>`).join('')}</div>` : ''}
+          ${p.notes ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;font-style:italic">"${e(p.notes)}"</div>` : ''}
+        </div>
+        <div class="pd-card-footer">
+          <span class="pd-task-count">📋 <strong>${taskCount}</strong> task${taskCount !== 1 ? 's' : ''} assigned</span>
+          <div class="pd-card-actions">
+            <button class="btn btn-ghost btn-xs" onclick="pdOpenModal(${p.id})">✏️ Edit</button>
+            <button class="btn btn-danger btn-xs" onclick="pdDeletePerson(${p.id})">🗑️</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    const tbody = document.getElementById('pd-table-body');
+    tbody.innerHTML = filtered.map(p => {
+      const taskCount = pdGetTaskCount(p.name);
+      return `<tr>
+        <td><div style="display:flex;align-items:center;gap:8px"><div class="assignee-avatar" style="background:${p.color}">${pdGetInitials(p.name)}</div><strong>${e(p.name)}</strong></div></td>
+        <td>${e(p.role || '—')}</td>
+        <td>${e(p.department || '—')}</td>
+        <td style="font-size:11px;color:var(--text-muted)">${e(p.email || '—')}</td>
+        <td style="font-size:11px;font-family:'DM Mono',monospace">${e(p.phone || '—')}</td>
+        <td><span class="pd-status-badge pd-status-${e(p.status)}">${e(p.status)}</span></td>
+        <td><div class="pd-skills-wrap">${p.skills.slice(0, 3).map(s => `<span class="pd-skill-chip">${e(s)}</span>`).join('')}${p.skills.length > 3 ? `<span style="font-size:10px;color:var(--text-muted)">+${p.skills.length - 3}</span>` : ''}</div></td>
+        <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--accent2)">${taskCount}</td>
+        <td><div class="actions">
+          <button class="btn btn-ghost btn-xs" onclick="pdOpenModal(${p.id})">✏️</button>
+          <button class="btn btn-danger btn-xs" onclick="pdDeletePerson(${p.id})">🗑️</button>
+        </div></td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function pdExportCSV() {
+  if (!persons.length) { alert('No persons to export.'); return; }
+  const headers = ['Name', 'Role', 'Department', 'Email', 'Phone', 'Status', 'Skills', 'Notes'];
+  const rows = persons.map(p => [
+    p.name, p.role, p.department, p.email, p.phone, p.status,
+    p.skills.join('; '), p.notes
+  ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'persons-' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// Init color options on page load
+(function(){
+  const wrap = document.getElementById('pd-color-options');
+  if (wrap) {
+    wrap.innerHTML = PD_COLORS.map((c, i) => `<div class="pd-color-opt${i === 0 ? ' selected' : ''}" data-color="${c}" style="background:${c}" onclick="document.querySelectorAll('.pd-color-opt').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')"></div>`).join('');
+  }
+})();
+
+// ══════════ TASK VIEW TOGGLE (TABLE / KANBAN) ══════════
+let currentTaskView = 'table'; // 'table' or 'kanban'
+
+function toggleView(view) {
+  currentTaskView = view;
+  const tableWrap = document.getElementById('table-view-wrap');
+  const kanbanWrap = document.getElementById('kanban-view-wrap');
+  const tableBtn = document.getElementById('view-table-btn');
+  const kanbanBtn = document.getElementById('view-kanban-btn');
+
+  if (view === 'table') {
+    tableWrap.style.display = '';
+    kanbanWrap.classList.remove('active');
+    tableBtn.classList.add('active');
+    kanbanBtn.classList.remove('active');
+    renderTable();
+  } else {
+    tableWrap.style.display = 'none';
+    kanbanWrap.classList.add('active');
+    tableBtn.classList.remove('active');
+    kanbanBtn.classList.add('active');
+    renderKanban();
+  }
+}
+
+function renderKanban() {
+  const filtered = getSorted(getFiltered());
+  updateStats();
+  updateFilterDropdowns();
+  saveConfig();
+
+  const board = document.getElementById('kanban-board');
+  const columns = [
+    { key: 'To Do', cssClass: 'todo', color: '#a8a09a', icon: '📋' },
+    { key: 'In Progress', cssClass: 'inprogress', color: '#f59e0b', icon: '🔄' },
+    { key: 'In Review', cssClass: 'inreview', color: '#6366f1', icon: '🔍' },
+    { key: 'Done', cssClass: 'done', color: '#10b981', icon: '✅' },
+    { key: 'Blocked', cssClass: 'blocked', color: '#ef4444', icon: '🚫' }
+  ];
+
+  const today = new Date().toISOString().slice(0, 10);
+  const soon = od(3);
+
+  board.innerHTML = columns.map(col => {
+    const colTasks = filtered.filter(t => t.status === col.key);
+    const cardsHtml = colTasks.length === 0
+      ? '<div class="kanban-empty">No tasks</div>'
+      : colTasks.map(t => {
+          const isDone = t.status === 'Done';
+          const isOv = t.dueDate && t.dueDate < today && !isDone;
+          const prog = Math.min(100, Math.max(0, parseInt(t.progress) || 0));
+          const init = t.assignee ? t.assignee.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase() : '?';
+          const ac = strColor(t.assignee || '');
+          const prioColors = { High: 'background:#fee2e2;color:#991b1b', Medium: 'background:#fef3c7;color:#92400e', Low: 'background:#d1fae5;color:#065f46' };
+          const prioStyle = prioColors[t.priority] || prioColors.Medium;
+          const dueHtml = t.dueDate
+            ? `<span class="kanban-card-due ${isOv ? 'due-overdue' : ''}">${isOv ? '⚠ ' : ''}${fmtDate(t.dueDate)}</span>`
+            : '';
+
+          return `<div class="kanban-card ${isDone ? 'row-done' : ''}" onclick="openModal(${t.id})" title="${e(t.title)}${t.desc ? '\\n' + e(t.desc) : ''}">
+            <div class="kanban-card-title">${e(t.title)}</div>
+            ${t.desc ? `<div class="kanban-card-desc">${e(t.desc)}</div>` : ''}
+            <div class="kanban-card-meta">
+              <span class="kanban-card-priority" style="${prioStyle}">${e(t.priority)}</span>
+              ${t.assignee ? `<span class="kanban-card-assignee"><span class="kanban-card-assignee-avatar" style="background:${ac}">${init}</span>${e(t.assignee)}</span>` : ''}
+              ${dueHtml}
+            </div>
+            ${prog > 0 ? `<div class="kanban-card-progress"><div class="kanban-card-progress-fill" style="width:${prog}%"></div></div>` : ''}
+          </div>`;
+        }).join('');
+
+    return `<div class="kanban-column kanban-col-${col.cssClass}">
+      <div class="kanban-col-header">
+        <div class="kanban-col-title"><span class="kanban-col-dot" style="background:${col.color}"></span>${col.icon} ${col.key}</div>
+        <div class="kanban-col-count">${colTasks.length}</div>
+      </div>
+      <div class="kanban-col-body">${cardsHtml}</div>
+    </div>`;
+  }).join('');
+}
+
 // ══════════ INIT ══════════
 loadGitHubConfig(); // Load GitHub config on startup
-loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();
+loadAll();renderWeekBadge();renderTable();updateProjectDropdown();whLoadData();slLoadData();pdLoadData();
 setTimeout(()=>{ whLoadWorkdays(); vfLoadData(); vfUpdateTabBadge(); }, 0);
 </script>
